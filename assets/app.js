@@ -88,13 +88,83 @@ async function share(title, url) {
    build time, drawn here as SVG.
    ------------------------------------------------------------ */
 function coverSvg(map) {
-  const dots = map.cover.map((p, i) => {
-    const r = i === 0 ? 3.6 : 2.8;
-    const o = 0.35 + (0.65 * (map.cover.length - i)) / map.cover.length;
-    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${r}" fill="#1f1f1f" opacity="${o.toFixed(2)}"/>`;
+  const dot = (p, i, fill, dx, dy, r) =>
+    `<circle cx="${(p.x * 100 + dx).toFixed(2)}" cy="${(p.y * 100 + dy).toFixed(2)}" r="${r}" fill="${fill}"/>`;
+
+  // knocked-out-of-register underlay, then the ink pass on top
+  const under = map.cover.map((p, i) => dot(p, i, '#e6d5a8', 1.6, 1.6, 4.4)).join('');
+  const ink = map.cover.map((p, i) => {
+    const o = 0.42 + (0.58 * (map.cover.length - i)) / map.cover.length;
+    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${i === 0 ? 4.2 : 3.4}" fill="#1f1f1f" opacity="${o.toFixed(2)}"/>`;
   }).join('');
 
-  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${dots}</svg>`;
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <g>${under}</g><g>${ink}</g>
+  </svg>`;
+}
+
+/* ------------------------------------------------------------
+   Hero block print
+
+   Carved-block vocabulary: ridgelines behind, hanok eaves in
+   front, and a beige pass offset from the ink pass so the two
+   colours sit slightly out of register.
+   ------------------------------------------------------------ */
+function heroArt() {
+  const ridgeFar =
+    'M0 72 C42 56 64 66 98 53 C134 39 152 59 188 53 C224 47 246 32 284 42 '
+    + 'C318 51 352 38 390 46 L390 150 L0 150 Z';
+  const ridgeNear =
+    'M0 100 C34 84 54 90 80 77 C106 64 130 80 158 73 C188 65 208 84 238 79 '
+    + 'C268 74 290 60 320 71 C346 80 368 70 390 75 L390 150 L0 150 Z';
+
+  const EAVE = 124;   // lowest point of the eave, at the centre of the span
+  const GROUND = 146;
+
+  /* A giwa roof from the front. The defining move is that the eave line
+     itself lifts at the corners — the tips sit ABOVE the centre of the
+     eave, so the roof reads as a shallow crescent rather than a cap.
+     Both edges are arcs: the ridge over the top, the eave underside
+     dipping back down to EAVE at mid-span. */
+  const roof = (x, w, h) => {
+    const lift = h * 0.42;                 // how far the corners ride up
+    const tip = (EAVE - lift).toFixed(1);
+    const cx = x + w * 0.5;
+    // control pulled below EAVE so the curve's midpoint lands exactly on
+    // it — otherwise the underside stops short and the roof floats
+    return `<path d="M${x} ${tip} `
+      + `Q${cx} ${(EAVE - h * 1.35).toFixed(1)} ${x + w} ${tip} `
+      + `Q${cx} ${(EAVE + lift).toFixed(1)} ${x} ${tip} Z" fill="#1f1f1f"/>`;
+  };
+
+  /* wall below the eave, with a doorway punched out of it */
+  const wall = (cx, w) => {
+    const x = cx - w / 2;
+    const dw = Math.max(7, w * 0.26);
+    const dh = 13;
+    return `<rect x="${x}" y="${EAVE - 2}" width="${w}" height="${GROUND - EAVE + 2}" fill="#1f1f1f" opacity=".8"/>`
+      + `<rect x="${(cx - dw / 2).toFixed(1)}" y="${GROUND - dh}" width="${dw.toFixed(1)}" height="${dh}" fill="#fff8e0" opacity=".92"/>`;
+  };
+
+  const village = [
+    { x: -4, w: 80, wall: 48, r: 0.34 },
+    { x: 84, w: 98, wall: 60, r: 0.3 },
+    { x: 194, w: 66, wall: 40, r: 0.36 },
+    { x: 272, w: 84, wall: 50, r: 0.31 },
+    { x: 362, w: 60, wall: 36, r: 0.35 },
+  ];
+
+  const buildings = village
+    .map((b) => wall(b.x + b.w / 2, b.wall) + roof(b.x, b.w, b.w * b.r))
+    .join('');
+
+  return `<svg viewBox="0 28 390 128" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <circle cx="318" cy="52" r="16" fill="#fff0c2"/>
+    <path d="${ridgeFar}" fill="#e6d5a8" opacity=".45"/>
+    <path d="${ridgeNear}" fill="#e6d5a8" opacity=".8"/>
+    ${buildings}
+    <rect x="0" y="${GROUND}" width="390" height="1.2" fill="#1f1f1f" opacity=".28"/>
+  </svg>`;
 }
 
 /* ------------------------------------------------------------
@@ -139,16 +209,32 @@ function renderTabbar(route) {
    ------------------------------------------------------------ */
 let activeCity = 'all';
 
+const cardHtml = (m) => `
+  <li>
+    <a class="card" href="#/m/${m.id}">
+      <div class="cover">${coverSvg(m)}</div>
+      <div class="card-body">
+        <h2 class="card-title">${esc(m.title)}</h2>
+        <p class="card-summary">${esc(m.summary)}</p>
+        <p class="card-meta">${esc(m.city)} · ${m.placeCount} places</p>
+      </div>
+    </a>
+  </li>`;
+
 function renderHome() {
   const cities = [{ city: 'all', count: DATA.mapCount }, ...DATA.cities];
   const list = activeCity === 'all' ? DATA.maps : DATA.maps.filter((m) => m.city === activeCity);
 
   view.innerHTML = `
-    <div class="pad" style="padding-bottom:0">
-      <p class="eyebrow">Curated by approved locals</p>
-      <h1 class="lede">Korea, by the people who actually live there.</h1>
-      <p class="lede-sub">${DATA.mapCount} maps · ${DATA.placeCount} places. No sponsored listings, no aggregate scores — just the spots a local would walk you to.</p>
-    </div>
+    <section class="hero">
+      <div class="hero-art">${heroArt()}</div>
+      <div class="hero-copy">
+        <p class="eyebrow">Curated by approved locals</p>
+        <h1 class="lede">Korea, by the people who live there.</h1>
+        <p class="lede-sub">${DATA.mapCount} maps · ${DATA.placeCount} places — the spots a local would walk you to.</p>
+      </div>
+    </section>
+    <hr class="cut">
 
     <div class="filters" role="group" aria-label="Filter by city">
       ${cities.map((c) => `
@@ -157,22 +243,7 @@ function renderHome() {
         </button>`).join('')}
     </div>
 
-    <ul class="feed">
-      ${list.map((m) => `
-        <li>
-          <a class="card" href="#/m/${m.id}">
-            <div class="cover">
-              ${coverSvg(m)}
-              <span class="cover-city">${esc(m.city)}</span>
-              <span class="cover-count">${m.placeCount} places</span>
-            </div>
-            <div class="card-body">
-              <h2 class="card-title">${esc(m.title)}</h2>
-              <p class="card-summary">${esc(m.summary)}</p>
-            </div>
-          </a>
-        </li>`).join('')}
-    </ul>`;
+    <ul class="feed">${list.map(cardHtml).join('')}</ul>`;
 
   view.querySelectorAll('[data-city]').forEach((b) => {
     b.onclick = () => { activeCity = b.dataset.city; renderHome(); };
@@ -364,22 +435,7 @@ function savedMapsHtml(maps) {
       <a class="btn btn-cream" href="#/">Browse maps</a>
     </div>`;
   }
-  return `<ul class="feed" style="padding-top:var(--sp-md)">
-    ${maps.map((m) => `
-      <li>
-        <a class="card" href="#/m/${m.id}">
-          <div class="cover">
-            ${coverSvg(m)}
-            <span class="cover-city">${esc(m.city)}</span>
-            <span class="cover-count">${m.placeCount} places</span>
-          </div>
-          <div class="card-body">
-            <h2 class="card-title">${esc(m.title)}</h2>
-            <p class="card-summary">${esc(m.summary)}</p>
-          </div>
-        </a>
-      </li>`).join('')}
-  </ul>`;
+  return `<ul class="feed" style="padding-top:var(--sp-md)">${maps.map(cardHtml).join('')}</ul>`;
 }
 
 function savedPlacesHtml(places) {
