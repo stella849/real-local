@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Internal planning docs — meeting notes, PRD, wireframes.
+# Held back because this repository is public and these contain the
+# client's budget and internal scope discussion. Remove this line to
+# publish them, or move the repo to private first.
+docs/

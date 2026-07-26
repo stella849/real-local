@@ -1,0 +1,490 @@
+/* ============================================================
+   Real Local
+   Design system: DESIGN-mistral.ai.md, saturated-orange family removed.
+
+   Excluded per client direction (채도 과함):
+     primary #fa520f · primary-deep #cc3a05 · sunshine-300..900
+     yellow-saturated #ffd900 · block-5/6/7 · link (= primary)
+
+   Consequences, all of which stay inside the source system:
+     - primary CTA  -> button-dark (ink), already a documented component
+     - active tab   -> pill-tab-active (ink), already ink in the source
+     - segmented-tab-active -> ink underline instead of orange
+     - sunset-stripe-band -> rebuilt from the cream/beige stops only
+   ============================================================ */
+
+:root{
+  /* --- cream / neutral warm (kept) --- */
+  --cream:#fff8e0;
+  --cream-light:#fffaeb;
+  --cream-deeper:#fff0c2;
+  --beige-deep:#e6d5a8;
+
+  /* --- text (kept) --- */
+  --ink:#1f1f1f;
+  --ink-tint:#3d3d3d;
+  --charcoal:#2c2c2c;
+  --slate:#4a4a4a;
+  --steel:#6a6a6a;
+  --stone:#8a8a8a;
+  --muted:#a8a8a8;
+
+  /* --- surface (kept) --- */
+  --canvas:#ffffff;
+  --surface:#fafafa;
+  --hairline:#e5e5e5;
+  --hairline-soft:#ededed;
+  --hairline-strong:#c7c7c7;
+
+  /* --- radius --- */
+  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
+
+  /* --- spacing --- */
+  --sp-xxs:4px; --sp-xs:8px; --sp-sm:12px; --sp-md:16px; --sp-lg:20px;
+  --sp-xl:24px; --sp-xxl:32px; --sp-xxxl:40px; --sp-section:64px;
+
+  /* --- type --- */
+  --font-display:"Instrument Serif","PP Editorial Old",Georgia,"Times New Roman",serif;
+  --font-ui:"Inter",ui-sans-serif,system-ui,-apple-system,"Malgun Gothic",sans-serif;
+
+  /* --- elevation --- */
+  --e1:rgba(0,0,0,.04) 0 1px 2px 0;
+  --e2:rgba(0,0,0,.04) 0 4px 12px 0;
+  --e4:rgba(0,0,0,.12) 0 16px 48px -8px;
+
+  --shell:480px;
+}
+
+/* The source brand ships no dark-mode palette (documented gap), so this
+   commits to the light cream world rather than inventing one. */
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--surface);
+  color:var(--ink);
+  font-family:var(--font-ui);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:var(--r-xs)}
+
+/* ============================================================
+   Shell — mobile-first, centred column on wider screens
+   ============================================================ */
+.shell{
+  max-width:var(--shell);
+  margin:0 auto;
+  min-height:100dvh;
+  background:var(--canvas);
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+@media (min-width:520px){
+  .shell{border-inline:1px solid var(--hairline-soft)}
+}
+
+/* ============================================================
+   Top bar
+   ============================================================ */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:var(--canvas);
+  border-bottom:1px solid var(--hairline-soft);
+  display:flex;align-items:center;gap:var(--sp-sm);
+  padding:0 var(--sp-md);
+  height:56px;flex:none;
+}
+.wordmark{
+  font-family:var(--font-ui);
+  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink);text-decoration:none;
+}
+.topbar-spacer{margin-left:auto}
+.iconbtn{
+  width:36px;height:36px;flex:none;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--slate);
+}
+.iconbtn:hover{background:var(--surface)}
+.iconbtn svg{width:19px;height:19px}
+.topbar-title{
+  font-family:var(--font-ui);font-size:14px;font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ============================================================
+   View / scroll region
+   ============================================================ */
+.view{flex:1;padding-bottom:var(--sp-xxl)}
+.pad{padding:var(--sp-md)}
+
+.eyebrow{
+  font-size:11px;font-weight:600;line-height:1.4;letter-spacing:1px;
+  text-transform:uppercase;color:var(--stone);
+  margin:0 0 var(--sp-xs);
+}
+.lede{
+  font-family:var(--font-display);
+  font-size:30px;font-weight:400;line-height:1.1;letter-spacing:-.5px;
+  margin:0 0 var(--sp-xs);
+  text-wrap:balance;
+}
+.lede-sub{
+  font-size:14px;line-height:1.5;color:var(--steel);
+  margin:0 0 var(--sp-lg);
+}
+
+/* ============================================================
+   City filter — pill-tab (the one place pills are allowed)
+   ============================================================ */
+.filters{
+  display:flex;gap:var(--sp-xs);
+  overflow-x:auto;scrollbar-width:none;
+  padding:0 var(--sp-md) var(--sp-md);
+  margin:0;
+}
+.filters::-webkit-scrollbar{display:none}
+.pill{
+  flex:none;
+  background:var(--canvas);color:var(--steel);
+  font-size:14px;font-weight:500;line-height:1.5;
+  border:1px solid var(--hairline);
+  border-radius:var(--r-full);
+  padding:var(--sp-xs) var(--sp-md);
+  white-space:nowrap;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+.pill[aria-pressed="true"]{
+  background:var(--ink);color:var(--canvas);border-color:var(--ink);
+}
+.pill .n{opacity:.55;margin-left:5px;font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   Map card — cover is a generated pin minimap, not photography
+   ============================================================ */
+.feed{
+  display:flex;flex-direction:column;gap:var(--sp-md);
+  padding:0 var(--sp-md);margin:0;list-style:none;
+}
+.card{
+  display:block;
+  background:var(--canvas);
+  border:1px solid var(--hairline-soft);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  text-decoration:none;
+  transition:box-shadow .18s ease,transform .18s ease;
+}
+.card:hover{box-shadow:var(--e2)}
+.card:active{transform:scale(.995)}
+
+.cover{
+  position:relative;
+  aspect-ratio:16/9;
+  background:var(--cream);
+  border-bottom:1px solid var(--hairline-soft);
+  /* grid fills the whole cover; the pin svg above keeps its own square
+     aspect so the cluster geometry is never stretched */
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0 23px,var(--beige-deep) 23px 23.6px),
+    repeating-linear-gradient(90deg,transparent 0 23px,var(--beige-deep) 23px 23.6px);
+}
+.cover svg{position:absolute;inset:0;width:100%;height:100%}
+.cover-city{
+  position:absolute;left:var(--sp-sm);top:var(--sp-sm);
+  background:var(--cream-deeper);color:var(--ink);
+  font-size:13px;font-weight:600;line-height:1.4;
+  border-radius:var(--r-full);
+  padding:4px 10px;
+}
+.cover-count{
+  position:absolute;right:var(--sp-sm);bottom:var(--sp-sm);
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(4px);
+  color:var(--slate);
+  font-size:12px;font-weight:500;line-height:1.4;
+  border:1px solid var(--beige-deep);
+  border-radius:var(--r-full);
+  padding:3px 9px;
+  font-variant-numeric:tabular-nums;
+}
+
+.card-body{padding:var(--sp-md)}
+.card-title{
+  font-family:var(--font-display);
+  font-size:24px;font-weight:400;line-height:1.15;letter-spacing:-.3px;
+  color:var(--ink);
+  margin:0 0 var(--sp-xxs);
+  text-wrap:balance;
+}
+.card-summary{
+  font-size:14px;line-height:1.5;color:var(--steel);
+  margin:0;
+}
+
+/* ============================================================
+   Map detail
+   ============================================================ */
+.detail-head{padding:var(--sp-lg) var(--sp-md) var(--sp-md)}
+.detail-title{
+  font-family:var(--font-display);
+  font-size:34px;font-weight:400;line-height:1.08;letter-spacing:-.6px;
+  margin:0 0 var(--sp-xs);
+  text-wrap:balance;
+}
+.detail-summary{
+  font-size:16px;line-height:1.55;color:var(--slate);
+  margin:0 0 var(--sp-md);
+}
+.detail-meta{
+  display:flex;align-items:center;gap:var(--sp-xs);flex-wrap:wrap;
+}
+.badge{
+  background:var(--cream-deeper);color:var(--ink);
+  font-size:13px;font-weight:600;line-height:1.4;
+  border-radius:var(--r-full);padding:4px 10px;
+  font-variant-numeric:tabular-nums;
+}
+.badge.quiet{background:transparent;color:var(--steel);border:1px solid var(--hairline);font-weight:500}
+
+#map{
+  height:260px;
+  background:var(--cream);
+  border-block:1px solid var(--hairline-soft);
+  z-index:0;
+}
+.leaflet-container{font-family:var(--font-ui)}
+
+/* Numbered pin, drawn rather than shipped as an image asset */
+.pin-marker{
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink);color:var(--canvas);
+  border:2px solid var(--canvas);
+  border-radius:var(--r-full);
+  font-size:12px;font-weight:600;
+  font-variant-numeric:tabular-nums;
+  box-shadow:var(--e1);
+}
+.pin-marker.is-active{background:var(--cream);color:var(--ink);border-color:var(--ink)}
+
+/* ============================================================
+   Place list — the tip is the hero, the data has no photography
+   ============================================================ */
+.section-head{
+  display:flex;align-items:baseline;gap:var(--sp-xs);
+  padding:var(--sp-lg) var(--sp-md) var(--sp-xs);
+}
+.section-head h2{
+  font-size:18px;font-weight:500;line-height:1.4;margin:0;
+}
+.section-head .count{font-size:13px;color:var(--stone);font-variant-numeric:tabular-nums}
+
+.places{list-style:none;margin:0;padding:0 var(--sp-md)}
+.place{
+  display:flex;gap:var(--sp-sm);
+  padding:var(--sp-md) 0;
+  border-bottom:1px solid var(--hairline-soft);
+  scroll-margin-top:72px;
+}
+.place:last-child{border-bottom:0}
+.place.is-active{background:var(--cream-light)}
+.place-n{
+  flex:none;width:24px;height:24px;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--hairline-strong);
+  border-radius:var(--r-full);
+  font-size:12px;font-weight:600;color:var(--slate);
+  font-variant-numeric:tabular-nums;
+}
+.place.is-active .place-n{background:var(--ink);border-color:var(--ink);color:var(--canvas)}
+.place-main{flex:1;min-width:0}
+.place-name{
+  font-size:16px;font-weight:500;line-height:1.4;
+  margin:0 0 2px;
+  color:var(--ink);
+}
+.place-addr{
+  font-size:13px;line-height:1.4;color:var(--stone);
+  margin:0;
+}
+.place-tip{
+  font-size:14px;line-height:1.5;color:var(--charcoal);
+  margin:var(--sp-xs) 0 0;
+  padding-left:var(--sp-sm);
+  border-left:2px solid var(--beige-deep);
+}
+.place-actions{display:flex;flex-direction:column;gap:var(--sp-xs);flex:none}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-xs);
+  font-size:14px;font-weight:500;line-height:1.3;
+  border-radius:var(--r-md);
+  padding:10px 20px;
+  min-height:44px;
+  text-decoration:none;
+  transition:background .15s ease,border-color .15s ease;
+}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-dark{background:var(--ink);color:var(--canvas)}
+.btn-dark:hover{background:var(--charcoal)}
+.btn-secondary{border:1px solid var(--hairline-strong);color:var(--ink)}
+.btn-secondary:hover{background:var(--surface)}
+.btn-cream{background:var(--cream);color:var(--ink);border:1px solid var(--beige-deep)}
+.btn-cream:hover{background:var(--cream-deeper)}
+.btn-block{width:100%}
+
+/* round icon action, used for save / open-in-maps on rows */
+.act{
+  width:36px;height:36px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--hairline);
+  border-radius:var(--r-full);
+  color:var(--steel);
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.act:hover{background:var(--surface);color:var(--ink)}
+.act svg{width:17px;height:17px}
+.act[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--canvas)}
+
+/* ============================================================
+   Empty / notice
+   ============================================================ */
+.empty{
+  margin:var(--sp-md);
+  padding:var(--sp-xxl) var(--sp-lg);
+  background:var(--cream-light);
+  border:1px solid var(--beige-deep);
+  border-radius:var(--r-lg);
+  text-align:center;
+}
+.empty h3{
+  font-family:var(--font-display);
+  font-size:22px;font-weight:400;line-height:1.25;margin:0 0 var(--sp-xxs);
+}
+.empty p{font-size:14px;line-height:1.5;color:var(--steel);margin:0 auto;max-width:34ch}
+.empty .btn{margin-top:var(--sp-md)}
+
+.notice{
+  margin:var(--sp-md);
+  padding:var(--sp-sm) var(--sp-md);
+  background:var(--cream);
+  border:1px solid var(--beige-deep);
+  border-radius:var(--r-md);
+  font-size:13px;line-height:1.5;color:var(--ink-tint);
+}
+.notice b{font-weight:600}
+
+/* ============================================================
+   Segmented tabs (Saved)
+   ============================================================ */
+.segmented{
+  display:flex;gap:var(--sp-md);
+  padding:0 var(--sp-md);
+  border-bottom:1px solid var(--hairline);
+}
+.seg{
+  padding:var(--sp-sm) 0;
+  font-size:14px;font-weight:500;line-height:1.5;
+  color:var(--steel);
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+}
+.seg[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.seg .n{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   Saved place row
+   ============================================================ */
+.saved-place{
+  display:flex;gap:var(--sp-sm);align-items:flex-start;
+  padding:var(--sp-md) 0;
+  border-bottom:1px solid var(--hairline-soft);
+}
+.saved-place:last-child{border-bottom:0}
+.saved-from{
+  font-size:12px;font-weight:500;line-height:1.4;color:var(--stone);
+  margin:4px 0 0;
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast{
+  position:fixed;left:50%;bottom:84px;
+  transform:translate(-50%,8px);
+  background:var(--ink);color:var(--canvas);
+  font-size:14px;font-weight:500;line-height:1.3;
+  padding:10px 18px;border-radius:var(--r-md);
+  box-shadow:var(--e4);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+  z-index:60;
+  max-width:calc(var(--shell) - 32px);
+}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+/* ============================================================
+   Sunset stripe band — the brand's closing signature, rebuilt
+   from the cream/beige stops only (saturated orange excluded)
+   ============================================================ */
+.stripe{
+  height:8px;flex:none;
+  background:linear-gradient(90deg,
+    var(--beige-deep) 0%,
+    var(--cream-deeper) 34%,
+    var(--cream) 62%,
+    var(--cream-light) 100%);
+}
+
+.footer{
+  background:var(--cream);
+  padding:var(--sp-xl) var(--sp-md) calc(var(--sp-xl) + 64px);
+  font-size:13px;line-height:1.5;color:var(--ink-tint);
+}
+.footer p{margin:0 0 var(--sp-xxs)}
+.footer .muted{color:var(--steel)}
+
+/* ============================================================
+   Bottom tab bar
+   ============================================================ */
+.tabbar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:var(--shell);
+  display:flex;
+  background:var(--canvas);
+  border-top:1px solid var(--hairline);
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:50;
+}
+.tab{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:9px 0 10px;
+  color:var(--stone);
+  text-decoration:none;
+}
+.tab svg{width:21px;height:21px}
+.tab span{font-size:11px;font-weight:500;line-height:1.2;letter-spacing:.02em}
+.tab[aria-current="page"]{color:var(--ink)}
+.tab[aria-current="page"] span{font-weight:600}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}

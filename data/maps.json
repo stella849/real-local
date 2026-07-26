@@ -1,0 +1,2151 @@
+{
+  "generatedAt": "2026-07-26",
+  "mapCount": 9,
+  "placeCount": 133,
+  "cities": [
+    {
+      "city": "Seoul",
+      "count": 7
+    },
+    {
+      "city": "Seongsu",
+      "count": 1
+    },
+    {
+      "city": "Busan",
+      "count": 1
+    }
+  ],
+  "maps": [
+    {
+      "id": "mimyos-everyday-euljiro",
+      "title": "Mimyo’s Everyday Euljiro",
+      "summary": "Everyday Euljiro spots I keep coming back to.",
+      "city": "Seoul",
+      "placeCount": 23,
+      "cover": [
+        {
+          "x": 0.646,
+          "y": 0.8067
+        },
+        {
+          "x": 0.14,
+          "y": 0.2167
+        },
+        {
+          "x": 0.7408,
+          "y": 0.6242
+        },
+        {
+          "x": 0.6617,
+          "y": 0.825
+        },
+        {
+          "x": 0.7489,
+          "y": 0.86
+        },
+        {
+          "x": 0.6401,
+          "y": 0.8327
+        },
+        {
+          "x": 0.7046,
+          "y": 0.8448
+        },
+        {
+          "x": 0.6717,
+          "y": 0.4186
+        },
+        {
+          "x": 0.7095,
+          "y": 0.8385
+        },
+        {
+          "x": 0.7097,
+          "y": 0.836
+        },
+        {
+          "x": 0.7577,
+          "y": 0.6431
+        },
+        {
+          "x": 0.6023,
+          "y": 0.4756
+        },
+        {
+          "x": 0.5486,
+          "y": 0.2353
+        },
+        {
+          "x": 0.7503,
+          "y": 0.681
+        },
+        {
+          "x": 0.6364,
+          "y": 0.8003
+        },
+        {
+          "x": 0.1947,
+          "y": 0.14
+        },
+        {
+          "x": 0.6754,
+          "y": 0.3361
+        },
+        {
+          "x": 0.7662,
+          "y": 0.7487
+        },
+        {
+          "x": 0.6619,
+          "y": 0.3947
+        },
+        {
+          "x": 0.6639,
+          "y": 0.3604
+        },
+        {
+          "x": 0.86,
+          "y": 0.6291
+        },
+        {
+          "x": 0.7624,
+          "y": 0.7353
+        },
+        {
+          "x": 0.8066,
+          "y": 0.795
+        }
+      ],
+      "center": {
+        "lat": 37.570444,
+        "lng": 126.990821
+      },
+      "places": [
+        {
+          "id": "dalmaji-plaza-bbq",
+          "n": 1,
+          "name": "Dalmaji Plaza BBQ",
+          "address": "112-1 Eulji-ro, Jung District, Seoul, South Korea",
+          "tip": "Atmospheric Euljiro BBQ—chicken barbecue and draft beer, best with a group.",
+          "lat": 37.5658285,
+          "lng": 126.9904459,
+          "gmaps": "https://maps.app.goo.gl/Vxgwxq9hM76QAxz66",
+          "hasLink": true
+        },
+        {
+          "id": "jinsim",
+          "n": 2,
+          "name": "Jinsim",
+          "address": "42-1 Pirundae-ro, Nuha-dong, Jongno District, Seoul, South Korea",
+          "tip": "Clean, comforting pork gukbap at a great price—also works as a solo drinking spot.",
+          "lat": 37.579819,
+          "lng": 126.9687947,
+          "gmaps": "https://www.google.com/maps/place/Jinsim/data=!3m2!1e3!4b1!4m6!3m5!1s0x357ca3c41b8ebd41:0xb64e87941af0bf1c!8m2!3d37.5625641!4d126.9940721!16s%2Fg%2F11fk1rckfs?entry=ttu&g_ep=EgoyMDI2MDUyNS4wIKXMDSoASAFQAw%3D%3D",
+          "hasLink": true
+        },
+        {
+          "id": "gyerim-sikdang",
+          "n": 3,
+          "name": "Gyerim Sikdang",
+          "address": "39 Donhwamun-ro 4-gil, Jongno District, Seoul, South Korea",
+          "tip": "Old-school garlicky dakdoritang (chicken stew)—add knife-cut noodles to the broth at the end.",
+          "lat": 37.5701559,
+          "lng": 126.9945035,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EA%B3%84%EB%A6%BC%20Jongno%203-ga",
+          "hasLink": true
+        },
+        {
+          "id": "hyogye",
+          "n": 4,
+          "name": "Hyogye",
+          "address": "17 Eulji-ro 12-gil, Jung District, Seoul, South Korea",
+          "tip": "Grilled-for-you chicken BBQ in Euljiro—thigh, breast, and special cuts with a highball.",
+          "lat": 37.5653957,
+          "lng": 126.9911196,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%ED%9A%A8%EA%B3%84%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "moasikpum",
+          "n": 5,
+          "name": "Moasikpum",
+          "address": "61-6 Mareunnae-ro, Jung District, Seoul, South Korea",
+          "tip": "Tucked-away outdoor Euljiro spot for cheap grilled beef brisket and tasty snacks.",
+          "lat": 37.5645652,
+          "lng": 126.9948484,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EB%AA%A8%EC%95%84%EC%8B%9D%ED%92%88%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "jiyuken",
+          "n": 6,
+          "name": "Jiyuken",
+          "address": "Jung District, Supyo-ro, 42-7, Seoul, South Korea",
+          "tip": "Cozy Japanese-style Chinese—tantanmen, mapo tofu, and dumplings with cold draft beer.",
+          "lat": 37.5652133,
+          "lng": 126.9901938,
+          "gmaps": "https://maps.app.goo.gl/UjtTRUAEL4wXJ7FF7",
+          "hasLink": true
+        },
+        {
+          "id": "jusikhoesa-hanju-hanju-daieori",
+          "n": 7,
+          "name": "Jusikhoesa Hanju(hanju Daieori)",
+          "address": "Jung District, Chungmu-ro 4-gil, 2, Seoul, South Korea",
+          "tip": "Cute Euljiro stationery shop—cat-themed goods, nice paper, friendly prices.",
+          "lat": 37.5649259,
+          "lng": 126.9929541,
+          "gmaps": "https://maps.app.goo.gl/FhWHg9gGWabw5Rar6",
+          "hasLink": true
+        },
+        {
+          "id": "seoul-gypsy",
+          "n": 8,
+          "name": "Seoul Gypsy",
+          "address": "107 Seosulla-gil, Jongno District, Seoul, South Korea",
+          "tip": "Craft beer and global food against a hanok and stone-wall backdrop on Seosulla-gil.",
+          "lat": 37.5750322,
+          "lng": 126.9915443,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%84%9C%EC%9A%B8%EC%A7%91%EC%8B%9C%20%EC%84%9C%EC%88%9C%EB%9D%BC%EA%B8%B8%20Seosulla-gil",
+          "hasLink": true
+        },
+        {
+          "id": "lost-found-bourbon-bar-roseuteuaenpaundeu",
+          "n": 9,
+          "name": "Lost & Found Bourbon Bar (roseuteuaenpaundeu)",
+          "address": "5 Chungmu-ro 4-gil, Cho-dong, Jung District, Seoul, South Korea",
+          "tip": "Rare dedicated bourbon bar run with real love—perfect for one slow after-dinner drink.",
+          "lat": 37.565076,
+          "lng": 126.9931622,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EB%A1%9C%EC%8A%A4%ED%8A%B8%20%26%20%ED%8C%8C%EC%9A%B4%EB%93%9C%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "oldies-taco",
+          "n": 10,
+          "name": "Oldies Taco",
+          "address": "Jung District, Chungmu-ro 4-gil, 5, Seoul, South Korea",
+          "tip": "Hip taco stand in Euljiro's print-shop alleys—a light bite before a bar or a walk.",
+          "lat": 37.5651334,
+          "lng": 126.9931736,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%98%AC%EB%94%94%EC%8A%A4%20%ED%83%80%EC%BD%94%20%EC%9D%84%EC%A7%80%EB%A1%9C%20%EB%B3%B8%EC%A0%90%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "sewoon-arcade-makercity-sewoon",
+          "n": 11,
+          "name": "Sewoon Arcade (Makercity Sewoon)",
+          "address": "116-6 Jangsa-dong, Jongno District, Seoul, South Korea",
+          "tip": "Old electronics arcade now dotted with cafes and bars—walk it toward Jongmyo for a local route.",
+          "lat": 37.5697077,
+          "lng": 126.995225,
+          "gmaps": "https://maps.app.goo.gl/y8H84fCDghGJbEZv6",
+          "hasLink": true
+        },
+        {
+          "id": "eulji-myeonok",
+          "n": 12,
+          "name": "Eulji Myeonok",
+          "address": "12 Samil-daero 30-gil, Jongno District, Seoul, South Korea",
+          "tip": "Pyongyang-style naengmyeon with a subtle broth that turns quietly addictive.",
+          "lat": 37.5736809,
+          "lng": 126.9885769,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%9D%84%EC%A7%80%EB%A9%B4%EC%98%A5%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "salt-house-deli-anguk",
+          "n": 13,
+          "name": "SALT HOUSE DELI Anguk",
+          "address": "Jongno District, Bukchon-ro 4-gil, 19, Seoul, South Korea",
+          "tip": "Deli doing jambon-beurre and charcuterie well before it was trendy—eat in or take out.",
+          "lat": 37.5793777,
+          "lng": 126.9862789,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%86%8C%EA%B8%88%EC%A7%91%EB%8D%B8%EB%A6%AC%20%EC%95%88%EA%B5%AD%20Anguk",
+          "hasLink": true
+        },
+        {
+          "id": "burnt-seoul",
+          "n": 14,
+          "name": "Burnt Seoul",
+          "address": "Jongno District, Cheonggyecheon-ro, 155, Seoul, South Korea",
+          "tip": "Spacious cafe-bakery near Cheonggyecheon—known for pretzels, but get the honey granola ice cream.",
+          "lat": 37.5688105,
+          "lng": 126.994908,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EB%B2%88%ED%8A%B8%EC%84%9C%EC%9A%B8%20Jongno%20%2F%20Cheonggyecheon",
+          "hasLink": true
+        },
+        {
+          "id": "cheongwaok",
+          "n": 15,
+          "name": "Cheongwaok",
+          "address": "Jung District, Eulji-ro, 110, Seoul, South Korea",
+          "tip": "Clean, approachable spot to try sundae-guk with soju—start with the sundae set if unsure.",
+          "lat": 37.565982,
+          "lng": 126.9900341,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%B2%AD%EC%99%80%EC%98%A5%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "seoul-gypsy-fermenteria-seochon",
+          "n": 16,
+          "name": "Seoul Gypsy Fermenteria Seochon",
+          "address": "62 Jahamun-ro, Jongno District, Seoul, South Korea",
+          "tip": "Fermentation-themed Seochon bar with top Korean craft beer—start with the Mission Helles.",
+          "lat": 37.5816382,
+          "lng": 126.9711341,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%84%9C%EC%9A%B8%EC%A7%91%EC%8B%9C%20%ED%8D%BC%EB%A9%98%ED%85%8C%EB%A6%AC%EC%95%84%20%EC%84%9C%EC%B4%8C%20Seochon",
+          "hasLink": true
+        },
+        {
+          "id": "ida-seoul",
+          "n": 17,
+          "name": "IDA Seoul",
+          "address": "153 Seosulla-gil, Gwonnong-dong, Jongno District, Seoul, South Korea",
+          "tip": "Polished contemporary Korean dining at fair prices on Seosulla-gil—nice outdoor seats.",
+          "lat": 37.5769881,
+          "lng": 126.9917047,
+          "gmaps": "https://www.google.com/maps/place/IDA+Seoul/data=!3m2!1e3!4b1!4m6!3m5!1s0x357ca36fe49fd6b9:0x8a432cdb2abcaabf!8m2!3d37.5769881!4d126.9917047!16s%2Fg%2F11h6v3crp3?entry=ttu&g_ep=EgoyMDI2MDUyNS4wIKXMDSoASAFQAw%3D%3D",
+          "hasLink": true
+        },
+        {
+          "id": "ppau",
+          "n": 18,
+          "name": "Ppau",
+          "address": "157 Eulji-ro, Jung District, Seoul, South Korea",
+          "tip": "Donut shop in Sewoon Sangga—crisp-outside, soft-inside Ppau donuts, freshly fried.",
+          "lat": 37.5672051,
+          "lng": 126.9955916,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EB%B9%A0%EC%9A%B0%20%EC%9D%84%EC%A7%80%EB%A1%9C%EC%A0%90%20Euljiro",
+          "hasLink": true
+        },
+        {
+          "id": "ramen-borudo",
+          "n": 19,
+          "name": "Ramen Borudo",
+          "address": "123-8 Seosulla-gil, Jongno District, Seoul, South Korea",
+          "tip": "Rich tonkotsu ramen near the palaces—thick broth and generous toppings.",
+          "lat": 37.5755976,
+          "lng": 126.9911285,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EB%9D%BC%EB%A9%98%20%EB%B3%B4%EB%A3%A8%EB%8F%84%20Seosulla-gil",
+          "hasLink": true
+        },
+        {
+          "id": "daeseongseong",
+          "n": 20,
+          "name": "Daeseongseong",
+          "address": "Jongno District, Yulgok-ro 10-gil, 25-3, Seoul, South Korea",
+          "tip": "Casual Vietnamese on Seosulla-gil—banh xeo and nurungji highball, best with a group.",
+          "lat": 37.5764117,
+          "lng": 126.9912144,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EB%8C%80%EC%84%B1%EC%84%B1%20%EC%84%9C%EC%88%9C%EB%9D%BC%EA%B8%B8%20Seosulla-gil",
+          "hasLink": true
+        },
+        {
+          "id": "gwangjang-market",
+          "n": 21,
+          "name": "Gwangjang Market",
+          "address": "88 Cheonggyecheon-ro, Jongno District, Seoul, South Korea",
+          "tip": "Seoul's classic market—bindaetteok, yukhoe, mayak gimbap, and full-volume market energy.",
+          "lat": 37.5700398,
+          "lng": 126.9996036,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EA%B4%91%EC%9E%A5%EC%8B%9C%EC%9E%A5%20Jongno%20%2F%20Gwangjang%20Market",
+          "hasLink": true
+        },
+        {
+          "id": "207-2",
+          "n": 22,
+          "name": "207-2",
+          "address": "207-2 Sallim-dong, Jung District, Seoul, South Korea",
+          "tip": "Popular outdoor samgyeopsal near Sewoon Sangga—arrive at opening; great street mood.",
+          "lat": 37.5675231,
+          "lng": 126.9954275,
+          "gmaps": "https://www.google.com/maps/place/207-2+Sallim-dong,+Jung+District,+Seoul/data=!3m2!1e3!4b1!4m6!3m5!1s0x357ca2e04b5d8f3f:0x57ac1199514c44ec!8m2!3d37.5675231!4d126.9954275!16s%2Fg%2F11bzk5t_8k?entry=ttu&g_ep=EgoyMDI2MDUyNS4wIKXMDSoASAFQAw%3D%3D",
+          "hasLink": true
+        },
+        {
+          "id": "seusisora-euljirojeom",
+          "n": 23,
+          "name": "Seusisora Euljirojeom",
+          "address": "Jung District, Eulji-ro, 170, Seoul, South Korea",
+          "tip": "Good-value mid-range sushi omakase using Korean seafood—the Euljiro branch is the one.",
+          "lat": 37.5661055,
+          "lng": 126.9973166,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=%EC%8A%A4%EC%8B%9C%EC%86%8C%EB%9D%BC%20%EC%9D%84%EC%A7%80%EB%A1%9C%EC%A0%90%20Euljiro",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "lost-in-mangwon-dong",
+      "title": "Lost in Mangwon-Dong",
+      "summary": "Charming shops, food, and streets to wander in Mangwon-dong.",
+      "city": "Seoul",
+      "placeCount": 20,
+      "cover": [
+        {
+          "x": 0.8404,
+          "y": 0.3009
+        },
+        {
+          "x": 0.2469,
+          "y": 0.86
+        },
+        {
+          "x": 0.5589,
+          "y": 0.2868
+        },
+        {
+          "x": 0.2106,
+          "y": 0.4836
+        },
+        {
+          "x": 0.3701,
+          "y": 0.274
+        },
+        {
+          "x": 0.86,
+          "y": 0.3434
+        },
+        {
+          "x": 0.2097,
+          "y": 0.4192
+        },
+        {
+          "x": 0.5353,
+          "y": 0.3774
+        },
+        {
+          "x": 0.5156,
+          "y": 0.14
+        },
+        {
+          "x": 0.3113,
+          "y": 0.5863
+        },
+        {
+          "x": 0.4147,
+          "y": 0.308
+        },
+        {
+          "x": 0.4882,
+          "y": 0.427
+        },
+        {
+          "x": 0.4851,
+          "y": 0.5301
+        },
+        {
+          "x": 0.377,
+          "y": 0.239
+        },
+        {
+          "x": 0.1774,
+          "y": 0.4821
+        },
+        {
+          "x": 0.3307,
+          "y": 0.3697
+        },
+        {
+          "x": 0.14,
+          "y": 0.4428
+        },
+        {
+          "x": 0.3587,
+          "y": 0.4665
+        },
+        {
+          "x": 0.2721,
+          "y": 0.2514
+        },
+        {
+          "x": 0.3252,
+          "y": 0.2645
+        }
+      ],
+      "center": {
+        "lat": 37.554782,
+        "lng": 126.906124
+      },
+      "places": [
+        {
+          "id": "kkito",
+          "n": 1,
+          "name": "kkito",
+          "address": "16 World Cup-ro 14-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Cozy yakitori bar near Mangwon Station—skewers with a cold Asahi draft.",
+          "lat": 37.5559959,
+          "lng": 126.9114624,
+          "gmaps": "https://maps.google.com/?cid=12951355135042775412&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "mangwon-hangang-river-park-mapo-nanji-saengmyeong-gil-course",
+          "n": 2,
+          "name": "Mangwon Hangang River Park, Mapo Nanji Saengmyeong-gil Course 2",
+          "address": "465-8 Hapjeong-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Skip the riverbank—the quiet forest trails near 465-6 Hapjeong-dong are the hidden gem.",
+          "lat": 37.5485934,
+          "lng": 126.9042449,
+          "gmaps": "https://maps.app.goo.gl/aR13Q8ZCsks9id4L8",
+          "hasLink": true
+        },
+        {
+          "id": "choe-market",
+          "n": 3,
+          "name": "CHOE MARKET",
+          "address": "57-61 Mangwon-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Indie gift shop in Mangwon, a treasure trove for stationery and character lovers.",
+          "lat": 37.5561832,
+          "lng": 126.908039,
+          "gmaps": "https://maps.google.com/?cid=8642299446996327854&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "tteumsae",
+          "n": 4,
+          "name": "Tteumsae",
+          "address": "395-29 Mangwon-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Charming shop of handmade knitted goods—keyrings, lamps, vases—changing with the seasons.",
+          "lat": 37.553577,
+          "lng": 126.9038027,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.553577,126.9038027",
+          "hasLink": false
+        },
+        {
+          "id": "mood",
+          "n": 5,
+          "name": "Mood",
+          "address": "16 Poeun-ro 8-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Home goods, candles, and ceramics next to Mangwon Market—easy to lose track of time.",
+          "lat": 37.5563521,
+          "lng": 126.9057435,
+          "gmaps": "https://www.google.com/maps/place/%EB%AC%B4%EB%93%9C/data=!4m14!1m7!3m6!1s0x357c99a215faab01:0x7495f3b515b56d30!2zbW9vZG4g66y065Og!8m2!3d37.5598149!4d126.9056634!16s%2Fg%2F11twmpnntj!3m5!1s0x357c992608011415:0x11cda728d3375599!8m2!3d37.5563521!4d126.9057435!16s%2Fg%2F11hf3ls3ck?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D",
+          "hasLink": true
+        },
+        {
+          "id": "anthracite-coffee-seogyo",
+          "n": 6,
+          "name": "Anthracite Coffee Seogyo",
+          "address": "11 World Cup-ro 12-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Bright, light-filled cafe roasting its own beans—great for reading or working.",
+          "lat": 37.5554335,
+          "lng": 126.9117009,
+          "gmaps": "https://maps.google.com/?cid=13578495904792071092&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "your-dining",
+          "n": 7,
+          "name": "Your Dining",
+          "address": "398-15 Mangwon-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Solid Italian with an open kitchen—watch the chefs cook while you wait.",
+          "lat": 37.5544305,
+          "lng": 126.9037923,
+          "gmaps": "https://maps.google.com/?cid=16462378960371327814&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "travel-town",
+          "n": 8,
+          "name": "Travel Town",
+          "address": "57 World Cup-ro 17-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Travel-themed indie bookstore with books, zines, and camping goods—feels like starting a trip.",
+          "lat": 37.554984,
+          "lng": 126.9077525,
+          "gmaps": "https://maps.google.com/?cid=16884915957469427899&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "cheongeoram-mangwon",
+          "n": 9,
+          "name": "Cheongeoram Mangwon",
+          "address": "97 Mangwon-ro, Mapo-gu, Seoul, South Korea",
+          "tip": "Gopchang jeongol (beef tripe hot pot) made for soju—save room for the fried rice finish.",
+          "lat": 37.5581268,
+          "lng": 126.9075123,
+          "gmaps": "https://maps.google.com/?cid=16475224882691896791&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "pp-coffee",
+          "n": 10,
+          "name": "PP Coffee",
+          "address": "23 Donggyo-ro, Mapo-gu, Seoul, South Korea",
+          "tip": "Cloth-filter coffee with a fuller, creamier body—the owner even farms his own beans.",
+          "lat": 37.5522173,
+          "lng": 126.9050275,
+          "gmaps": "https://maps.google.com/?cid=7740504355660271571&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "mangwon-market",
+          "n": 11,
+          "name": "Mangwon Market",
+          "address": "27 Poeun-ro 6-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Market with something for everyone—traditional food, trendy snacks, and a drink as you wander.",
+          "lat": 37.5559018,
+          "lng": 126.9062854,
+          "gmaps": "https://maps.google.com/?cid=17784676563566721318&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "moeul",
+          "n": 12,
+          "name": "moeul",
+          "address": "Mapo-gu, World Cup-ro 19-gil, 71, Seoul, South Korea",
+          "tip": "Cozy cafe covered in visitors' handwritten notes—work downstairs, relax on the third floor.",
+          "lat": 37.5543262,
+          "lng": 126.9071799,
+          "gmaps": "https://maps.google.com/?cid=7677979667882729729&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "quarter",
+          "n": 13,
+          "name": "Quarter",
+          "address": "43-1 Poeun-ro, Mapo-gu, Seoul, South Korea",
+          "tip": "Listening cafe by jazz drummer Jung Maru—vinyl, great sound, admission includes a drink.",
+          "lat": 37.5529611,
+          "lng": 126.9071414,
+          "gmaps": "https://maps.google.com/?cid=9211471805597064811&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "gohyangjib",
+          "n": 14,
+          "name": "Gohyangjib",
+          "address": "414-67 Mangwon-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Cheap Korean meals inside Mangwon Market—kalguksu and sujebi around 5,000 won.",
+          "lat": 37.5568156,
+          "lng": 126.9058274,
+          "gmaps": "https://maps.google.com/?cid=17782890962100634513&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "post-no-bills",
+          "n": 15,
+          "name": "Post No Bills",
+          "address": "397-14 Mangwon-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Vintage-modern cafe with big windows for Mangwon street-watching—terrace on sunny days.",
+          "lat": 37.5535966,
+          "lng": 126.9033992,
+          "gmaps": "https://maps.google.com/?cid=4422154263006639393&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "chaegbar",
+          "n": 16,
+          "name": "Chaegbar",
+          "address": "301ho, 90 Poeun-ro, Mapo-gu, Seoul, South Korea",
+          "tip": "Book bar with separate zones for reading and conversation—good solo or with friends.",
+          "lat": 37.5550858,
+          "lng": 126.9052635,
+          "gmaps": "https://maps.google.com/?cid=16348061961155529893&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "weekend-cake",
+          "n": 17,
+          "name": "Weekend Cake",
+          "address": "69 Mangwon-ro 2-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Best lettering cakes—cream cheese sheet instead of whipped cream, adorable and not too sweet.",
+          "lat": 37.5541169,
+          "lng": 126.9029447,
+          "gmaps": "https://maps.google.com/?cid=4854064276462147832&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "dongilru",
+          "n": 18,
+          "name": "Dongilru",
+          "address": "75 Poeun-ro, Mangwon-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Korean-Chinese by a 40-year chef—Busan-style ganjjajang, only 10 bowls a day.",
+          "lat": 37.5538036,
+          "lng": 126.9056048,
+          "gmaps": "https://maps.google.com/?cid=11029759449995642347&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "ichizen",
+          "n": 19,
+          "name": "Ichizen",
+          "address": "Mapo-gu, Poeun-ro, 109, Seoul, South Korea",
+          "tip": "Favorite tendon spot—seasonal tempura fried right in front of you at the counter.",
+          "lat": 37.5566517,
+          "lng": 126.9045511,
+          "gmaps": "https://maps.google.com/?cid=13714044240427710442&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "tokyo-bingsu",
+          "n": 20,
+          "name": "Tokyo Bingsu",
+          "address": "9 Poeun-ro 8-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Must-try bingsu—the fresh, light tomato bingsu is unlike any other.",
+          "lat": 37.5564784,
+          "lng": 126.9051972,
+          "gmaps": "https://maps.google.com/?cid=2213279829968979701&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "yeonhui-dong",
+      "title": "Yeonhui-dong",
+      "summary": "Quiet streets and thoughtfully designed cafés made for slowing down.",
+      "city": "Seoul",
+      "placeCount": 20,
+      "cover": [
+        {
+          "x": 0.4249,
+          "y": 0.8238
+        },
+        {
+          "x": 0.4355,
+          "y": 0.4821
+        },
+        {
+          "x": 0.5144,
+          "y": 0.7092
+        },
+        {
+          "x": 0.3889,
+          "y": 0.8308
+        },
+        {
+          "x": 0.5815,
+          "y": 0.7589
+        },
+        {
+          "x": 0.366,
+          "y": 0.7838
+        },
+        {
+          "x": 0.618,
+          "y": 0.14
+        },
+        {
+          "x": 0.2982,
+          "y": 0.8201
+        },
+        {
+          "x": 0.6172,
+          "y": 0.648
+        },
+        {
+          "x": 0.4952,
+          "y": 0.7373
+        },
+        {
+          "x": 0.5105,
+          "y": 0.7323
+        },
+        {
+          "x": 0.4539,
+          "y": 0.7969
+        },
+        {
+          "x": 0.86,
+          "y": 0.4633
+        },
+        {
+          "x": 0.6754,
+          "y": 0.7204
+        },
+        {
+          "x": 0.4089,
+          "y": 0.7784
+        },
+        {
+          "x": 0.364,
+          "y": 0.2987
+        },
+        {
+          "x": 0.7937,
+          "y": 0.4663
+        },
+        {
+          "x": 0.4783,
+          "y": 0.746
+        },
+        {
+          "x": 0.3982,
+          "y": 0.2834
+        },
+        {
+          "x": 0.14,
+          "y": 0.86
+        }
+      ],
+      "center": {
+        "lat": 37.569601,
+        "lng": 126.930158
+      },
+      "places": [
+        {
+          "id": "pueoringausmeraki",
+          "n": 1,
+          "name": "Pueoringausmeraki",
+          "address": "189-2 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Striking building with a ground-floor cafe and exhibition space upstairs.",
+          "lat": 37.5667112,
+          "lng": 126.929278,
+          "gmaps": "https://maps.google.com/?cid=3687288891674389548&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "coottha-brunch",
+          "n": 2,
+          "name": "Coottha Brunch",
+          "address": "48 Jeungga-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Aussie-style brunch arguably better than Australia's—everything on the menu delivers.",
+          "lat": 37.5722016,
+          "lng": 126.9294189,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5722016,126.9294189",
+          "hasLink": false
+        },
+        {
+          "id": "domasorigimbab",
+          "n": 3,
+          "name": "Domasorigimbab",
+          "address": "27 Yeonhui-ro 15-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Standout kimbap even by Yeonhui standards—one generously stuffed roll is a full meal.",
+          "lat": 37.5685534,
+          "lng": 126.9304667,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5685534,126.9304667",
+          "hasLink": false
+        },
+        {
+          "id": "yeonhuidonggukhwappang",
+          "n": 4,
+          "name": "Yeonhuidonggukhwappang",
+          "address": "17-21 Yeonhuimat-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Yeonhui's signature street snack—try the seasonal cream flavors beyond classic red bean.",
+          "lat": 37.5665983,
+          "lng": 126.9287997,
+          "gmaps": "https://maps.google.com/?cid=5604846584235338536&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "protokoll-roasters",
+          "n": 5,
+          "name": "Protokoll Roasters",
+          "address": "109 Yeonhui-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Laptop-friendly roastery cafe where everyone's working—easy to focus.",
+          "lat": 37.5677541,
+          "lng": 126.9313583,
+          "gmaps": "https://maps.google.com/?cid=12556498310606203999&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "vision-stroll-yeonhui-roastery",
+          "n": 6,
+          "name": "Vision Stroll Yeonhui Roastery",
+          "address": "24 Yeonhui-ro 11ga-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Mangwon favorite reborn in Yeonhui—same cozy vibe, even better bakery selection.",
+          "lat": 37.5673546,
+          "lng": 126.9284961,
+          "gmaps": "https://maps.google.com/?cid=8475649539660303499&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "yangmingsan",
+          "n": 7,
+          "name": "Yangmingsan",
+          "address": "Seodaemun-gu, Gajwa-ro, 36, Seoul, South Korea",
+          "tip": "Hidden local Chinese joint—fried eggplant and pork with a cold beer, cheap and comforting.",
+          "lat": 37.5776984,
+          "lng": 126.9318425,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5776984,126.9318425",
+          "hasLink": false
+        },
+        {
+          "id": "lowkey-yeonhui",
+          "n": 8,
+          "name": "Lowkey Yeonhui",
+          "address": "433-8 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Relaxed cafe for slow coffee, an outdoor chat, or settling in to work.",
+          "lat": 37.5667703,
+          "lng": 126.9275951,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5667703,126.9275951",
+          "hasLink": false
+        },
+        {
+          "id": "der-stuhl",
+          "n": 9,
+          "name": "Der StuhL",
+          "address": "98 Yeonhui-ro 25-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Cool minimalist cafe with big communal tables—great for groups or focused work.",
+          "lat": 37.5695365,
+          "lng": 126.9318315,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5695365,126.9318315",
+          "hasLink": false
+        },
+        {
+          "id": "cobbler-yeonhee-kobeulreo-yeonhui",
+          "n": 10,
+          "name": "Cobbler Yeonhee Kobeulreo Yeonhui",
+          "address": "31-9 Yeonhuimat-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Cocktail bar in a renovated house—drinks tailored to your taste in a calm, cozy setting.",
+          "lat": 37.5681013,
+          "lng": 126.9302113,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5681013,126.9302113",
+          "hasLink": false
+        },
+        {
+          "id": "chungwang",
+          "n": 11,
+          "name": "Chungwang",
+          "address": "132-83 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Korean fusion pub with crowd-pleasers—pair them with traditional Korean liquor.",
+          "lat": 37.568181,
+          "lng": 126.9304143,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.568181,126.9304143",
+          "hasLink": false
+        },
+        {
+          "id": "objectsang-ga",
+          "n": 12,
+          "name": "objectsang-ga",
+          "address": "23 Yeonhuimat-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Customize pouches and totes with patches—staff iron them on while you wait.",
+          "lat": 37.5671442,
+          "lng": 126.9296632,
+          "gmaps": "https://maps.google.com/?cid=18043842668380229882&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "izakaya-robataya-caden",
+          "n": 13,
+          "name": "Izakaya Robataya Caden",
+          "address": "173 Yeonhui-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Generous, varied udon—head upstairs for cold beer and tasty side dishes.",
+          "lat": 37.5725045,
+          "lng": 126.9350565,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5725045,126.9350565",
+          "hasLink": false
+        },
+        {
+          "id": "cafe-sinola-yeonhui",
+          "n": 14,
+          "name": "CAFE SINOLA YEONHUI",
+          "address": "7-15 Yeonhui-ro 16-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Brunch favorite that turns into a popular cafe—the newest branch of a loved local chain.",
+          "lat": 37.5683722,
+          "lng": 126.9326045,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5683722,126.9326045",
+          "hasLink": false
+        },
+        {
+          "id": "banul-story",
+          "n": 15,
+          "name": "Banul Story",
+          "address": "15 Yeonhui-ro 11ga-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Cozy yarn shop with an amazing selection and a warm community vibe.",
+          "lat": 37.5674403,
+          "lng": 126.9290661,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5674403,126.9290661",
+          "hasLink": false
+        },
+        {
+          "id": "bottle-lounge",
+          "n": 16,
+          "name": "Bottle Lounge",
+          "address": "26 Hongyeon-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "All-vegan desserts that taste like the real thing, plus eco-friendly goods to browse.",
+          "lat": 37.5751488,
+          "lng": 126.9284689,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5751488,126.9284689",
+          "hasLink": false
+        },
+        {
+          "id": "nokwonssambab-yeonhuijeom",
+          "n": 17,
+          "name": "Nokwonssambab Yeonhuijeom",
+          "address": "22 Yeonhui-ro 25-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Authentic Korean home-style meals like grandma's, in a homey setting.",
+          "lat": 37.5724562,
+          "lng": 126.9341766,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5724562,126.9341766",
+          "hasLink": false
+        },
+        {
+          "id": "tta",
+          "n": 18,
+          "name": "tta",
+          "address": "28-5 Yeonhui-ro 11-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Lifestyle prop shop in a renovated house—curated props to furniture at fair prices.",
+          "lat": 37.5679621,
+          "lng": 126.929987,
+          "gmaps": "https://maps.google.com/?cid=13225273786933418163&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "sans",
+          "n": 19,
+          "name": "Sans",
+          "address": "708-3 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Brunch cafe with plenty of vegan options—light food and floor-to-ceiling natural light.",
+          "lat": 37.5753948,
+          "lng": 126.9289241,
+          "gmaps": "https://maps.google.com/?cid=1772263547785475843&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "midopa",
+          "n": 20,
+          "name": "MIDOPA",
+          "address": "420-15 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Rare Yeonhui cafe-bar—drop in for wine or whiskey with light sweet snacks.",
+          "lat": 37.5661297,
+          "lng": 126.9254945,
+          "gmaps": "https://maps.google.com/?cid=1888166125576151671&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "inspiration-seongsu",
+      "title": "Inspiration seongsu",
+      "summary": "Where I find inspiration in Seoul's most creative neighborhood.",
+      "city": "Seongsu",
+      "placeCount": 20,
+      "cover": [
+        {
+          "x": 0.5859,
+          "y": 0.5229
+        },
+        {
+          "x": 0.6397,
+          "y": 0.4562
+        },
+        {
+          "x": 0.7292,
+          "y": 0.5761
+        },
+        {
+          "x": 0.14,
+          "y": 0.1439
+        },
+        {
+          "x": 0.2575,
+          "y": 0.14
+        },
+        {
+          "x": 0.6865,
+          "y": 0.6852
+        },
+        {
+          "x": 0.4716,
+          "y": 0.3934
+        },
+        {
+          "x": 0.4338,
+          "y": 0.3772
+        },
+        {
+          "x": 0.6537,
+          "y": 0.86
+        },
+        {
+          "x": 0.5892,
+          "y": 0.4051
+        },
+        {
+          "x": 0.5284,
+          "y": 0.3643
+        },
+        {
+          "x": 0.5696,
+          "y": 0.4631
+        },
+        {
+          "x": 0.6528,
+          "y": 0.4637
+        },
+        {
+          "x": 0.6261,
+          "y": 0.5446
+        },
+        {
+          "x": 0.5634,
+          "y": 0.4945
+        },
+        {
+          "x": 0.5426,
+          "y": 0.4779
+        },
+        {
+          "x": 0.86,
+          "y": 0.6125
+        },
+        {
+          "x": 0.4358,
+          "y": 0.4226
+        },
+        {
+          "x": 0.5915,
+          "y": 0.8328
+        },
+        {
+          "x": 0.7293,
+          "y": 0.5767
+        }
+      ],
+      "center": {
+        "lat": 37.542607,
+        "lng": 127.055791
+      },
+      "places": [
+        {
+          "id": "ader-error-seongsu",
+          "n": 1,
+          "name": "ADER ERROR SEONGSU",
+          "address": "82 Seongsui-ro, Seongdong-gu, Seoul, South Korea",
+          "tip": "Fashion store that feels like an art installation—Korean brand storytelling at its best.",
+          "lat": 37.5422211,
+          "lng": 127.0565311,
+          "gmaps": "https://maps.google.com/?cid=9037249081505500256&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "mo-no-ha",
+          "n": 2,
+          "name": "Mo-no-ha",
+          "address": "South Korea, Seoul, Seongdong-gu, Seongsui-ro 20-gil, 16",
+          "tip": "Calm lifestyle store blending Korean and Japanese minimal aesthetics.",
+          "lat": 37.543018,
+          "lng": 127.0583818,
+          "gmaps": "https://maps.google.com/?cid=10053289788956073747&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "ephemera",
+          "n": 3,
+          "name": "EPHEMERA",
+          "address": "10 Yeonmujang 17-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "Quiet cafe inside LCDC, perfect for slowing down.",
+          "lat": 37.5415864,
+          "lng": 127.0614547,
+          "gmaps": "https://maps.google.com/?cid=8337559195580467313&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "narrative-object",
+          "n": 4,
+          "name": "Narrative object",
+          "address": "24-7 Seoulsup 2-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "Curated objects with stories—refined pieces by Korean designers and makers.",
+          "lat": 37.5467459,
+          "lng": 127.0412121,
+          "gmaps": "https://maps.google.com/?cid=8108240413448795610&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "your-naked-cheese",
+          "n": 5,
+          "name": "Your Naked Cheese",
+          "address": "656-439 Seongsu-dong 1(il)-ga, Seongdong-gu, Seoul, South Korea",
+          "tip": "Cozy wine bar specializing in cheese pairings—a lovely way to end the evening.",
+          "lat": 37.5467922,
+          "lng": 127.04525,
+          "gmaps": "https://maps.google.com/?cid=17072066884854235419&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "seongsuyul-immersive-music-space",
+          "n": 6,
+          "name": "SEONGSUYUL IMMERSIVE MUSIC SPACE",
+          "address": "269-212 Seongsu-dong 2(i)-ga, Seongdong-gu, Seoul, South Korea",
+          "tip": "Record shop and music space with intimate live shows—Seoul's local music culture.",
+          "lat": 37.5402836,
+          "lng": 127.0599885,
+          "gmaps": "https://maps.google.com/?cid=2365541824658911416&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "tamburins-seongsu",
+          "n": 7,
+          "name": "Tamburins Seongsu",
+          "address": "8 Yeonmujang 5-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "Fragrance flagship where the spatial storytelling rivals the perfumes.",
+          "lat": 37.5437671,
+          "lng": 127.0526044,
+          "gmaps": "https://maps.google.com/?cid=8792177122217069928&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "new-mix-coffee",
+          "n": 8,
+          "name": "New Mix Coffee",
+          "address": "3 Yeonmujang 3-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "Tiny shop rebranding Korea's iconic instant coffee mix with clean, clever design.",
+          "lat": 37.5439611,
+          "lng": 127.0513053,
+          "gmaps": "https://maps.google.com/?cid=10685972495728647283&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "haus-nowhere",
+          "n": 9,
+          "name": "Haus nowhere",
+          "address": "South Korea, Seoul, Seongdong-gu, Ttukseom-ro, 433",
+          "tip": "Flagship that feels more like a contemporary exhibition than a store—world-class brand experience.",
+          "lat": 37.5381974,
+          "lng": 127.0588615,
+          "gmaps": "https://maps.google.com/?cid=12964177860871752529&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "musinsa-empty-seongsu",
+          "n": 10,
+          "name": "MUSINSA EMPTY SEONGSU",
+          "address": "97 Seongsui-ro, Seongdong-gu, Seoul, South Korea",
+          "tip": "Experimental retail space mixing fashion and art—rotating exhibitions and pop-ups.",
+          "lat": 37.5436282,
+          "lng": 127.0566446,
+          "gmaps": "https://maps.google.com/?cid=5075294706579618113&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "olive-young-n-seongsu",
+          "n": 11,
+          "name": "Olive Young N Seongsu",
+          "address": "13 Yeonmujang 7-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "Flagship for the latest K-beauty trends—and for watching Korean consumer culture.",
+          "lat": 37.5441151,
+          "lng": 127.054556,
+          "gmaps": "https://maps.google.com/?cid=5819355147860464207&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "maman-gelato-seongsu",
+          "n": 12,
+          "name": "Maman Gelato Seongsu",
+          "address": "South Korea, Seoul, Seongdong-gu, Yeonmujang 9-gil, 8",
+          "tip": "Beloved neighborhood gelato—the perfect break while wandering Seongsu.",
+          "lat": 37.5429349,
+          "lng": 127.0559738,
+          "gmaps": "https://maps.google.com/?cid=7806284122973477261&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "eql-seongsu-grove",
+          "n": 13,
+          "name": "EQL SEONGSU GROVE",
+          "address": "South Korea, Seoul, Seongdong-gu, Yeonmujang 15-gil, 11",
+          "tip": "Curated Korean fashion and lifestyle brands—a snapshot of current Korean design.",
+          "lat": 37.542928,
+          "lng": 127.0588309,
+          "gmaps": "https://maps.google.com/?cid=17244925744761784497&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "visual-collect",
+          "n": 14,
+          "name": "Visual Collect",
+          "address": "South Korea, Seoul, Seongdong-gu, Yeonmujang 13-gil, 3",
+          "tip": "Curated bookstore for art books and indie publications—great for visual references.",
+          "lat": 37.5419619,
+          "lng": 127.0579137,
+          "gmaps": "https://maps.google.com/?cid=11504739294201572773&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "29cm-home",
+          "n": 15,
+          "name": "29cm home",
+          "address": "315-10 Seongsu-dong 2(i)-ga, Seongdong-gu, Seoul, South Korea",
+          "tip": "Curated home store of contemporary Korean lifestyle brands—how modern Seoul lives.",
+          "lat": 37.5425599,
+          "lng": 127.0557579,
+          "gmaps": "https://maps.google.com/?cid=13259399922311660843&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "repertory",
+          "n": 16,
+          "name": "Repertory",
+          "address": "315-56 Seongsu-dong 2(i)-ga, Seongdong-gu, Seoul, South Korea",
+          "tip": "Leather brand focused on craftsmanship—for products that age beautifully.",
+          "lat": 37.5427587,
+          "lng": 127.055043,
+          "gmaps": "https://maps.google.com/?cid=955105521803782571&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "index",
+          "n": 17,
+          "name": "index",
+          "address": "200 Achasan-ro, Gwangjin District, Seoul, South Korea",
+          "tip": "",
+          "lat": 37.5411513,
+          "lng": 127.0659498,
+          "gmaps": "https://maps.google.com/?cid=12495250399016584720&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "point-of-view",
+          "n": 18,
+          "name": "Point of View",
+          "address": "18 Yeonmujang-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "One of the best spots for Korean stationery and indie design brands.",
+          "lat": 37.5434188,
+          "lng": 127.051374,
+          "gmaps": "https://maps.google.com/?cid=8411587396190321932&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "piece-layer",
+          "n": 19,
+          "name": "Piece Layer",
+          "address": "South Korea, Seoul, Seongdong-gu, Ttukseom-ro, 415",
+          "tip": "Curated design object store channeling Seoul's creative community taste.",
+          "lat": 37.538522,
+          "lng": 127.0567242,
+          "gmaps": "https://maps.google.com/?cid=15236065406558256953&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "lcdc-seoul",
+          "n": 20,
+          "name": "LCDC Seoul",
+          "address": "10 Yeonmujang 17-gil, Seongsu-dong 2(i)-ga, Seongdong-gu, Seoul, South Korea",
+          "tip": "Creative complex blending brands, exhibitions, and retail—Seoul's creative scene in one stop.",
+          "lat": 37.5415795,
+          "lng": 127.0614594,
+          "gmaps": "https://maps.google.com/?cid=15597777237517384379&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "gwangjang-market-essentials",
+      "title": "Gwangjang Market Essentials",
+      "summary": "Seoul's most iconic market through a local's eyes.",
+      "city": "Seoul",
+      "placeCount": 19,
+      "cover": [
+        {
+          "x": 0.72,
+          "y": 0.2783
+        },
+        {
+          "x": 0.6452,
+          "y": 0.1468
+        },
+        {
+          "x": 0.6563,
+          "y": 0.4313
+        },
+        {
+          "x": 0.4555,
+          "y": 0.6628
+        },
+        {
+          "x": 0.5213,
+          "y": 0.4284
+        },
+        {
+          "x": 0.14,
+          "y": 0.481
+        },
+        {
+          "x": 0.2661,
+          "y": 0.4734
+        },
+        {
+          "x": 0.7479,
+          "y": 0.5219
+        },
+        {
+          "x": 0.6269,
+          "y": 0.2346
+        },
+        {
+          "x": 0.2661,
+          "y": 0.4734
+        },
+        {
+          "x": 0.7409,
+          "y": 0.3899
+        },
+        {
+          "x": 0.5815,
+          "y": 0.378
+        },
+        {
+          "x": 0.4555,
+          "y": 0.6628
+        },
+        {
+          "x": 0.4555,
+          "y": 0.6628
+        },
+        {
+          "x": 0.631,
+          "y": 0.584
+        },
+        {
+          "x": 0.2661,
+          "y": 0.4734
+        },
+        {
+          "x": 0.2661,
+          "y": 0.4734
+        },
+        {
+          "x": 0.86,
+          "y": 0.86
+        },
+        {
+          "x": 0.6161,
+          "y": 0.14
+        }
+      ],
+      "center": {
+        "lat": 37.570299,
+        "lng": 126.999916
+      },
+      "places": [
+        {
+          "id": "parks-mung-bean-pancake-main",
+          "n": 1,
+          "name": "Park's Mung Bean Pancake Main",
+          "address": "7 Jong-ro 32-gil, Jongno District, Seoul, South Korea",
+          "tip": "Netflix-famous Gwangjang stall—crispy mung bean pancakes with cold dongdongju.",
+          "lat": 37.5705337,
+          "lng": 127.0008464,
+          "gmaps": "https://maps.google.com/?cid=10884672776949401746&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "gwangjang-hotteok",
+          "n": 2,
+          "name": "Gwangjang Hotteok",
+          "address": "206 Jong-ro, Jongno 5(o)-ga, Jongno District, Seoul, South Korea",
+          "tip": "Made-to-order hotteok stuffed with brown sugar, cinnamon, and nuts—eat it hot.",
+          "lat": 37.5707027,
+          "lng": 127.0004948,
+          "gmaps": "https://maps.app.goo.gl/UNXXcQxFLuDyBdh8A",
+          "hasLink": true
+        },
+        {
+          "id": "honglim-sanghoe",
+          "n": 3,
+          "name": "Honglim Sanghoe",
+          "address": "3-1 Yeji -dong, Jongno District, Seoul, South Korea",
+          "tip": "Traditional banchan shop—soy marinated crab, pollock roe, kimchi; Korean food beyond BBQ.",
+          "lat": 37.5703372,
+          "lng": 127.0005473,
+          "gmaps": "https://maps.google.com/?cid=4616835776940341713&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "sundae-blood-sausage",
+          "n": 4,
+          "name": "Sundae (Blood Sausage)",
+          "address": "88 Cheonggyecheon-ro, Jongno District, Seoul, South Korea",
+          "tip": "Fresh sundae (blood sausage) in Gwangjang—dip it in tteokbokki sauce like the locals.",
+          "lat": 37.5700398,
+          "lng": 126.9996036,
+          "gmaps": "https://www.google.com/maps/place/%EA%B4%91%EC%9E%A5%EC%8B%9C%EC%9E%A5/data=!3m1!4b1!4m6!3m5!1s0x357ca2ed7e74759b:0xd656a34831089f44!8m2!3d37.5700398!4d126.9996036!16s%2Fm%2F012r1x6q?entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D",
+          "hasLink": true
+        },
+        {
+          "id": "buchon-yukhoe-main-store",
+          "n": 5,
+          "name": "Buchon Yukhoe Main Store",
+          "address": "Jongno District, Jongno 4(sa)-ga, Seoul, South Korea",
+          "tip": "Iconic yukhoe (seasoned raw beef) with egg yolk—or try it topped with fresh octopus.",
+          "lat": 37.5703409,
+          "lng": 126.999913,
+          "gmaps": "https://maps.google.com/?cid=3621053671024990226&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "off-beauty",
+          "n": 6,
+          "name": "Off Beauty",
+          "address": "Jongno District, Changgyeonggung-ro, 88, Seoul, South Korea",
+          "tip": "Discount K-beauty store—outlet prices on skincare, sheet masks, and travel-size items.",
+          "lat": 37.5702734,
+          "lng": 126.9981212,
+          "gmaps": "https://maps.google.com/?cid=15976841986945156687&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "galrikboi",
+          "n": 7,
+          "name": "Galrikboi",
+          "address": "88 Changgyeonggung-ro, Jongno District, Seoul, South Korea",
+          "tip": "Korean garlic bread at its best—chewy, stuffed with cream cheese and sweet garlic butter.",
+          "lat": 37.5702831,
+          "lng": 126.9987139,
+          "gmaps": "https://maps.google.com/?cid=11578728264329447995&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "jeonrado-hoetjip",
+          "n": 8,
+          "name": "Jeonrado Hoetjip",
+          "address": "Jongno District, Changgyeonggung-ro, 88, Seoul, South Korea",
+          "tip": "Market-style sashimi and seafood platters with soju—the Gwangjang locals' longer meal.",
+          "lat": 37.5702208,
+          "lng": 127.0009775,
+          "gmaps": "https://maps.google.com/?cid=11853152874975084583&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "kangane-tteokbokki",
+          "n": 9,
+          "name": "Kangane Tteokbokki",
+          "address": "Jongno District, Jong-ro 32-gil, 2, Seoul, South Korea",
+          "tip": "Chewy, firm-bite tteokbokki—pair with fried snacks or sundae for the full market combo.",
+          "lat": 37.5705899,
+          "lng": 127.000409,
+          "gmaps": "https://maps.google.com/?cid=10567511475662224687&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "kodak",
+          "n": 10,
+          "name": "Kodak",
+          "address": "Jongno District, Changgyeonggung-ro, 88, Seoul, South Korea",
+          "tip": "Kodak fashion store with streetwear and Korea-exclusive merch—fun for a quick browse.",
+          "lat": 37.5702831,
+          "lng": 126.9987139,
+          "gmaps": "https://maps.google.com/?cid=11128614242124134061&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "mother-daughter-kimbap",
+          "n": 11,
+          "name": "Mother-Daughter Kimbap",
+          "address": "403-23 Dongho-ro, Jongno District, Seoul, South Korea",
+          "tip": "Gwangjang's famous mayak gimbap—bite-size rolls with an addictive mustard-soy dip.",
+          "lat": 37.5703904,
+          "lng": 127.0009448,
+          "gmaps": "https://maps.google.com/?cid=18160832364236802800&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "olive-young",
+          "n": 12,
+          "name": "Olive Young",
+          "address": "88 Changgyeonggung-ro, Jongno District, Seoul, South Korea",
+          "tip": "Olive Young as an attraction—color analysis, skin diagnostics, and exclusive market goods.",
+          "lat": 37.5704057,
+          "lng": 127.0001957,
+          "gmaps": "https://maps.google.com/?cid=13480356349037815818&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "live-octopus",
+          "n": 13,
+          "name": "Live Octopus",
+          "address": "88 Cheonggyecheon-ro, Jongno District, Seoul, South Korea",
+          "tip": "For the adventurous—freshly chopped live octopus and octopus-topped beef tartare.",
+          "lat": 37.5700398,
+          "lng": 126.9996036,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5700398,126.9996036",
+          "hasLink": false
+        },
+        {
+          "id": "fresh-fruit-juice-stalls",
+          "n": 14,
+          "name": "Fresh Fruit Juice Stalls",
+          "address": "88 Cheonggyecheon-ro, Jongno District, Seoul, South Korea",
+          "tip": "Follow the colorful fruit stacks—Gwangjang's juice stalls are an open secret.",
+          "lat": 37.5700398,
+          "lng": 126.9996036,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5700398,126.9996036",
+          "hasLink": false
+        },
+        {
+          "id": "starbucks-gwangjang-market",
+          "n": 15,
+          "name": "Starbucks Gwangjang Market",
+          "address": "88 Changgyeonggung-ro, Jongno District, Seoul, South Korea",
+          "tip": "A Starbucks with a view—window seats overlooking Gwangjang Market's rooftops and lanes.",
+          "lat": 37.5701411,
+          "lng": 127.000428,
+          "gmaps": "https://maps.google.com/?cid=3913981661560645047&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "kirsh-fruit-of-the-loom",
+          "n": 16,
+          "name": "KIRSH & Fruit of the Loom",
+          "address": "88 Changgyeonggung-ro, Jongno District, Seoul, South Korea",
+          "tip": "Easy intro to contemporary Korean fashion in Gwangjang—apparel, bags, and accessories.",
+          "lat": 37.5702831,
+          "lng": 126.9987139,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5702831,126.9987139",
+          "hasLink": false
+        },
+        {
+          "id": "hbaf-almond-store",
+          "n": 17,
+          "name": "HBAF Almond Store",
+          "address": "88 Changgyeonggung-ro, Jongno District, Seoul, South Korea",
+          "tip": "Korea's flavored almonds, from Honey Butter to Wasabi—an easy souvenir; sample a few.",
+          "lat": 37.5702831,
+          "lng": 126.9987139,
+          "gmaps": "https://maps.google.com/?cid=368003097064063027&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "onion-cafe",
+          "n": 18,
+          "name": "Onion Cafe",
+          "address": "Jongno District, Cheonggyecheon-ro, 215, Seoul, South Korea",
+          "tip": "Industrial-chic cafe in an old jewelry workshop—excellent pastries, stunning space.",
+          "lat": 37.5697865,
+          "lng": 127.0015042,
+          "gmaps": "https://maps.google.com/?cid=16483001005606592790&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "chapssal-kkwabaegi-glutinous-rice-twist",
+          "n": 19,
+          "name": "Chapssal Kkwabaegi (Glutinous Rice Twist)",
+          "address": "Jongno District, Jongno 4(sa)-ga, 188, Seoul, South Korea",
+          "tip": "Chewy glutinous-rice twist donuts fried fresh—get the original or red bean, warm.",
+          "lat": 37.5707114,
+          "lng": 127.0003582,
+          "gmaps": "https://maps.google.com/?cid=13923868255222706406&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "noodle-goodness",
+      "title": "Noodle Goodness",
+      "summary": "Only the #1 spot for each ramen style.",
+      "city": "Seoul",
+      "placeCount": 10,
+      "cover": [
+        {
+          "x": 0.14,
+          "y": 0.4133
+        },
+        {
+          "x": 0.2081,
+          "y": 0.4329
+        },
+        {
+          "x": 0.1717,
+          "y": 0.4271
+        },
+        {
+          "x": 0.2233,
+          "y": 0.3994
+        },
+        {
+          "x": 0.2343,
+          "y": 0.3065
+        },
+        {
+          "x": 0.86,
+          "y": 0.6847
+        },
+        {
+          "x": 0.8062,
+          "y": 0.86
+        },
+        {
+          "x": 0.5918,
+          "y": 0.202
+        },
+        {
+          "x": 0.2211,
+          "y": 0.14
+        },
+        {
+          "x": 0.5615,
+          "y": 0.3089
+        }
+      ],
+      "center": {
+        "lat": 37.549241,
+        "lng": 126.956423
+      },
+      "places": [
+        {
+          "id": "ramura",
+          "n": 1,
+          "name": "Ramura",
+          "address": "Mapo-gu, Poeun-ro, 21, Seoul, South Korea",
+          "tip": "Chicken ramen specialists—get the black one.",
+          "lat": 37.5497522,
+          "lng": 126.9085877,
+          "gmaps": "https://maps.app.goo.gl/matXoR3QwQzUrhWA6?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "ramenba-sikou",
+          "n": 2,
+          "name": "Ramenba Sikou",
+          "address": "Mapo-gu, Wausan-ro 7-gil, 33, Seoul, South Korea",
+          "tip": "Best shoyu ramen around—better than most shops in Japan.",
+          "lat": 37.5473514,
+          "lng": 126.9210357,
+          "gmaps": "https://maps.app.goo.gl/Fv2pJWvPDEgDCE5g7?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "irie",
+          "n": 3,
+          "name": "Irie",
+          "address": "372-30 Hapjeong-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "Get the shio ramen—the best in Korea.",
+          "lat": 37.5480687,
+          "lng": 126.9143843,
+          "gmaps": "https://maps.app.goo.gl/3RhpBynDKAuSdJSdA?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "mentakamusyo",
+          "n": 4,
+          "name": "Mentakamusyo",
+          "address": "29 Wausan-ro 18-gil, Mapo-gu, Seoul, South Korea",
+          "tip": "Best tsukemen in Korea—add the shrimp seasoning to the soup.",
+          "lat": 37.5514493,
+          "lng": 126.9238053,
+          "gmaps": "https://maps.app.goo.gl/TFEdhZWRgicCB9Xb8?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "hakuten",
+          "n": 5,
+          "name": "Hakuten",
+          "address": "387-6 Yeonnam-dong, Mapo-gu, Seoul, South Korea",
+          "tip": "The best iekei ramen in Seoul.",
+          "lat": 37.5628201,
+          "lng": 126.9258144,
+          "gmaps": "https://maps.app.goo.gl/aAZ74Vh9AMxKV2bL9?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "butanomaekseu",
+          "n": 6,
+          "name": "Butanomaekseu",
+          "address": "338 Hakdong-ro, Gangnam District, Seoul, South Korea",
+          "tip": "Best miso ramen—Sapporo-style with a seasonal menu; the miso is the top pick.",
+          "lat": 37.5165513,
+          "lng": 127.0401391,
+          "gmaps": "https://maps.app.goo.gl/EqVRwFo9jhyWLTTX9?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "wasshoiken",
+          "n": 7,
+          "name": "Wasshoiken",
+          "address": "Gangnam District, Teheran-ro 4-gil, 46, Seoul, South Korea",
+          "tip": "Their seafood-based kyokai tonkotsu is easily the best in Seoul.",
+          "lat": 37.4951086,
+          "lng": 127.0303115,
+          "gmaps": "https://maps.app.goo.gl/naQXT1BesSx4HFo29?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "ramen-borudo",
+          "n": 8,
+          "name": "Ramen Borudo",
+          "address": "123-8 Seosulla-gil, Jongno District, Seoul, South Korea",
+          "tip": "Thick, porky tonkotsu—#1 in Seoul.",
+          "lat": 37.5755976,
+          "lng": 126.9911285,
+          "gmaps": "https://maps.app.goo.gl/BWaPCFgVsjVTXFPe7?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "katatsumuri-udon",
+          "n": 9,
+          "name": "Katatsumuri Udon",
+          "address": "72 Myongjidae-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Hole-in-the-wall udon with carefully made, great-texture noodles—#1 in Korea.",
+          "lat": 37.5831877,
+          "lng": 126.9234127,
+          "gmaps": "https://maps.app.goo.gl/86U13dBeMACXs6KA8?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "myeongdong-kyoja",
+          "n": 10,
+          "name": "Myeongdong Kyoja",
+          "address": "29 Myeongdong 10-gil, Jung District, Seoul, South Korea",
+          "tip": "An institution for chicken noodle soup—beware the kimchi, fiercely spicy and garlicky.",
+          "lat": 37.5625266,
+          "lng": 126.985609,
+          "gmaps": "https://maps.app.goo.gl/ADhNQV9rStwoK6Fe6?g_st=ic",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "korean-bbq-only-1",
+      "title": "Korean BBQ - Only #1",
+      "summary": "Only the #1 BBQ spot per genre, regularly updated.",
+      "city": "Seoul",
+      "placeCount": 8,
+      "cover": [
+        {
+          "x": 0.6951,
+          "y": 0.14
+        },
+        {
+          "x": 0.7569,
+          "y": 0.4481
+        },
+        {
+          "x": 0.6144,
+          "y": 0.5212
+        },
+        {
+          "x": 0.86,
+          "y": 0.86
+        },
+        {
+          "x": 0.6359,
+          "y": 0.6604
+        },
+        {
+          "x": 0.7153,
+          "y": 0.1788
+        },
+        {
+          "x": 0.4933,
+          "y": 0.5492
+        },
+        {
+          "x": 0.14,
+          "y": 0.4953
+        }
+      ],
+      "center": {
+        "lat": 37.540301,
+        "lng": 127.012723
+      },
+      "places": [
+        {
+          "id": "insaeng-hanwoo",
+          "n": 1,
+          "name": "Insaeng Hanwoo",
+          "address": "Seongdong-gu, Majang-ro 31-gil, 43, Seoul, South Korea",
+          "tip": "Top self-grill BBQ in Majang meat market—ask for custom cuts; affordable, great charcoal.",
+          "lat": 37.57011,
+          "lng": 127.0381874,
+          "gmaps": "https://maps.google.com/?cid=12185189961555578505&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "ggupdang-seongsu",
+          "n": 2,
+          "name": "Ggupdang Seongsu",
+          "address": "Seongdong-gu, Seongsui-ro 20-gil, 10, Seoul, South Korea",
+          "tip": "Top self-grill pork BBQ with well-aged cuts—order the kokumi rice bowl alongside.",
+          "lat": 37.5432243,
+          "lng": 127.057537,
+          "gmaps": "https://maps.google.com/?cid=16204548897865048625&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "butcheli-house",
+          "n": 3,
+          "name": "Butcheli House",
+          "address": "122-1 Dokseodang-ro, Yongsan District, Seoul, South Korea",
+          "tip": "The best steakhouse in Korea—perfectly aged, thick-seared steak that beats the big names.",
+          "lat": 37.5368461,
+          "lng": 127.0128969,
+          "gmaps": "https://maps.google.com/?cid=12504799423283789685&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "buil-galmaegi",
+          "n": 4,
+          "name": "Buil Galmaegi",
+          "address": "4 Samjeon-ro 13-gil, Songpa District, Seoul, South Korea",
+          "tip": "Best 'special cut' BBQ for going beyond tenderloin, with a deep sake lineup.",
+          "lat": 37.5072851,
+          "lng": 127.0898565,
+          "gmaps": "https://maps.google.com/?cid=13218121252389506667&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "miu",
+          "n": 5,
+          "name": "Miu",
+          "address": "113-22 Apgujeong-ro, Apgujeong-dong, Gangnam District, Seoul, South Korea",
+          "tip": "Best non-self-grill beef BBQ in Korea—butcher-family sourcing; try anchang and ansim.",
+          "lat": 37.5247016,
+          "lng": 127.0196296,
+          "gmaps": "https://maps.app.goo.gl/1LVZM7iMm7TQZq4i8?g_st=ic",
+          "hasLink": true
+        },
+        {
+          "id": "born-and-bred",
+          "n": 6,
+          "name": "Born and Bred",
+          "address": "1 Majang-ro 42-gil, Seongdong-gu, Seoul, South Korea",
+          "tip": "Best beef omakase, right in Majang meat market—the high-end hanwoo experience.",
+          "lat": 37.5667249,
+          "lng": 127.0445221,
+          "gmaps": "https://maps.google.com/?cid=8446753105285414404&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "bongsanjip",
+          "n": 7,
+          "name": "Bongsanjip",
+          "address": "Yongsan District, Yongsan-dong 3(sam)-ga, Seoul, South Korea",
+          "tip": "Top brisket (chadolbagi) BBQ—just-right thickness, dip in the sauce, finish with fried rice.",
+          "lat": 37.534407,
+          "lng": 126.974929,
+          "gmaps": "https://maps.google.com/?cid=11582916550784481855&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "busanyanggobchang",
+          "n": 8,
+          "name": "Busanyanggobchang",
+          "address": "29 Mokdongjungangnam-ro 11-gil, Yangcheon District, Seoul, South Korea",
+          "tip": "Classic beef intestines BBQ—order yang and daechang two-to-one, finish with fried rice.",
+          "lat": 37.5391107,
+          "lng": 126.8642229,
+          "gmaps": "https://maps.google.com/?cid=10342933884285782652&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "the-softer-side-of-seoul-yeonhui",
+      "title": "The Softer Side of Seoul: Yeonhui",
+      "summary": "An emerging neighborhood of charming cafés and indie shops.",
+      "city": "Seoul",
+      "placeCount": 8,
+      "cover": [
+        {
+          "x": 0.1818,
+          "y": 0.667
+        },
+        {
+          "x": 0.6083,
+          "y": 0.7264
+        },
+        {
+          "x": 0.2378,
+          "y": 0.86
+        },
+        {
+          "x": 0.14,
+          "y": 0.8392
+        },
+        {
+          "x": 0.2239,
+          "y": 0.3515
+        },
+        {
+          "x": 0.4074,
+          "y": 0.7015
+        },
+        {
+          "x": 0.86,
+          "y": 0.14
+        },
+        {
+          "x": 0.3681,
+          "y": 0.7336
+        }
+      ],
+      "center": {
+        "lat": 37.569403,
+        "lng": 126.930347
+      },
+      "places": [
+        {
+          "id": "sway-coffee-station",
+          "n": 1,
+          "name": "Sway Coffee Station",
+          "address": "61 Yeonhui-ro 11-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Aussie-inspired neighborhood cafe with a train-station theme, one of Yeonhui's most charming storefronts.",
+          "lat": 37.5690231,
+          "lng": 126.9285991,
+          "gmaps": "https://maps.google.com/?cid=7793221144182082214&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "your-mind",
+          "n": 2,
+          "name": "YOUR MIND",
+          "address": "Seodaemun-gu, Yeonhui-ro, 122, Seoul, South Korea",
+          "tip": "Beloved indie bookstore behind Seoul's zine and small-press scene.",
+          "lat": 37.5684545,
+          "lng": 126.93239,
+          "gmaps": "https://maps.google.com/?cid=7745104775476166029&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "sentiment-caf",
+          "n": 3,
+          "name": "Sentiment Café",
+          "address": "17-14 Yeonhuimat-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Gallery-like Yeonhui cafe with soaring ceilings and rare open space—stay for the room.",
+          "lat": 37.5671737,
+          "lng": 126.9290973,
+          "gmaps": "https://maps.google.com/?cid=942591527078137029&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "ssereupareukeu-serrparc",
+          "n": 4,
+          "name": "Ssereupareukeu(SERRPARC)",
+          "address": "7-5 Yeonhui-ro 11na-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Curated shop by Camel Coffee's founder—fashion, vintage objects, books, lifestyle goods.",
+          "lat": 37.5673732,
+          "lng": 126.9282277,
+          "gmaps": "https://maps.google.com/?cid=16824976580461373835&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "padilla-bake-shop",
+          "n": 5,
+          "name": "Padilla Bake Shop",
+          "address": "107-1 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Under-the-radar Yeonhui bakery cafe—don't miss the cassata frozen dessert.",
+          "lat": 37.5720473,
+          "lng": 126.9289736,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.5720473,126.9289736",
+          "hasLink": false
+        },
+        {
+          "id": "misotzeum-yeonhui",
+          "n": 6,
+          "name": "MISOTZEUM YEONHUI",
+          "address": "133-13 Yeonhui-dong, Seodaemun-gu, Seoul, South Korea",
+          "tip": "New spot for Korean stone-pot rice cooked to order with seasonal ingredients.",
+          "lat": 37.568693,
+          "lng": 126.9306045,
+          "gmaps": "https://www.google.com/maps/search/?api=1&query=37.568693,126.9306045",
+          "hasLink": false
+        },
+        {
+          "id": "vonzrr",
+          "n": 7,
+          "name": "Vonzrr",
+          "address": "189-16 Yeonhui-ro, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Spacious cafe in a converted house—multiple floors, quiet, made for unhurried afternoons.",
+          "lat": 37.5740748,
+          "lng": 126.934627,
+          "gmaps": "https://maps.google.com/?cid=6718279598257609042&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        },
+        {
+          "id": "dolpound",
+          "n": 8,
+          "name": "Dolpound",
+          "address": "10-6 Yeonhui-ro 11ra-gil, Seodaemun-gu, Seoul, South Korea",
+          "tip": "Beloved dessert cafe known for pound cakes and seasonal sweets—worth crossing town for.",
+          "lat": 37.5683856,
+          "lng": 126.9302546,
+          "gmaps": "https://maps.google.com/?cid=1710019577141372144&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+          "hasLink": true
+        }
+      ]
+    },
+    {
+      "id": "busan-with-friends",
+      "title": "Busan with friends",
+      "summary": "Our friends' favorite BBQ, cafes, bars, and bakeries in Busan.",
+      "city": "Busan",
+      "placeCount": 5,
+      "cover": [
+        {
+          "x": 0.14,
+          "y": 0.86
+        },
+        {
+          "x": 0.86,
+          "y": 0.1639
+        },
+        {
+          "x": 0.7402,
+          "y": 0.2858
+        },
+        {
+          "x": 0.2381,
+          "y": 0.1499
+        },
+        {
+          "x": 0.2398,
+          "y": 0.14
+        }
+      ],
+      "center": {
+        "lat": 35.142989,
+        "lng": 129.085636
+      },
+      "places": [
+        {
+          "id": "watda-sikdang",
+          "n": 1,
+          "name": "Watda Sikdang",
+          "address": "811 Hana-gil, Yeongdo-gu, Busan, South Korea",
+          "tip": "Beyond the classic hangover soup—melt-in-your-mouth braised hanwoo beef tendon.",
+          "lat": 35.094054,
+          "lng": 129.0563315,
+          "gmaps": "https://maps.google.com/?cid=6461792662822096020&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "corduroy-fellaz",
+          "n": 2,
+          "name": "Corduroy fellaz",
+          "address": "53 Millakbondong-ro 11beon-gil, Suyeong-gu, Busan, South Korea",
+          "tip": "Beautifully designed Busan cocktail bar—stunning, balanced drinks for a special evening.",
+          "lat": 35.1571249,
+          "lng": 129.1258295,
+          "gmaps": "https://maps.google.com/?cid=7396138714465649580&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "akiwawa",
+          "n": 3,
+          "name": "Akiwawa",
+          "address": "5-12 Namcheon-dong, Suyeong-gu, Busan, South Korea",
+          "tip": "Vintage cafe with high-end speakers—come for coffee, stay for the music and the space.",
+          "lat": 35.1460824,
+          "lng": 129.1142628,
+          "gmaps": "https://maps.google.com/?cid=3043979775614042554&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "heewa-bake-shop",
+          "n": 4,
+          "name": "Heewa Bake Shop",
+          "address": "Jeonpo-daero 246beon-gil, 6, Busan, South Korea",
+          "tip": "Destination Busan bakery famous for red bean bread—honest ingredients over sweetness.",
+          "lat": 35.1583925,
+          "lng": 129.0657971,
+          "gmaps": "https://maps.google.com/?cid=15862543762218146004&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        },
+        {
+          "id": "dulumi",
+          "n": 5,
+          "name": "Dulumi",
+          "address": "33 Seojeon-ro 57beon-gil, Busanjin District, South Korea",
+          "tip": "Busan favorite for thick-cut, juicy pork belly—plus their signature grilled gimbap.",
+          "lat": 35.1592913,
+          "lng": 129.0659603,
+          "gmaps": "https://maps.google.com/?cid=2246745682807949139&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+          "hasLink": true
+        }
+      ]
+    }
+  ]
+}
