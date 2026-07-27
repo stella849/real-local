@@ -1,89 +1,74 @@
 # Real Local
 
-Curated food and neighbourhood maps of Korea, made by approved locals — for visitors who want the spots a local would actually walk them to.
+인증된 로컬이 직접 만든 한국의 맛집·동네 지도. 한국을 찾은 여행자에게 로컬이 실제로 데려갈 만한 곳을 소개하는 서비스입니다.
 
-**Live:** https://stella849.github.io/real-local/
+**배포:** https://stella849.github.io/real-local/
 
 ---
 
-## What this build is
+## 이 빌드의 상태
 
-The Tuesday milestone: the full front end running on the real dataset. Nine maps and 133 places are loaded from the curators' own lists, every place is on the map, and every place carries the curator's own note.
+**디자인을 입히기 전 단계입니다.** 화면 구조와 기능은 전부 동작하지만 브랜드 색·서체·일러스트는 의도적으로 비어 있습니다. 시스템 폰트와 중립 회색조만 쓰며, 팔레트가 확정되면 `assets/style.css` 상단 토큰만 교체하면 됩니다.
 
 | | |
 |---|---|
-| Maps | 9 |
-| Places | 133 |
-| Cities | Seoul 7 · Seongsu 1 · Busan 1 |
-| Stack | Static HTML/CSS/JS, no build step |
-| Deploy | GitHub Pages from `main` |
+| 지도 | 9개 |
+| 장소 | 133곳 |
+| 도시 | 서울 7 · 성수 1 · 부산 1 |
+| 스택 | 정적 HTML/CSS/JS, 빌드 단계 없음 |
+| 배포 | GitHub Pages (`main` 브랜치) |
 
-### Working
+### 동작하는 것
 
-- **Home** — map feed with city filter
-- **Map detail** — interactive map with numbered pins, tapping a pin highlights its row and vice versa
-- **Place list** — name, address, and the curator's note, plus a link straight into Google Maps
-- **Saving** — maps and places save independently, and the Saved tab keeps them apart
-- **Sharing** — native share sheet where available, clipboard elsewhere
+- **홈** — 지도 목록, 도시 필터, 카드에서 바로 저장
+- **지도 상세** — 번호 핀이 찍힌 지도(상단 고정), 핀을 누르면 해당 행이 강조되고 그 반대도 동작
+- **장소 목록** — 이름·주소·큐레이터 코멘트, 구글 지도로 바로 열기
+- **저장** — 지도와 장소가 서로 독립적으로 저장되고 탭에서 분리 표시
+- **공유** — 네이티브 공유 시트, 미지원 환경에서는 클립보드 복사
 
-### Not in this build
+### 아직 없는 것
 
-- Sign-in, cloud sync, and map reviews — these need the backend (see below)
-- Curator authoring tools — see the open question in `docs/`
-
----
-
-## Design
-
-Built from `DESIGN-mistral.ai.md` with the saturated-orange family removed at the client's direction — `primary #fa520f`, `primary-deep`, `sunshine-300..900`, `yellow-saturated`, and `block-5/6/7` are all excluded.
-
-Everything that carried orange was reassigned to a component the source system already documents, so nothing was invented:
-
-| Was | Now |
-|---|---|
-| `button-primary` (orange) | `button-dark` (ink `#1f1f1f`) |
-| `segmented-tab-active` (orange underline) | ink underline |
-| `sunset-stripe-band` (red→orange→yellow) | rebuilt from the cream/beige stops only |
-| `link` (= primary orange) | ink |
-
-What remains is the system's cream and beige warm surfaces over white, which is also what the client asked for in the first interview — beige to white, handmade. Typography keeps the source's editorial pairing: a high-contrast serif for display, Inter for everything else. `PP Editorial Old` is a licensed face, so **Instrument Serif** stands in for it.
-
-The dataset has no photography, so map covers are drawn from each map's own pin cluster — a shape unique to that curation. In the place list, the curator's note takes the space a photo would normally hold.
+- 디자인 시안 (색·서체·일러스트)
+- 로그인, 클라우드 동기화, 지도 리뷰 — 백엔드 필요
+- 큐레이터 제작 도구 — 포함 여부 미확정
 
 ---
 
-## Data
+## 데이터
 
-Source CSVs live in `data-source/`. They are the input, not the runtime data.
+원본 CSV는 `data-source/`에 있습니다. 런타임 데이터가 아니라 입력값입니다.
 
 ```bash
 node scripts/build-data.mjs   # data-source/*.csv -> data/maps.json
 ```
 
-The importer resolves `map_title` to map ids, generates stable place ids (one duplicate name exists in the source), precomputes cover geometry, and falls back to a coordinate query for the 18 places with no Google Maps link. It prints a warning for anything incomplete — currently one place with no note.
+임포터가 `map_title`을 지도 id로 치환하고, 장소 id를 안정적으로 생성하며(원본에 동명 1건 존재), 커버용 핀 좌표를 미리 계산하고, 구글 지도 링크가 없는 18건은 좌표 검색으로 대체합니다. 불완전한 항목은 경고로 출력합니다 — 현재 코멘트 없는 장소 1건.
 
-### Known data gaps
+### 알려진 데이터 공백
 
-| Gap | Effect | Status |
+| 항목 | 영향 | 상태 |
 |---|---|---|
-| No photography | Covers use generated pin maps | Resolved by design |
-| No curator names | Curator attribution is not shown anywhere | Open — needs the client |
-| No categories | Category filters were dropped | Open |
-| `area` formatting inconsistent | Some addresses read in reverse order | Open |
+| 사진 없음 | 커버는 핀 분포 미니맵으로 대체 | 해결 (Q1 확정) |
+| 큐레이터 정보 없음 | 큐레이터 표기 없음 | MVP 범위에서 제외 |
+| 카테고리 없음 | 카테고리 필터 제외 | 확정 |
+| `area` 표기 불일치 | 일부 주소가 역순 | **미해결 (Q5)** |
 
 ---
 
-## Backend
+## 미확정 사항
 
-Saving currently writes to `localStorage`, which the client was explicit is not acceptable for the real service. It is a front-end stand-in so the flow can be reviewed on Tuesday, and it is confined to the `store` object at the top of `assets/app.js` — swapping those four functions for Supabase calls is the whole migration.
-
-Thursday's build needs Supabase for auth, saved maps and places, and map reviews.
+| # | 안건 | 현재 상태 |
+|---|---|---|
+| 지도 | 화면 안의 지도는 **Google Maps가 아니라 Leaflet + CARTO 타일**입니다. PRD NFR-03과 불일치하며 API 키가 없어 이렇게 구현했습니다. Google Maps는 장소별 외부 길찾기 링크에만 사용됩니다. | 결정 필요 |
+| UI 언어 | 현재 전 화면 한국어. PRD NFR-04는 영어(타깃이 외국인 관광객). | 결정 필요 |
+| 저장소 | `localStorage`. 클라이언트가 기기 저장만으로는 안 된다고 명시한 부분이라 임시 구현입니다. `assets/app.js`의 `store` 객체 4개 함수만 교체하면 됩니다. | Supabase 대기 |
+| 큐레이터 제작 UI | 미구현. 초기 데이터는 CSV 시딩. | 결정 필요 |
 
 ---
 
-## Running locally
+## 로컬 실행
 
-Any static server works, because there is no build step.
+빌드 단계가 없어 정적 서버면 무엇이든 됩니다.
 
 ```bash
 npx serve .

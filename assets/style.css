@@ -1,112 +1,57 @@
 /* ============================================================
-   Real Local
-   Design system: DESIGN-mistral.ai.md, saturated-orange family removed.
+   Real Local — 구조 스타일시트 (디자인 미적용)
 
-   Excluded per client direction (채도 과함):
-     primary #fa520f · primary-deep #cc3a05 · sunshine-300..900
-     yellow-saturated #ffd900 · block-5/6/7 · link (= primary)
+   디자인 시안을 입히기 전 단계다. 여기 있는 값은 화면 구조를
+   읽을 수 있게 하는 최소한이며, 브랜드 색·서체·일러스트는
+   의도적으로 비어 있다. 팔레트가 확정되면 아래 토큰만 갈아끼운다.
 
-   Consequences, all of which stay inside the source system:
-     - primary CTA  -> button-dark (ink), already a documented component
-     - active tab   -> pill-tab-active (ink), already ink in the source
-     - segmented-tab-active -> ink underline instead of orange
-     - sunset-stripe-band -> rebuilt from the cream/beige stops only
+   시스템 폰트만 쓰고 외부 요청은 하지 않는다.
    ============================================================ */
 
 :root{
-  /* --- cream / neutral warm ---------------------------------
-     Mistral's cream leans yellow; the client's own motif sheet
-     (docs/reference/브랜드_모티프_시트.png) is warmer and greyer.
-     These are pulled off that sheet, so the surfaces now match
-     the artwork that sits on them.
-     ---------------------------------------------------------- */
-  --cream:#F6F0E4;
-  --cream-light:#FBF7EF;
-  --cream-deeper:#EFE5D3;
-  --beige-deep:#DDCDB2;
-  /* sampled off assets/img/tiger.png — the panel behind the plate
-     uses the artwork's own paper so the bitmap has no visible edge */
-  --paper-tiger:#DECDB2;
+  /* 중립 회색조 — 확정된 팔레트가 들어올 자리 */
+  --bg:#f4f4f5;
+  --canvas:#ffffff;
+  --surface:#fafafa;
 
-  /* --- text --- */
-  --ink:#2C2620;
-  --ink-tint:#4A423A;
-  --charcoal:#3A332C;
-  --slate:#5A5149;
-  --steel:#7A7166;
-  --stone:#9A9186;
-  --muted:#B5ADA2;
+  --line:#e4e4e7;
+  --line-strong:#c8c8cc;
 
-  /* --- 전통 모티프 accent ------------------------------------
-     Low-saturation only. The coral is the peony's, well below the
-     Mistral orange that was pulled for being too hot; the clay is
-     the tiger's stripe accent. Both stay decorative — no CTA,
-     no active state, so the ink-led hierarchy is untouched.
-     ---------------------------------------------------------- */
-  --clay:#C4633F;
-  --coral:#E39A6E;
-  --sky:#AFCBDD;
-  --leaf:#95AD8D;
+  --text:#18181b;
+  --text-2:#52525b;
+  --text-3:#8a8a92;
 
-  /* --- surface (kept) --- */
-  --canvas:#FFFDF9;
-  --surface:#F2ECE1;
-  --hairline:#E4DCCD;
-  --hairline-soft:#EDE6D9;
-  --hairline-strong:#C9BEA9;
+  --r-sm:4px; --r-md:6px; --r-lg:8px; --r-full:9999px;
 
-  /* --- radius --- */
-  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
+  --sp-xxs:4px; --sp-xs:8px; --sp-sm:12px; --sp-md:16px;
+  --sp-lg:20px; --sp-xl:24px; --sp-xxl:32px;
 
-  /* --- spacing --- */
-  --sp-xxs:4px; --sp-xs:8px; --sp-sm:12px; --sp-md:16px; --sp-lg:20px;
-  --sp-xl:24px; --sp-xxl:32px; --sp-xxxl:40px; --sp-section:64px;
-
-  /* --- type ---------------------------------------------------
-     Instrument Serif carries no Hangul, so a myeongjo (serif)
-     fallback follows it — otherwise Korean drops to a sans and the
-     display/UI contrast that carries the brand voice disappears.
-     ------------------------------------------------------------ */
-  --font-display:"Instrument Serif","PP Editorial Old",Georgia,"Times New Roman",
-                 "Nanum Myeongjo","Gowun Batang","Apple SD Gothic Neo",Batang,serif;
-  --font-ui:"Inter",ui-sans-serif,system-ui,-apple-system,"Malgun Gothic",sans-serif;
-
-  /* --- elevation --- */
-  --e1:rgba(0,0,0,.04) 0 1px 2px 0;
-  --e2:rgba(0,0,0,.04) 0 4px 12px 0;
-  --e4:rgba(0,0,0,.12) 0 16px 48px -8px;
+  --font:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
 
   --shell:480px;
-
 }
-
-/* The source brand ships no dark-mode palette (documented gap), so this
-   commits to the light cream world rather than inventing one. */
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;
-  background:var(--surface);
-  color:var(--ink);
-  font-family:var(--font-ui);
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
   font-size:16px;
   line-height:1.55;
-  -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
-  /* Korean wraps per character by default, which splits 어절 mid-word
-     ("사람들이" -> "사람들 / 이"). keep-all restores word-boundary
-     breaks; the companion rule keeps long latin names from overflowing. */
+  /* 한국어는 기본값이 글자 단위로 끊어 어절을 쪼갠다 */
   word-break:keep-all;
   overflow-wrap:anywhere;
 }
 img{max-width:100%;display:block}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:var(--r-xs)}
+:focus-visible{outline:2px solid var(--text);outline-offset:2px}
 
 /* ============================================================
-   Shell — mobile-first, centred column on wider screens
+   Shell
    ============================================================ */
 .shell{
   max-width:var(--shell);
@@ -115,12 +60,8 @@ a{color:inherit}
   background:var(--canvas);
   display:flex;
   flex-direction:column;
-  position:relative;
 }
-@media (min-width:520px){
-  .shell{border-inline:1px solid var(--hairline-soft)}
-}
-
+@media (min-width:520px){ .shell{border-inline:1px solid var(--line)} }
 
 /* ============================================================
    Top bar
@@ -128,420 +69,285 @@ a{color:inherit}
 .topbar{
   position:sticky;top:0;z-index:40;
   background:var(--canvas);
-  border-bottom:1px solid var(--hairline-soft);
+  border-bottom:1px solid var(--line);
   display:flex;align-items:center;gap:var(--sp-sm);
   padding:0 var(--sp-md);
   height:56px;flex:none;
 }
 .wordmark{
-  font-family:var(--font-ui);
-  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink);text-decoration:none;
+  font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;
 }
 .topbar-spacer{margin-left:auto}
 .iconbtn{
   width:36px;height:36px;flex:none;border-radius:var(--r-md);
   display:flex;align-items:center;justify-content:center;
-  color:var(--slate);
+  color:var(--text-2);
 }
 .iconbtn:hover{background:var(--surface)}
 .iconbtn svg{width:19px;height:19px}
 .topbar-title{
-  font-family:var(--font-ui);font-size:14px;font-weight:500;
+  font-size:14px;font-weight:500;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 
 /* ============================================================
-   View / scroll region
+   View
    ============================================================ */
 .view{flex:1;padding-bottom:var(--sp-xxl)}
 .pad{padding:var(--sp-md)}
 
 .eyebrow{
-  font-size:11px;font-weight:600;line-height:1.4;letter-spacing:1px;
-  text-transform:uppercase;color:var(--stone);
-  margin:0 0 var(--sp-xs);
+  font-size:12px;font-weight:600;letter-spacing:.04em;
+  color:var(--text-3);margin:0 0 var(--sp-xxs);
 }
-.lede{
-  font-family:var(--font-display);
-  font-size:30px;font-weight:400;line-height:1.1;letter-spacing:-.5px;
-  margin:0 0 var(--sp-xs);
-  text-wrap:balance;
-}
-.lede-sub{
-  font-size:14px;line-height:1.5;color:var(--steel);
-  margin:0 0 var(--sp-lg);
-}
+.lede{font-size:22px;font-weight:600;line-height:1.3;margin:0 0 var(--sp-xxs)}
+.lede-sub{font-size:14px;line-height:1.5;color:var(--text-2);margin:0 0 var(--sp-md)}
+
+.hero{padding:var(--sp-md);border-bottom:1px solid var(--line)}
+.hero .lede-sub{margin-bottom:0}
 
 /* ============================================================
-   Hero — drawn, not printed
-   Ridgelines and hanok eaves as pen outlines. The line carries the
-   texture now, so nothing is laid over the paper.
-   ============================================================ */
-.hero{
-  position:relative;
-  background:var(--cream);
-  border-bottom:1px solid var(--beige-deep);
-  overflow:hidden;
-}
-/* height follows width so the block is never cropped */
-.hero-art{position:relative;display:block;width:100%}
-.hero-art svg{display:block;width:100%;height:auto}
-.hero-copy{
-  position:relative;z-index:2;
-  padding:var(--sp-md) var(--sp-md) var(--sp-sm);
-}
-.hero-copy .lede{
-  font-size:27px;margin-bottom:5px;
-}
-.hero-copy .lede-sub{
-  font-size:13.5px;margin-bottom:0;color:var(--ink-tint);
-}
-
-/* 손으로 그은 구분선 — 자가 아니라 펜으로 그은 한 줄.
-   굵기가 고르지 않게 흔들리는 SVG 획을 가로로 늘려 쓴다. */
-.cut{
-  height:7px;flex:none;border:0;margin:0;
-  background:center/100% 7px no-repeat
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='7' viewBox='0 0 400 7'%3E%3Cpath d='M2 4.2 C48 2.3 96 5.1 148 3.4 C204 1.6 252 5.4 300 3.2 C338 1.6 370 4.6 398 3' fill='none' stroke='%23C9BEA9' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E");
-  opacity:.85;
-}
-
-/* ============================================================
-   City filter — pill-tab (the one place pills are allowed)
+   City filter
    ============================================================ */
 .filters{
   display:flex;gap:var(--sp-xs);
   overflow-x:auto;scrollbar-width:none;
-  padding:0 var(--sp-md) var(--sp-md);
+  padding:var(--sp-md) var(--sp-md) var(--sp-sm);
   margin:0;
 }
 .filters::-webkit-scrollbar{display:none}
 .pill{
   flex:none;
-  background:var(--canvas);color:var(--steel);
-  font-size:14px;font-weight:500;line-height:1.5;
-  border:1px solid var(--hairline);
+  border:1px solid var(--line-strong);
   border-radius:var(--r-full);
-  padding:var(--sp-xs) var(--sp-md);
+  padding:6px var(--sp-sm);
+  font-size:14px;color:var(--text-2);
   white-space:nowrap;
-  transition:background .15s ease,color .15s ease,border-color .15s ease;
 }
-.pill[aria-pressed="true"]{
-  background:var(--ink);color:var(--canvas);border-color:var(--ink);
-}
-.pill .n{opacity:.55;margin-left:5px;font-variant-numeric:tabular-nums}
+.pill[aria-pressed="true"]{background:var(--text);color:var(--canvas);border-color:var(--text)}
+.pill .n{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
 
 /* ============================================================
-   Map card — cover is a generated pin minimap, not photography
+   Map card — 커버는 핀 분포 미니맵 (구조 확정, 디자인 미적용)
    ============================================================ */
 .feed{
   display:flex;flex-direction:column;gap:var(--sp-xs);
   padding:0 var(--sp-md);margin:0;list-style:none;
 }
-/* the bookmark is a sibling of the card link, laid over its top-right.
-   Scoped to .feed-item so the size wins over the base .act below. */
 .feed-item{position:relative}
-.feed-item .card-save{
-  position:absolute;top:var(--sp-sm);right:var(--sp-sm);
-  width:32px;height:32px;
-  background:var(--canvas);
-}
-.feed-item .card-save svg{width:15px;height:15px}
-
-/* 손그림 상자 — 네 모서리의 반지름을 서로 다르게 줘서
-   컴퍼스로 그린 티를 없앤다. 값 자체는 미세하지만 8장이 나란히
-   놓이면 같은 상자를 복제한 느낌이 사라진다. */
 .card{
   display:flex;align-items:center;gap:var(--sp-sm);
   background:var(--canvas);
-  border:1.5px solid var(--hairline-strong);
-  border-radius:14px 11px 15px 12px;
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
   padding:var(--sp-xs);
   text-decoration:none;
-  transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease;
 }
-.card:nth-child(even){border-radius:12px 15px 11px 14px}
-.card:nth-child(3n){border-radius:15px 12px 13px 11px}
-.card:hover{box-shadow:var(--e2);border-color:var(--ink)}
-.card:active{transform:scale(.995)}
+.card:hover{border-color:var(--line-strong)}
 
-/* the block the cluster is printed on */
 .cover{
   position:relative;flex:none;
   width:88px;height:88px;
-  background:var(--cream);
-  border:1.5px solid var(--hairline-strong);
-  border-radius:11px 8px 10px 9px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
   overflow:hidden;
 }
 .cover svg{position:absolute;inset:0;width:100%;height:100%}
 
-/* right padding clears the bookmark so long titles don't run under it */
 .card-body{min-width:0;flex:1;padding-right:34px}
 .card-title{
-  font-family:var(--font-display);
-  font-size:19px;font-weight:400;line-height:1.2;letter-spacing:-.2px;
-  color:var(--ink);
-  margin:0 0 2px;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-  overflow:hidden;
+  font-size:16px;font-weight:600;line-height:1.3;margin:0 0 2px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .card-summary{
-  font-size:13px;line-height:1.45;color:var(--steel);
-  margin:0 0 3px;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-  overflow:hidden;
+  font-size:13px;line-height:1.45;color:var(--text-2);margin:0 0 3px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
-.card-meta{
-  font-size:11px;font-weight:600;line-height:1.4;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--stone);
-  margin:0;font-variant-numeric:tabular-nums;
+.card-meta{font-size:12px;color:var(--text-3);margin:0;font-variant-numeric:tabular-nums}
+
+.feed-item .card-save{
+  position:absolute;top:var(--sp-sm);right:var(--sp-sm);
+  width:30px;height:30px;
 }
+.feed-item .card-save svg{width:16px;height:16px}
 
 /* ============================================================
    Map detail
    ============================================================ */
-.detail-head{
-  padding:var(--sp-md) var(--sp-md) var(--sp-sm);
-  background:var(--cream-light);
-  border-bottom:1px solid var(--beige-deep);
-  position:relative;
-}
-.detail-head > *{position:relative;z-index:1}
-.detail-title{
-  font-family:var(--font-display);
-  font-size:28px;font-weight:400;line-height:1.1;letter-spacing:-.4px;
-  margin:0 0 3px;
-  text-wrap:balance;
-}
-.detail-summary{
-  font-size:14px;line-height:1.5;color:var(--slate);
-  margin:0 0 var(--sp-sm);
-}
-.detail-meta{
-  display:flex;align-items:center;gap:var(--sp-xs);flex-wrap:wrap;
-}
+.detail-head{padding:var(--sp-md);border-bottom:1px solid var(--line)}
+.detail-title{font-size:20px;font-weight:600;line-height:1.3;margin:0 0 3px}
+.detail-summary{font-size:14px;line-height:1.5;color:var(--text-2);margin:0 0 var(--sp-sm)}
+.detail-meta{display:flex;align-items:center;gap:var(--sp-xs);flex-wrap:wrap}
 .badge{
-  background:var(--cream-deeper);color:var(--ink);
-  font-size:13px;font-weight:600;line-height:1.4;
-  border-radius:var(--r-full);padding:4px 10px;
-  font-variant-numeric:tabular-nums;
+  font-size:12px;color:var(--text-2);
+  border:1px solid var(--line);border-radius:var(--r-full);
+  padding:3px 9px;font-variant-numeric:tabular-nums;
 }
-.badge.quiet{background:transparent;color:var(--steel);border:1px solid var(--hairline);font-weight:500}
+.badge.quiet{color:var(--text-3)}
 
-/* Map holds the top of the screen while the list scrolls under it —
-   place counts run 5..23, so the long maps would otherwise push the
-   map off-screen and take the pin <-> row link with it. */
 #map{
-  position:sticky;top:56px;   /* 56px = .topbar height */
   height:260px;
-  background:var(--cream);
-  border-block:1px solid var(--hairline-soft);
-  z-index:1;
+  position:sticky;top:56px;z-index:1;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
 }
-.leaflet-container{font-family:var(--font-ui)}
-
-/* Numbered pin, drawn rather than shipped as an image asset */
+.leaflet-container{font-family:var(--font)}
 .pin-marker{
   width:26px;height:26px;
   display:flex;align-items:center;justify-content:center;
-  background:var(--ink);color:var(--canvas);
+  background:var(--text);color:var(--canvas);
   border:2px solid var(--canvas);
   border-radius:var(--r-full);
-  font-size:12px;font-weight:600;
-  font-variant-numeric:tabular-nums;
-  box-shadow:var(--e1);
+  font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
 }
-.pin-marker.is-active{background:var(--cream);color:var(--ink);border-color:var(--ink)}
+.pin-marker.is-active{background:var(--canvas);color:var(--text);border-color:var(--text)}
 
 /* ============================================================
-   Place list — the tip is the hero, the data has no photography
+   Place list — tip이 핵심 콘텐츠
    ============================================================ */
 .section-head{
   display:flex;align-items:baseline;gap:var(--sp-xs);
   padding:var(--sp-md) var(--sp-md) 2px;
+  position:relative;z-index:2;background:var(--canvas);
 }
-.section-head h2{
-  font-size:18px;font-weight:500;line-height:1.4;margin:0;
-}
-.section-head .count{font-size:13px;color:var(--stone);font-variant-numeric:tabular-nums}
+.section-head h2{font-size:16px;font-weight:600;margin:0}
+.section-head .count{font-size:13px;color:var(--text-3);font-variant-numeric:tabular-nums}
 
-.places{list-style:none;margin:0;padding:0 var(--sp-md)}
+.places{
+  list-style:none;margin:0;padding:0 var(--sp-md);
+  position:relative;z-index:2;background:var(--canvas);
+}
 .place{
   display:flex;gap:var(--sp-sm);
   padding:var(--sp-sm) 0;
-  border-bottom:1px solid var(--hairline-soft);
-  scroll-margin-top:72px;
+  border-bottom:1px solid var(--line);
+  scroll-margin-top:var(--sp-xxl);
 }
 .place:last-child{border-bottom:0}
-.place.is-active{background:var(--cream-light)}
+.place.is-active{background:var(--surface)}
 .place-n{
   flex:none;width:24px;height:24px;margin-top:2px;
   display:flex;align-items:center;justify-content:center;
-  border:1px solid var(--hairline-strong);
-  border-radius:var(--r-full);
-  font-size:12px;font-weight:600;color:var(--slate);
+  border:1px solid var(--line-strong);border-radius:var(--r-full);
+  font-size:12px;font-weight:600;color:var(--text-2);
   font-variant-numeric:tabular-nums;
 }
-.place.is-active .place-n{background:var(--ink);border-color:var(--ink);color:var(--canvas)}
+.place.is-active .place-n{background:var(--text);border-color:var(--text);color:var(--canvas)}
 .place-main{flex:1;min-width:0}
-.place-name{
-  font-size:16px;font-weight:500;line-height:1.4;
-  margin:0 0 2px;
-  color:var(--ink);
-}
+.place-name{font-size:15px;font-weight:600;line-height:1.4;margin:0 0 2px}
 .place-addr{
-  font-size:12.5px;line-height:1.35;color:var(--stone);
-  margin:0;
+  font-size:12.5px;line-height:1.35;color:var(--text-3);margin:0;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .place-tip{
-  font-size:13.5px;line-height:1.45;color:var(--charcoal);
-  margin:5px 0 0;
-  padding-left:var(--sp-sm);
-  border-left:2px solid var(--beige-deep);
+  font-size:13.5px;line-height:1.45;color:var(--text-2);
+  margin:5px 0 0;padding-left:var(--sp-sm);
+  border-left:2px solid var(--line-strong);
 }
-/* actions ride side by side — a stacked column added 40px to every row */
 .place-actions{display:flex;gap:6px;flex:none;align-items:flex-start}
 .place-actions .act{width:32px;height:32px}
 .place-actions .act svg{width:15px;height:15px}
 
 /* ============================================================
-   Buttons
+   Controls
    ============================================================ */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-xs);
   font-size:14px;font-weight:500;line-height:1.3;
   border-radius:var(--r-md);
-  padding:10px 20px;
+  padding:10px var(--sp-lg);
   min-height:44px;
   text-decoration:none;
-  transition:background .15s ease,border-color .15s ease;
 }
 .btn svg{width:18px;height:18px;flex:none}
-.btn-dark{background:var(--ink);color:var(--canvas)}
-.btn-dark:hover{background:var(--charcoal)}
-.btn-secondary{border:1px solid var(--hairline-strong);color:var(--ink)}
+.btn-dark{background:var(--text);color:var(--canvas)}
+.btn-secondary{border:1px solid var(--line-strong);color:var(--text)}
 .btn-secondary:hover{background:var(--surface)}
-.btn-cream{background:var(--cream);color:var(--ink);border:1px solid var(--beige-deep)}
-.btn-cream:hover{background:var(--cream-deeper)}
 .btn-block{width:100%}
+.btn.sm{min-height:36px;padding:6px var(--sp-md);font-size:13px}
 
-/* round icon action, used for save / open-in-maps on rows */
 .act{
   width:36px;height:36px;flex:none;
   display:flex;align-items:center;justify-content:center;
-  border:1px solid var(--hairline);
-  border-radius:var(--r-full);
-  color:var(--steel);
-  transition:background .15s ease,border-color .15s ease,color .15s ease;
+  border:1px solid var(--line);border-radius:var(--r-full);
+  color:var(--text-2);background:var(--canvas);
 }
-.act:hover{background:var(--surface);color:var(--ink)}
+.act:hover{background:var(--surface)}
 .act svg{width:17px;height:17px}
-.act[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--canvas)}
+.act[aria-pressed="true"]{background:var(--text);border-color:var(--text);color:var(--canvas)}
 
 /* ============================================================
-   Empty / notice
+   Segmented tabs / empty / notice
    ============================================================ */
-/* ============================================================
-   전통 모티프
-   Illustration fills the slots the dataset leaves empty — no
-   photography exists, and none is coming (Q1 확정).
-   ============================================================ */
-.motif{
-  display:block;width:100%;height:auto;margin:0 auto;
-  max-width:132px;
+.segmented{display:flex;gap:var(--sp-md);padding:0 var(--sp-md);border-bottom:1px solid var(--line)}
+.seg{
+  padding:var(--sp-sm) 0;font-size:14px;font-weight:500;color:var(--text-2);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
 }
-.motif.sm{max-width:96px}
-/* no blend mode — the plate already carries the artwork's own paper,
-   and multiplying it against a matching ground just darkens the box */
-.motif-img{display:block;width:100%;height:auto}
+.seg[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+.seg .n{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
 
-/* the tiger plate — its own paper tone so the bitmap has no edge */
-.tiger-plate{
-  position:relative;
-  background:var(--paper-tiger);
-  border:1.5px solid var(--hairline-strong);
-  border-radius:15px 12px 14px 11px;
-  overflow:hidden;
-  padding:var(--sp-md) var(--sp-md) 0;
+.saved-place{
+  display:flex;gap:var(--sp-sm);align-items:flex-start;
+  padding:var(--sp-md) 0;border-bottom:1px solid var(--line);
 }
-.tiger-plate .motif-img{max-width:300px;margin:0 auto}
-.tiger-plate .plate-copy{
-  position:relative;z-index:1;
-  padding:var(--sp-xs) 0 var(--sp-md);
-  text-align:center;
-}
-.tiger-plate .plate-copy h3{
-  font-family:var(--font-display);
-  font-size:20px;font-weight:400;line-height:1.25;margin:0 0 3px;
-}
-.tiger-plate .plate-copy p{
-  font-size:13px;line-height:1.5;color:var(--ink-tint);margin:0 auto;max-width:30ch;
-}
+.saved-place:last-child{border-bottom:0}
+.saved-from{font-size:12px;color:var(--text-3);margin:4px 0 0}
 
 .empty{
   margin:var(--sp-md);
   padding:var(--sp-xxl) var(--sp-lg);
-  background:var(--cream-light);
-  border:1.5px solid var(--hairline-strong);
-  border-radius:13px 16px 12px 15px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
   text-align:center;
 }
-.empty .motif{margin-bottom:var(--sp-sm)}
-.empty h3{
-  font-family:var(--font-display);
-  font-size:22px;font-weight:400;line-height:1.25;margin:0 0 var(--sp-xxs);
-}
-.empty .motif-cap{
-  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--stone);margin:var(--sp-sm) 0 0;
-}
-.empty p{font-size:14px;line-height:1.5;color:var(--steel);margin:0 auto;max-width:34ch}
+.empty h3{font-size:16px;font-weight:600;margin:0 0 var(--sp-xxs)}
+.empty p{font-size:14px;line-height:1.5;color:var(--text-2);margin:0 auto;max-width:34ch}
 .empty .btn{margin-top:var(--sp-md)}
 
 .notice{
   margin:var(--sp-md);
   padding:var(--sp-sm) var(--sp-md);
-  background:var(--cream);
-  border:1.5px solid var(--hairline-strong);
-  border-radius:10px 13px 9px 12px;
-  font-size:13px;line-height:1.5;color:var(--ink-tint);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  font-size:13px;line-height:1.5;color:var(--text-2);
 }
-.notice b{font-weight:600}
+.notice b{color:var(--text)}
 
 /* ============================================================
-   Segmented tabs (Saved)
+   Footer / tab bar
    ============================================================ */
-.segmented{
-  display:flex;gap:var(--sp-md);
-  padding:0 var(--sp-md);
-  border-bottom:1px solid var(--hairline);
+.footer{
+  background:var(--surface);
+  border-top:1px solid var(--line);
+  padding:var(--sp-lg) var(--sp-md) calc(var(--sp-lg) + 64px);
+  font-size:13px;line-height:1.5;color:var(--text-2);
 }
-.seg{
-  padding:var(--sp-sm) 0;
-  font-size:14px;font-weight:500;line-height:1.5;
-  color:var(--steel);
-  border-bottom:2px solid transparent;
-  margin-bottom:-1px;
-}
-.seg[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
-.seg .n{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
+.footer p{margin:0 0 var(--sp-xxs)}
+.footer .muted{color:var(--text-3)}
 
-/* ============================================================
-   Saved place row
-   ============================================================ */
-.saved-place{
-  display:flex;gap:var(--sp-sm);align-items:flex-start;
-  padding:var(--sp-md) 0;
-  border-bottom:1px solid var(--hairline-soft);
+.tabbar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:var(--shell);
+  display:flex;
+  background:var(--canvas);
+  border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:50;
 }
-.saved-place:last-child{border-bottom:0}
-.saved-from{
-  font-size:12px;font-weight:500;line-height:1.4;color:var(--stone);
-  margin:4px 0 0;
+.tab{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:9px 0 10px;color:var(--text-3);text-decoration:none;
 }
+.tab svg{width:21px;height:21px}
+.tab span{font-size:11px}
+.tab[aria-current="page"]{color:var(--text)}
+.tab[aria-current="page"] span{font-weight:600}
 
 /* ============================================================
    Toast
@@ -549,61 +355,13 @@ a{color:inherit}
 .toast{
   position:fixed;left:50%;bottom:84px;
   transform:translate(-50%,8px);
-  background:var(--ink);color:var(--canvas);
-  font-size:14px;font-weight:500;line-height:1.3;
-  padding:10px 18px;border-radius:var(--r-md);
-  box-shadow:var(--e4);
+  background:var(--text);color:var(--canvas);
+  font-size:14px;padding:10px 18px;border-radius:var(--r-md);
   opacity:0;pointer-events:none;
   transition:opacity .2s ease,transform .2s ease;
-  z-index:60;
-  max-width:calc(var(--shell) - 32px);
+  z-index:60;max-width:calc(var(--shell) - 32px);
 }
 .toast.is-on{opacity:1;transform:translate(-50%,0)}
-
-/* ============================================================
-   Sunset stripe band — the brand's closing signature, rebuilt
-   from the cream/beige stops only (saturated orange excluded)
-   ============================================================ */
-.stripe{
-  height:8px;flex:none;
-  background:linear-gradient(90deg,
-    var(--beige-deep) 0%,
-    var(--cream-deeper) 34%,
-    var(--cream) 62%,
-    var(--cream-light) 100%);
-}
-
-.footer{
-  background:var(--cream);
-  padding:var(--sp-xl) var(--sp-md) calc(var(--sp-xl) + 64px);
-  font-size:13px;line-height:1.5;color:var(--ink-tint);
-}
-.footer p{margin:0 0 var(--sp-xxs)}
-.footer .muted{color:var(--steel)}
-
-/* ============================================================
-   Bottom tab bar
-   ============================================================ */
-.tabbar{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:var(--shell);
-  display:flex;
-  background:var(--canvas);
-  border-top:1px solid var(--hairline);
-  padding-bottom:env(safe-area-inset-bottom);
-  z-index:50;
-}
-.tab{
-  flex:1;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  padding:9px 0 10px;
-  color:var(--stone);
-  text-decoration:none;
-}
-.tab svg{width:21px;height:21px}
-.tab span{font-size:11px;font-weight:500;line-height:1.2;letter-spacing:.02em}
-.tab[aria-current="page"]{color:var(--ink)}
-.tab[aria-current="page"] span{font-weight:600}
 
 .sr-only{
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;

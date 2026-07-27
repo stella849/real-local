@@ -3,8 +3,6 @@
    Static data, hash routing, no build step (deploys as-is to Pages).
    ============================================================ */
 
-import { moonJar, giwa, peony, tigerImg } from './motifs.js';
-
 const view = document.getElementById('view');
 const topbar = document.getElementById('topbar');
 const tabbar = document.getElementById('tabbar');
@@ -94,97 +92,12 @@ async function share(title, url) {
    ------------------------------------------------------------ */
 function coverSvg(map) {
   const dots = map.cover.map((p, i) => {
-    const o = 0.5 + (0.5 * (map.cover.length - i)) / map.cover.length;
-    const r = i === 0 ? 4.2 : 3.2;
-    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${r}"
-             fill="#F3EADD" stroke="#2C2620" stroke-width="2" opacity="${o.toFixed(2)}"/>`;
+    const r = i === 0 ? 3.6 : 2.8;
+    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${r}" fill="#52525b"/>`;
   }).join('');
-
-  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
-               filter="url(#pen-soft)" aria-hidden="true">${dots}</svg>`;
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${dots}</svg>`;
 }
 
-/* ------------------------------------------------------------
-   Hero block print
-
-   Carved-block vocabulary: ridgelines behind, hanok eaves in
-   front, and a beige pass offset from the ink pass so the two
-   colours sit slightly out of register.
-   ------------------------------------------------------------ */
-function heroArt() {
-  const INK = '#2C2620';
-  const EAVE = 124;   // lowest point of the eave, at the centre of the span
-  const GROUND = 146;
-
-  // ridgelines are drawn as open strokes now, not filled masses
-  const ridgeFar =
-    'M0 72 C42 56 64 66 98 53 C134 39 152 59 188 53 C224 47 246 32 284 42 C318 51 352 38 390 46';
-  const ridgeNear =
-    'M0 100 C34 84 54 90 80 77 C106 64 130 80 158 73 C188 65 208 84 238 79 '
-    + 'C268 74 290 60 320 71 C346 80 368 70 390 75';
-
-  /* A giwa roof from the front. The eave line lifts at the corners —
-     the tips sit ABOVE the centre of the eave — so it reads as a shallow
-     crescent rather than a cap. Outlined rather than filled: the pen
-     line is what carries the texture now. */
-  const roof = (x, w, h) => {
-    const lift = h * 0.42;
-    const tip = (EAVE - lift).toFixed(1);
-    const cx = x + w * 0.5;
-    return `<path d="M${x} ${tip} `
-      + `Q${cx} ${(EAVE - h * 1.35).toFixed(1)} ${x + w} ${tip} `
-      + `Q${cx} ${(EAVE + lift).toFixed(1)} ${x} ${tip} Z"
-      fill="#E8E4DC" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>`;
-  };
-
-  /* wall below the eave, drawn as posts and a doorway rather than a slab */
-  const wall = (cx, w) => {
-    const x = cx - w / 2;
-    const dw = Math.max(8, w * 0.3);
-    return `<path d="M${x} ${EAVE} L${x} ${GROUND} M${x + w} ${EAVE} L${x + w} ${GROUND}"
-              stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-            <path d="M${(cx - dw / 2).toFixed(1)} ${GROUND} L${(cx - dw / 2).toFixed(1)} ${GROUND - 14}
-                     L${(cx + dw / 2).toFixed(1)} ${GROUND - 14} L${(cx + dw / 2).toFixed(1)} ${GROUND}"
-              stroke="${INK}" stroke-width="2.2" fill="none" stroke-linejoin="round"/>`;
-  };
-
-  const village = [
-    { x: -4, w: 80, wall: 48, r: 0.34 },
-    { x: 84, w: 98, wall: 60, r: 0.3 },
-    { x: 194, w: 66, wall: 40, r: 0.36 },
-    { x: 272, w: 84, wall: 50, r: 0.31 },
-    { x: 362, w: 60, wall: 36, r: 0.35 },
-  ];
-
-  const buildings = village
-    .map((b) => wall(b.x + b.w / 2, b.wall) + roof(b.x, b.w, b.w * b.r))
-    .join('');
-
-  /* 전통 구름 — the motif sheet pairs giwa with these curls and calls
-     the pair "지도의 상징", so the hero carries both */
-  const cloud = (x, y, s) => `
-    <g transform="translate(${x} ${y}) scale(${s})">
-      <path d="M2 26 C-2 20 1 12 8 11 C9 4 16 0 23 3 C27 -1 35 0 37 6
-               C44 6 48 13 45 19 C43 24 38 26 33 26 Z"
-            fill="#DCEAF2" stroke="#7FA3BC" stroke-width="2.4" stroke-linejoin="round"/>
-      <path d="M8 11 C13 8 19 10 20 15 C21 19 18 22 15 21"
-            fill="none" stroke="#7FA3BC" stroke-width="2.2" stroke-linecap="round"/>
-    </g>`;
-
-  return `<svg viewBox="0 28 390 128" preserveAspectRatio="xMidYMid meet"
-               filter="url(#pen-soft)" aria-hidden="true">
-    <circle cx="318" cy="52" r="15" fill="none" stroke="#C9BEA9" stroke-width="2.2"/>
-    ${cloud(14, 36, 1.0)}
-    ${cloud(206, 30, 0.76)}
-    ${cloud(288, 70, 0.54)}
-    <path d="${ridgeFar}" fill="none" stroke="#C9BEA9" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="${ridgeNear}" fill="none" stroke="#B3A794" stroke-width="2.4" stroke-linecap="round"/>
-    ${buildings}
-  </svg>`;
-  /* no ground rule — a full-width 2px line is exactly what the
-     displacement filter shreds, and the posts already sit the
-     village on a baseline without it */
-}
 
 /* ------------------------------------------------------------
    Chrome
@@ -260,7 +173,6 @@ function renderHome() {
 
   view.innerHTML = `
     <section class="hero">
-      <div class="hero-art">${heroArt()}</div>
       <div class="hero-copy">
         <p class="eyebrow">인증된 로컬이 직접 골랐어요</p>
         <h1 class="lede">그곳에 사는 사람들이 소개하는 한국.</h1>
@@ -355,11 +267,9 @@ function renderMap(m) {
 
     <div class="section-head"><h2>리뷰</h2><span class="count">0</span></div>
     <div class="empty">
-      <div class="motif">${peony()}</div>
       <h3>아직 리뷰가 없어요</h3>
       <p>리뷰는 개별 장소가 아니라 지도 전체에 대해 남깁니다. 로그인하고 첫 리뷰를 남겨보세요.</p>
       <button class="btn btn-secondary" id="review-cta">리뷰 쓰기</button>
-      <p class="motif-cap">모란 · 환대의 꽃</p>
     </div>`;
 
   view.querySelector('#save-map').onclick = (e) => {
@@ -497,11 +407,9 @@ function renderSaved() {
 function savedMapsHtml(maps) {
   if (!maps.length) {
     return `<div class="empty">
-      <div class="motif">${moonJar()}</div>
       <h3>아직 저장한 지도가 없어요</h3>
       <p>지도에서 북마크를 누르면 여행 때 볼 수 있게 여기에 모여요.</p>
-      <a class="btn btn-cream" href="#/">지도 둘러보기</a>
-      <p class="motif-cap">달항아리 · 여백의 미</p>
+      <a class="btn btn-secondary" href="#/">지도 둘러보기</a>
     </div>`;
   }
   return `<ul class="feed" style="padding-top:var(--sp-md)">${maps.map(cardHtml).join('')}</ul>`;
@@ -510,11 +418,9 @@ function savedMapsHtml(maps) {
 function savedPlacesHtml(places) {
   if (!places.length) {
     return `<div class="empty">
-      <div class="motif sm">${giwa({ clouds: true })}</div>
       <h3>저장한 장소가 없어요</h3>
       <p>지도 안에서 장소를 하나씩 저장할 수 있어요. 저장한 지도와는 별개로 여기에 모입니다.</p>
-      <a class="btn btn-cream" href="#/">지도 둘러보기</a>
-      <p class="motif-cap">기와와 구름 · 골목의 숨결</p>
+      <a class="btn btn-secondary" href="#/">지도 둘러보기</a>
     </div>`;
   }
   return `<ul class="places" style="padding-top:var(--sp-xs)">
@@ -551,16 +457,6 @@ function renderMe() {
     <div class="pad" style="padding-top:0">
       <p class="card-summary">이 기기에 지도 ${saved.maps.length}개 · 장소 ${saved.places.length}곳이 저장돼 있어요.</p>
       <button class="btn btn-secondary btn-block" id="clear" style="margin-top:var(--sp-sm)">저장 항목 모두 지우기</button>
-    </div>
-
-    <div class="pad" style="padding-top:0">
-      <div class="tiger-plate">
-        ${tigerImg('민화 호랑이')}
-        <div class="plate-copy">
-          <h3>한국인이 소개하는 진짜 한국</h3>
-          <p>인증된 로컬이 직접 걸어보고 고른 곳만 담습니다.</p>
-        </div>
-      </div>
     </div>
 
     <div class="notice">
