@@ -32,19 +32,38 @@ async function refreshSaved() {
 
 const isSaved = (kind, id) => savedSnap[kind].has(id);
 
-/* 로그인이 필요한 동작 앞에 세우는 게이트. 로그인 후 원래 하려던
-   화면으로 돌아오도록 돌아갈 곳을 남긴다. */
+/* 로그인이 필요한 동작 앞에 세우는 게이트.
+
+   돌아갈 화면뿐 아니라 하려던 동작까지 들고 간다. 와이어프레임
+   S-04 주석 ③이 짚었듯 로그인 후 그냥 화면만 돌려놓으면 사용자가
+   저장을 다시 눌러야 하고, 그 지점이 이탈 구간이 된다. */
 let returnTo = null;
-function requireAuth() {
+let pendingAction = null;
+
+function requireAuth(action = null) {
   if (db.user()) return true;
   returnTo = location.hash || '#/';
+  pendingAction = action;
   location.hash = '#/signin';
   return false;
 }
 
+/** 로그인 직후 보류해 둔 동작을 한 번만 실행한다. */
+async function runPendingAction() {
+  const action = pendingAction;
+  pendingAction = null;
+  if (!action) return;
+  try {
+    await action();
+  } catch (e) {
+    console.warn('보류 동작 실패:', e.message);
+  }
+}
+
 /** 저장 토글 공통 처리. 성공하면 스냅샷을 갱신한다. */
 async function toggleSaved(kind, id, extra) {
-  if (!requireAuth()) return null;
+  // 로그인 후 이 저장을 그대로 이어서 실행한다
+  if (!requireAuth(() => db.toggleSaved(kind, id, extra))) return null;
   try {
     const on = await db.toggleSaved(kind, id, extra);
     if (on === null) return null;
@@ -374,7 +393,7 @@ async function renderReviews(m) {
   }
 
   const cta = box.querySelector('#review-signin');
-  if (cta) cta.onclick = () => requireAuth();
+  if (cta) cta.onclick = () => requireAuth();   // 리뷰는 본문이 필요해 화면 복귀만 한다
 }
 
 const signinPrompt = () => `
@@ -797,6 +816,8 @@ function renderSignIn() {
       } else {
         await db.signIn(email, password);
       }
+      await runPendingAction();
+      db.resetCache();
       await refreshSaved();
       const back = returnTo && returnTo !== '#/signin' ? returnTo : '#/';
       returnTo = null;
