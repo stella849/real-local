@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Local — Wireframe &amp; User Flow</title>
+<style>
+/* ============================================================
+   REAL LOCAL — Wireframe & User Flow sheet   REV B
+   ============================================================ */
+:root{
+  --paper:#E8EAE6;
+  --plate:#FBFCFA;
+  --ink:#1B2A2E;
+  --ink-2:#5C6B70;
+  --ink-3:#8B9799;
+  --rule:#C3CAC6;
+  --rule-soft:#DBE0DC;
+  --fill:#DEE3DF;
+  --fill-2:#EAEEEA;
+  --accent:#1B4F8F;
+  --accent-soft:#DDE6F2;
+  --warn:#B33A1E;
+  --warn-soft:#F4E1DB;
+  --ok:#2F6B4F;
+  --ok-soft:#DEEBE3;
+
+  --mono:ui-monospace,"Cascadia Mono","Cascadia Code",Consolas,"SFMono-Regular",Menlo,"Malgun Gothic",monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+
+  --maxw:1240px;
+  --s1:6px; --s2:12px; --s3:20px; --s4:32px; --s5:40px; --s6:56px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#14191B; --plate:#1C2225;
+    --ink:#E4E9E7; --ink-2:#98A5A8; --ink-3:#6E7C7F;
+    --rule:#333D40; --rule-soft:#283033;
+    --fill:#262E31; --fill-2:#212829;
+    --accent:#78ADE8; --accent-soft:#1E2C3B;
+    --warn:#E08265; --warn-soft:#39241E;
+    --ok:#7FB79A; --ok-soft:#1D2B24;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14191B; --plate:#1C2225;
+  --ink:#E4E9E7; --ink-2:#98A5A8; --ink-3:#6E7C7F;
+  --rule:#333D40; --rule-soft:#283033;
+  --fill:#262E31; --fill-2:#212829;
+  --accent:#78ADE8; --accent-soft:#1E2C3B;
+  --warn:#E08265; --warn-soft:#39241E;
+  --ok:#7FB79A; --ok-soft:#1D2B24;
+}
+:root[data-theme="light"]{
+  --paper:#E8EAE6; --plate:#FBFCFA;
+  --ink:#1B2A2E; --ink-2:#5C6B70; --ink-3:#8B9799;
+  --rule:#C3CAC6; --rule-soft:#DBE0DC;
+  --fill:#DEE3DF; --fill-2:#EAEEEA;
+  --accent:#1B4F8F; --accent-soft:#DDE6F2;
+  --warn:#B33A1E; --warn-soft:#F4E1DB;
+  --ok:#2F6B4F; --ok-soft:#DEEBE3;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:15px;line-height:1.62;overflow-x:hidden;
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ---------- doc chrome ---------- */
+.sheet-nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);
+}
+.sheet-nav-in{max-width:var(--maxw);margin:0 auto;padding:9px var(--s3);display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap}
+.sheet-mark{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.sheet-nav ol{list-style:none;margin:0;padding:0;display:flex;gap:var(--s2);flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em}
+.sheet-nav a{color:var(--ink-2);text-decoration:none;padding:2px 0;border-bottom:1px solid transparent}
+.sheet-nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--s3) var(--s6)}
+
+/* ---------- title block ---------- */
+.titleblock{border:1px solid var(--ink);margin:var(--s4) 0 var(--s5);background:var(--plate)}
+.titleblock-top{padding:var(--s3) var(--s4)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 var(--s2)}
+h1{margin:0;font-size:clamp(30px,5.2vw,50px);line-height:1.04;letter-spacing:-.028em;font-weight:700;text-wrap:balance}
+h1 .sub{display:block;font-size:.42em;font-weight:400;letter-spacing:-.005em;color:var(--ink-2);margin-top:10px}
+.titleblock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid var(--ink)}
+.tb-cell{padding:12px var(--s3);border-right:1px solid var(--rule)}
+.tb-cell:last-child{border-right:0}
+.tb-k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);display:block}
+.tb-v{font-size:13.5px;font-weight:600;margin-top:3px;display:block}
+
+/* ---------- sections ---------- */
+section{scroll-margin-top:64px;margin-bottom:var(--s6)}
+section:last-of-type{margin-bottom:var(--s4)}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:var(--s3);flex-wrap:wrap}
+.sec-no{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:700}
+h2{margin:0;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.018em;font-weight:700}
+.sec-note{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.05em}
+h3{font-size:16px;margin:var(--s3) 0 var(--s2);letter-spacing:-.01em}
+p{margin:0 0 var(--s2);max-width:68ch;color:var(--ink-2)}
+p strong{color:var(--ink);font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--fill-2);border:1px solid var(--rule-soft);border-radius:3px;padding:1px 5px;color:var(--ink)}
+
+/* ---------- legend ---------- */
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.legend-item{background:var(--plate);padding:14px var(--s3);display:flex;gap:12px;align-items:flex-start}
+.legend-swatch{width:42px;height:30px;flex:none;border:1px solid var(--rule)}
+.sw-fill{background:var(--fill)}
+.sw-real{background:var(--plate);border-color:var(--ink);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;color:var(--ink)}
+.sw-act{background:var(--ink);border-color:var(--ink)}
+.legend-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:block}
+.legend-v{font-size:13px;color:var(--ink);display:block;margin-top:2px;line-height:1.4}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);background:var(--plate);margin-bottom:var(--s3)}
+table{border-collapse:collapse;width:100%;min-width:660px;font-size:13.5px}
+th,td{text-align:left;padding:8px 13px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--rule);font-weight:600;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.id{font-family:var(--mono);font-weight:700;color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums}
+td.fr{font-family:var(--mono);font-size:12px;color:var(--ink-2);white-space:nowrap}
+td.mono{font-family:var(--mono);font-size:12px;white-space:nowrap}
+td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--rule);border-radius:2px;color:var(--ink-2);white-space:nowrap}
+.tag.p0{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.tag.check{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+.tag.ok{border-color:var(--ok);color:var(--ok);background:var(--ok-soft)}
+.tag.out{border-color:var(--rule);color:var(--ink-3);text-decoration:line-through}
+
+/* ---------- data coverage bar ---------- */
+.bar{height:7px;background:var(--fill);border-radius:99px;overflow:hidden;min-width:78px;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar.warn i{background:var(--warn)}
+
+/* ---------- flow ---------- */
+.flow{margin-bottom:var(--s3);border:1px solid var(--rule);background:var(--plate)}
+.flow-head{padding:11px var(--s3);border-bottom:1px solid var(--rule);display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.flow-id{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--accent)}
+.flow-name{font-size:14.5px;font-weight:600}
+.flow-actor{margin-left:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.flow-body{padding:var(--s3);overflow-x:auto}
+.chain{display:flex;align-items:stretch;min-width:min-content}
+.fl-node{flex:none;width:132px;border:1px solid var(--ink);background:var(--plate);padding:10px 11px;display:flex;flex-direction:column;gap:4px}
+.fl-node .n-scr{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.fl-node .n-txt{font-size:12.5px;line-height:1.38;color:var(--ink)}
+.fl-node.start{background:var(--ink);border-color:var(--ink)}
+.fl-node.start .n-txt{color:var(--plate);font-weight:600}
+.fl-node.start .n-scr{color:var(--plate);opacity:.66}
+.fl-node.gate{border-style:dashed;border-color:var(--warn);background:var(--warn-soft)}
+.fl-node.gate .n-scr{color:var(--warn)}
+.fl-node.end{border-width:2px}
+.fl-arrow{flex:none;width:34px;align-self:center;height:9px;position:relative}
+.fl-arrow::before{content:"";position:absolute;left:0;top:4px;width:100%;height:1px;background:var(--accent)}
+.fl-arrow::after{content:"";position:absolute;right:0;top:0;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;border-left:8px solid var(--accent)}
+.fl-branch{display:flex;flex-direction:column;gap:10px;flex:none}
+.fl-branch-row{display:flex;align-items:center}
+.flow-foot{border-top:1px solid var(--rule-soft);padding:10px var(--s3);font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:flex-start}
+.flow-foot b{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);flex:none;padding-top:2px}
+
+/* ---------- wireframe plates ---------- */
+.plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--s3);align-items:start}
+.plate{margin:0;border:1px solid var(--rule);background:var(--plate);display:flex;flex-direction:column}
+.plate-head{padding:11px 14px;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.plate-id{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--accent)}
+.plate-name{font-size:14px;font-weight:600}
+.plate-head .tag{margin-left:auto}
+.plate-stage{padding:var(--s2);display:flex;justify-content:center;background:var(--fill-2)}
+
+.phone{width:288px;height:548px;background:var(--plate);border:1.5px solid var(--ink);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.wf-status{height:22px;flex:none;border-bottom:1px solid var(--rule-soft);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;color:var(--ink-3)}
+.wf-screen{flex:1;overflow-y:auto;overflow-x:hidden}
+.wf-screen::-webkit-scrollbar{width:5px}
+.wf-screen::-webkit-scrollbar-thumb{background:var(--rule);border-radius:3px}
+
+.wf-appbar{height:40px;flex:none;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:8px;padding:0 12px;position:sticky;top:0;background:var(--plate);z-index:2}
+.wf-logo{font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.2em}
+.wf-icon{width:20px;height:20px;flex:none;border:1px solid var(--rule);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--ink-3);font-family:var(--mono)}
+.wf-icon.solid{background:var(--fill)}
+.wf-spacer{margin-left:auto}
+.wf-pad{padding:12px}
+.wf-sec-label{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+/* S-02 지도 상세의 Places / Reviews 탭. Reviews 를 오른쪽 끝으로 미는
+   이유는 그 자리가 원래 비어 있었기 때문이다 — 세로 길이가 늘지 않는다. */
+.wf-tabs{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:1px solid var(--rule);margin:0 0 9px}
+.wf-tab-seg{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);padding:0 0 5px;border-bottom:2px solid transparent;margin-bottom:-1px}
+.wf-tab-seg b{font-weight:400;opacity:.55;margin-left:2px}
+.wf-tab-seg.on{color:var(--ink);border-bottom-color:var(--ink)}
+.stack{display:flex;flex-direction:column;gap:5px}
+.stack-lg{display:flex;flex-direction:column;gap:15px}
+.row{display:flex;gap:9px;align-items:center}
+
+/* real-content type inside the phone */
+.t-city{font-family:var(--mono);font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.t-title{font-size:13px;font-weight:700;line-height:1.24;letter-spacing:-.01em;color:var(--ink)}
+.t-title.lg{font-size:16px}
+.t-sub{font-size:10px;line-height:1.42;color:var(--ink-2)}
+.t-meta{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase}
+.t-name{font-size:11px;font-weight:600;line-height:1.3;color:var(--ink)}
+.t-addr{font-size:8.5px;line-height:1.35;color:var(--ink-3)}
+.t-tip{font-size:9.5px;line-height:1.45;color:var(--ink-2);border-left:2px solid var(--rule);padding-left:7px;margin-top:4px}
+
+/* missing-data placeholder */
+.wf-gap{
+  background:var(--fill);border:1px dashed var(--rule);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;color:var(--ink-3);line-height:1.4;padding:4px;
+}
+
+/* map placeholders */
+.wf-map{
+  height:176px;flex:none;position:relative;border-bottom:1px solid var(--rule);background:var(--fill-2);
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0 27px,var(--rule-soft) 27px 28px),
+    repeating-linear-gradient(90deg,transparent 0 31px,var(--rule-soft) 31px 32px),
+    linear-gradient(114deg,transparent 39%,var(--rule) 39%,var(--rule) 41.4%,transparent 41.4%);
+}
+.wf-map.sm{height:120px}
+.wf-mini{
+  width:64px;height:64px;flex:none;position:relative;border:1px solid var(--rule);border-radius:3px;background:var(--fill-2);
+  background-image:
+    repeating-linear-gradient(0deg,transparent 0 12px,var(--rule-soft) 12px 13px),
+    repeating-linear-gradient(90deg,transparent 0 14px,var(--rule-soft) 14px 15px);
+}
+.wf-map-tag{position:absolute;left:8px;bottom:6px;font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--ink-3);background:var(--plate);border:1px solid var(--rule);padding:1px 5px;border-radius:2px}
+.pin{position:absolute;width:18px;height:18px;border-radius:50% 50% 50% 2px;transform:rotate(-45deg);background:var(--ink);display:flex;align-items:center;justify-content:center}
+.pin span{transform:rotate(45deg);color:var(--plate);font-family:var(--mono);font-size:8.5px;font-weight:700}
+.pin.hollow{background:var(--plate);border:1.5px solid var(--ink)}
+.pin.hollow span{color:var(--ink)}
+.pin.dot{width:6px;height:6px;border-radius:50%;transform:none;background:var(--ink)}
+
+/* controls */
+.wf-btn{height:34px;border-radius:6px;background:var(--ink);color:var(--plate);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.wf-btn.ghost{background:transparent;border:1px solid var(--ink);color:var(--ink)}
+.wf-btn.sm{height:27px;font-size:9px}
+.wf-field{height:34px;border:1px solid var(--rule);border-radius:6px;background:var(--fill-2);display:flex;align-items:center;padding:0 10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink-3)}
+.wf-field.tall{height:52px;align-items:flex-start;padding-top:9px}
+.wf-seg{display:flex;border:1px solid var(--ink);border-radius:6px;overflow:hidden}
+.wf-seg div{flex:1;height:29px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.wf-seg div.on{background:var(--ink);color:var(--plate);font-weight:600}
+.wf-chip{border:1px solid var(--rule);border-radius:99px;padding:3px 10px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--ink-2);white-space:nowrap}
+.wf-chip.on{background:var(--ink);border-color:var(--ink);color:var(--plate)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}
+.wf-star{width:24px;height:24px;flex:none;border:1px solid var(--rule);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-2)}
+.wf-star.on{background:var(--ink);border-color:var(--ink);color:var(--plate)}
+.wf-div{height:1px;background:var(--rule-soft);margin:12px 0}
+.wf-card{border-bottom:1px solid var(--rule-soft);padding-bottom:14px}
+.wf-card:last-child{border-bottom:0}
+.wf-list-row{display:flex;gap:8px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--rule-soft)}
+.wf-list-row:last-child{border-bottom:0}
+.wf-num{width:17px;height:17px;flex:none;border-radius:50%;background:var(--ink);color:var(--plate);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8.5px;font-weight:700;margin-top:1px}
+.wf-empty{border:1px dashed var(--rule);border-radius:6px;padding:16px 12px;text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.08em;color:var(--ink-3);line-height:1.7}
+.wf-tabbar{height:48px;flex:none;border-top:1px solid var(--rule);display:flex;background:var(--plate)}
+.wf-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.wf-tab i{display:block;width:15px;height:15px;border:1px solid var(--ink-3);border-radius:3px}
+.wf-tab b{font-family:var(--mono);font-size:8px;letter-spacing:.08em;color:var(--ink-3);font-weight:500}
+.wf-tab.on i{background:var(--ink);border-color:var(--ink)}
+.wf-tab.on b{color:var(--ink);font-weight:700}
+
+.mk{width:16px;height:16px;flex:none;border-radius:50%;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;line-height:1}
+.callouts{list-style:none;margin:0;padding:11px 12px;border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:5px}
+.callouts li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+.callouts .mk{margin-top:2px}
+.callouts .co-fr{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.05em;white-space:nowrap}
+
+/* notes */
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px var(--s3);margin:var(--s2) 0}
+.note p{color:var(--ink);max-width:none;margin:0}
+.note p + p{margin-top:8px}
+.note-k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--warn);display:block;margin-bottom:5px;font-weight:700}
+.note.info{border-left-color:var(--accent);background:var(--accent-soft)}
+.note.info .note-k{color:var(--accent)}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.col{background:var(--plate);padding:13px var(--s3)}
+.col h4{margin:0 0 8px;font-size:13px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.col ul{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2);line-height:1.7}
+.col ol{margin:0;padding-left:19px;font-size:13px;color:var(--ink-2);line-height:1.7}
+
+footer{border-top:1px solid var(--ink);padding:var(--s3) 0;margin-top:var(--s5);font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
+
+@media (max-width:640px){
+  .phone{width:100%;max-width:288px}
+  .titleblock-top{padding:var(--s3)}
+}
+@media print{
+  .sheet-nav{display:none}
+  body{background:#fff}
+  .plate,.flow,.tablewrap{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+<nav class="sheet-nav">
+  <div class="sheet-nav-in">
+    <span class="sheet-mark">Real Local / WF-01 / Rev C</span>
+    <ol>
+      <li><a href="#legend">01 범례</a></li>
+      <li><a href="#data">02 데이터</a></li>
+      <li><a href="#screens">03 화면</a></li>
+      <li><a href="#flows">04 유저플로우</a></li>
+      <li><a href="#wireframes">05 와이어프레임</a></li>
+      <li><a href="#scope">06 확인사항</a></li>
+    </ol>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ===== TITLE BLOCK ===== -->
+  <header class="titleblock">
+    <div class="titleblock-top">
+      <p class="eyebrow">Wireframe &amp; User Flow — Mobile Web</p>
+      <h1>Real&nbsp;Local
+        <span class="sub">승인된 로컬이 만드는 한국 맛집 지도 · 실제 데이터 기준 화면 구조 설계도</span>
+      </h1>
+    </div>
+    <div class="titleblock-grid">
+      <div class="tb-cell"><span class="tb-k">Sheet</span><span class="tb-v">WF-01</span></div>
+      <div class="tb-cell"><span class="tb-k">Rev</span><span class="tb-v">C — 안건 정리</span></div>
+      <div class="tb-cell"><span class="tb-k">Basis</span><span class="tb-v">03_PRD + CSV ×2</span></div>
+      <div class="tb-cell"><span class="tb-k">Dataset</span><span class="tb-v">9 maps · 133 places</span></div>
+      <div class="tb-cell"><span class="tb-k">Viewport</span><span class="tb-v">375 × 812 (Mobile)</span></div>
+      <div class="tb-cell"><span class="tb-k">Milestone</span><span class="tb-v">화요일 중간 점검</span></div>
+    </div>
+  </header>
+
+  <!-- ===== 01 LEGEND ===== -->
+  <section id="legend">
+    <div class="sec-head">
+      <span class="sec-no">01</span>
+      <h2>범례</h2>
+      <span class="sec-note">Notation</span>
+    </div>
+    <p>Rev B부터 와이어프레임에 <strong>실제 CSV 데이터를 그대로 배치</strong>했습니다. 따라서 이 도면은 화면 구조도인 동시에 <strong>데이터 커버리지 진단서</strong>로도 읽힙니다 — 회색 점선 박스가 보이면 그 자리를 채울 데이터가 아직 없다는 뜻입니다.</p>
+    <div class="legend">
+      <div class="legend-item">
+        <span class="legend-swatch sw-real">Aa</span>
+        <span><span class="legend-k">Real data</span><span class="legend-v">CSV에 실제로 있는 값</span></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="border-style:dashed;background:var(--fill)"></span>
+        <span><span class="legend-k">Gap</span><span class="legend-v">데이터 없음 — 조달 필요</span></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch sw-act"></span>
+        <span><span class="legend-k">Action</span><span class="legend-v">주요 액션 · 활성 상태</span></span>
+      </div>
+      <div class="legend-item">
+        <span class="mk" style="margin-top:6px">1</span>
+        <span><span class="legend-k">Callout</span><span class="legend-v">주석 번호 → PRD의 FR-ID</span></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="border-style:dashed;border-color:var(--warn);background:var(--warn-soft)"></span>
+        <span><span class="legend-k">Gate</span><span class="legend-v">로그인 필요 지점</span></span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-swatch" style="background:var(--fill-2);background-image:repeating-linear-gradient(0deg,transparent 0 7px,var(--rule) 7px 8px),repeating-linear-gradient(90deg,transparent 0 9px,var(--rule) 9px 10px)"></span>
+        <span><span class="legend-k">Map</span><span class="legend-v">지도 임베드 영역 (Q6)</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 DATA ===== -->
+  <section id="data">
+    <div class="sec-head">
+      <span class="sec-no">02</span>
+      <h2>데이터 구조</h2>
+      <span class="sec-note">CSV ×2 → DB</span>
+    </div>
+    <p>전달받은 <code>maps_cleaned.csv</code>(9행)와 <code>places_cleaned_수정본.csv</code>(133행)를 검수했습니다. <strong>참조 무결성은 완전합니다</strong> — 133개 장소의 <code>map_title</code>이 모두 9개 맵 중 하나에 정확히 매칭되며, 장소 없는 빈 맵도 없습니다. 좌표도 133건 전부 유효합니다(위도 35.09~37.58, 경도 126.86~129.13 = 서울·부산 범위).</p>
+
+    <h3>maps_cleaned.csv → <code>maps</code> 테이블</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>CSV 컬럼</th><th>DB 필드</th><th>화면 사용처</th><th>충족</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">title</td><td class="mono">title</td><td>S-01 카드 제목 · S-02 헤더</td><td><span class="tag ok">9/9</span></td><td>PK 아님 — <code>id</code> 별도 생성 필요</td></tr>
+          <tr><td class="mono">subtitle</td><td class="mono">summary</td><td>S-01 카드 · S-02 상단</td><td><span class="tag ok">9/9</span></td><td>38~68자 → PRD의 한 줄 설명(FR-10)에 그대로 대응</td></tr>
+          <tr><td class="mono">city</td><td class="mono">city</td><td>S-01 카드 라벨 · 그룹핑</td><td><span class="tag ok">9/9</span></td><td>Seoul 7 · Busan 1 · Seongsu 1</td></tr>
+          <tr><td class="mono">—</td><td class="mono">curator_id</td><td>S-01 · S-02 큐레이터 표기</td><td><span class="tag check">0/9</span></td><td>MVP 제외 확정 (Q3)</td></tr>
+          <tr><td class="mono">—</td><td class="mono">cover_image</td><td>S-01 카드 커버</td><td><span class="tag check">0/9</span></td><td>사진 없음 확정 (Q1) — 미니맵으로 대체</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>places_cleaned_수정본.csv → <code>places</code> 테이블</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>CSV 컬럼</th><th>DB 필드</th><th>화면 사용처</th><th>충족</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">name</td><td class="mono">name</td><td>S-02 리스트 · 핀 라벨</td><td><span class="tag ok">133/133</span></td><td>동명 1건(Ramen Borudo) → id로 구분</td></tr>
+          <tr><td class="mono">map_title</td><td class="mono">map_id</td><td>맵 ↔ 장소 연결</td><td><span class="tag ok">133/133</span></td><td>임포트 시 title → id 치환</td></tr>
+          <tr><td class="mono">area</td><td class="mono">address</td><td>S-02 리스트 보조 정보</td><td><span class="tag ok">133/133</span></td><td>포맷 불일치 — 일부 역순 표기, 정규화 권장</td></tr>
+          <tr><td class="mono">tip</td><td class="mono">tip</td><td><strong>S-02 리스트 핵심 문구</strong></td><td><span class="tag ok">132/133</span></td><td>평균 79자 · 최대 105자 · 1건 공란</td></tr>
+          <tr><td class="mono">lat / lng</td><td class="mono">lat / lng</td><td>S-02 지도 핀 · 미니맵</td><td><span class="tag ok">133/133</span></td><td>전건 유효</td></tr>
+          <tr><td class="mono">google_maps_link</td><td class="mono">gmaps_url</td><td>S-02 외부 길찾기</td><td><span class="tag check">115/133</span></td><td>18건 결측 → lat/lng 폴백 처리</td></tr>
+          <tr><td class="mono">—</td><td class="mono">category</td><td>(설계에서 삭제)</td><td><span class="tag out">없음</span></td><td>Rev A의 카테고리 칩은 근거 없어 제거</td></tr>
+          <tr><td class="mono">—</td><td class="mono">photo</td><td>(설계에서 삭제)</td><td><span class="tag out">없음</span></td><td>Rev A의 썸네일 제거</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="note-k">Rev B — 설계 전제가 바뀐 지점</span>
+      <p><strong>이 데이터셋에는 사진이 한 장도 없습니다.</strong> Rev A의 와이어프레임은 에어비앤비를 레퍼런스로 삼아 커버 이미지가 화면을 지배하는 구조였는데, 그대로 만들면 9개 카드 전부가 빈 회색 박스가 됩니다. 사진을 새로 조달하지 않는 한 <strong>사진 중심 레이아웃은 성립하지 않습니다.</strong></p>
+      <p>대신 데이터가 가진 강점을 전면에 세웠습니다 — <code>tip</code> 필드(평균 79자의 로컬 코멘트, 132건 확보)와 <code>lat/lng</code>(133건 전건 확보)입니다. 그래서 Rev B는 <strong>커버 사진 자리에 해당 맵의 핀 분포를 그린 미니맵</strong>을 놓고, 장소 리스트에서는 썸네일 대신 <code>tip</code>을 가장 눈에 띄게 배치했습니다. “승인된 로컬이 만들었다”는 차별점을 실제로 전달하는 것은 사진이 아니라 이 한 줄이며, 이는 사진 없이도 성립하는 유일한 구조입니다.</p>
+    </div>
+
+    <h3>맵별 장소 분포</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Map title</th><th>City</th><th class="num">Places</th><th>Subtitle</th></tr></thead>
+        <tbody>
+          <tr><td>Mimyo&rsquo;s Everyday Euljiro</td><td class="mono">Seoul</td><td class="num">23</td><td>Everyday Euljiro spots I keep coming back to.</td></tr>
+          <tr><td>Lost in Mangwon-Dong</td><td class="mono">Seoul</td><td class="num">20</td><td>Charming shops, food, and streets to wander in Mangwon-dong.</td></tr>
+          <tr><td>Yeonhui-dong</td><td class="mono">Seoul</td><td class="num">20</td><td>Quiet streets and thoughtfully designed cafés made for slowing down.</td></tr>
+          <tr><td>Inspiration seongsu</td><td class="mono">Seongsu</td><td class="num">20</td><td>Where I find inspiration in Seoul&rsquo;s most creative neighborhood.</td></tr>
+          <tr><td>Gwangjang Market Essentials</td><td class="mono">Seoul</td><td class="num">19</td><td>Seoul&rsquo;s most iconic market through a local&rsquo;s eyes.</td></tr>
+          <tr><td>Noodle Goodness</td><td class="mono">Seoul</td><td class="num">10</td><td>Only the #1 spot for each ramen style.</td></tr>
+          <tr><td>Korean BBQ - Only #1</td><td class="mono">Seoul</td><td class="num">8</td><td>Only the #1 BBQ spot per genre, regularly updated.</td></tr>
+          <tr><td>The Softer Side of Seoul: Yeonhui</td><td class="mono">Seoul</td><td class="num">8</td><td>An emerging neighborhood of charming cafés and indie shops.</td></tr>
+          <tr><td>Busan with friends</td><td class="mono">Busan</td><td class="num">5</td><td>Our friends&rsquo; favorite BBQ, cafes, bars, and bakeries in Busan.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>맵당 장소 수가 <strong>5~23개로 편차가 큽니다</strong>(평균 15). 23개짜리 맵은 리스트가 상당히 길어지므로, S-02는 지도를 상단에 고정(sticky)하고 리스트만 스크롤되는 구조로 설계했습니다. 또한 부산 데이터가 포함되어 있어 <strong>서울 전용 서비스로 만들면 안 됩니다</strong> — 카드에 도시 라벨이 필요합니다.</p>
+  </section>
+
+  <!-- ===== 03 SCREEN INVENTORY ===== -->
+  <section id="screens">
+    <div class="sec-head">
+      <span class="sec-no">03</span>
+      <h2>화면 인벤토리</h2>
+      <span class="sec-note">7 screens</span>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>ID</th><th>화면</th><th>접근</th><th>진입 경로</th><th>충족 요구사항</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td class="id">S-01</td><td>Home — Map Feed</td><td>비로그인 가능</td><td>앱 진입 기본</td><td class="fr">FR-20</td><td><span class="tag p0">P0</span></td></tr>
+          <tr><td class="id">S-02</td><td>Map Detail</td><td>비로그인 가능</td><td>S-01 카드 · 공유 링크</td><td class="fr">FR-21·22·30·31·33·40·41</td><td><span class="tag p0">P0</span></td></tr>
+          <tr><td class="id">S-03</td><td>Saved</td><td>로그인</td><td>하단 탭바</td><td class="fr">FR-32</td><td><span class="tag p0">P0</span></td></tr>
+          <tr><td class="id">S-04</td><td>Sign in</td><td>비로그인</td><td>탭바 · 액션 게이트</td><td class="fr">FR-01</td><td><span class="tag p0">P0</span></td></tr>
+          <tr><td class="id">S-05</td><td>My Page</td><td>로그인</td><td>하단 탭바</td><td class="fr">FR-01·02</td><td><span class="tag p0">P0</span></td></tr>
+          <tr><td class="id">S-06</td><td>Create Map</td><td>큐레이터</td><td>S-05 → 맵 만들기</td><td class="fr">FR-10·12</td><td><span class="tag check">화요일 확인</span></td></tr>
+          <tr><td class="id">S-07</td><td>Add Place</td><td>큐레이터</td><td>S-06 → 장소 추가</td><td class="fr">FR-11</td><td><span class="tag check">화요일 확인</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>S-01~S-05는 <strong>전달받은 CSV만으로 즉시 구현 가능</strong>합니다. S-06·S-07은 큐레이터 제작 UI로, 포함 여부를 화요일 미팅에서 확정합니다(06장 참조).</p>
+  </section>
+
+  <!-- ===== 04 USER FLOWS ===== -->
+  <section id="flows">
+    <div class="sec-head">
+      <span class="sec-no">04</span>
+      <h2>유저플로우</h2>
+      <span class="sec-note">3 flows</span>
+    </div>
+    <p>점선·적색 노드는 <strong>로그인 게이트</strong>이며, 비로그인 상태에서 저장·후기를 시도할 때만 발생합니다. 탐색 자체는 로그인 없이 열어둡니다 — 외국인 관광객은 도착 직후 짧은 시간에 판단하므로, 첫 화면에 로그인 벽을 세우면 그대로 이탈합니다.</p>
+
+    <div class="flow">
+      <div class="flow-head">
+        <span class="flow-id">FLOW A</span><span class="flow-name">탐색 → 저장 → 공유 (핵심 루프)</span><span class="flow-actor">Traveler</span>
+      </div>
+      <div class="flow-body">
+        <div class="chain">
+          <div class="fl-node start"><span class="n-scr">ENTRY</span><span class="n-txt">웹 주소 접속 / 공유 링크</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node"><span class="n-scr">S-01</span><span class="n-txt">9개 맵 목록 훑어보기</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node"><span class="n-scr">S-02</span><span class="n-txt">지도 + 장소 리스트 + 로컬 팁</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-branch">
+            <div class="fl-branch-row">
+              <div class="fl-node"><span class="n-scr">FR-33</span><span class="n-txt">맵 / 장소 링크 공유</span></div>
+            </div>
+            <div class="fl-branch-row">
+              <div class="fl-node gate"><span class="n-scr">GATE</span><span class="n-txt">저장 시도 → 로그인 확인</span></div>
+              <div class="fl-arrow"></div>
+              <div class="fl-node"><span class="n-scr">FR-30·31</span><span class="n-txt">맵 저장 / 장소 저장</span></div>
+              <div class="fl-arrow"></div>
+              <div class="fl-node end"><span class="n-scr">S-03</span><span class="n-txt">저장 탭에서 다시 열기</span></div>
+            </div>
+            <div class="fl-branch-row">
+              <div class="fl-node"><span class="n-scr">EXIT</span><span class="n-txt">구글맵으로 길찾기 (115/133건)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-foot"><b>Note</b><span>공유 링크로 들어온 비로그인 방문자도 S-02를 그대로 볼 수 있어야 합니다. 공유가 유일한 신규 유입 경로이므로 여기 로그인 벽을 세우면 유입이 끊깁니다.</span></div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-head">
+        <span class="flow-id">FLOW B</span><span class="flow-name">맵 후기 작성</span><span class="flow-actor">Traveler · 로그인</span>
+      </div>
+      <div class="flow-body">
+        <div class="chain">
+          <div class="fl-node"><span class="n-scr">S-02</span><span class="n-txt">맵 상세 하단 후기 영역</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node gate"><span class="n-scr">GATE</span><span class="n-txt">비로그인 시 S-04로 이동</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node"><span class="n-scr">FR-40</span><span class="n-txt">맵 단위 후기 작성</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node end"><span class="n-scr">FR-41</span><span class="n-txt">후기 목록에 즉시 반영</span></div>
+        </div>
+      </div>
+      <div class="flow-foot"><b>Note</b><span>후기는 <strong>장소가 아닌 맵 단위</strong>입니다. 결과적으로 큐레이터 평가로 기능하며, 이는 1차 인터뷰에서 클라이언트가 직접 확인한 의도입니다.</span></div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-head">
+        <span class="flow-id">FLOW C</span><span class="flow-name">맵 제작 · 발행</span><span class="flow-actor">Curator</span>
+      </div>
+      <div class="flow-body">
+        <div class="chain">
+          <div class="fl-node start"><span class="n-scr">S-04</span><span class="n-txt">큐레이터 계정 로그인</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node"><span class="n-scr">S-05</span><span class="n-txt">role=curator 확인 → 진입점 노출</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node"><span class="n-scr">S-06</span><span class="n-txt">제목 · 한 줄 설명 · 도시 입력</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node"><span class="n-scr">S-07</span><span class="n-txt">장소 검색 → 팁 작성 (N회)</span></div>
+          <div class="fl-arrow"></div>
+          <div class="fl-node end"><span class="n-scr">S-01</span><span class="n-txt">발행 → 홈 목록에 노출</span></div>
+        </div>
+      </div>
+      <div class="flow-foot"><b>Scope</b><span>화요일 확인 안건. 제외될 경우 초기 9개 맵 · 133개 장소는 CSV 임포트 스크립트로 시딩하며, 이후 맵 추가도 동일 방식으로 처리합니다.</span></div>
+    </div>
+  </section>
+
+  <!-- ===== 05 WIREFRAMES ===== -->
+  <section id="wireframes">
+    <div class="sec-head">
+      <span class="sec-no">05</span>
+      <h2>와이어프레임</h2>
+      <span class="sec-note">실데이터 배치 · Mobile 375×812</span>
+    </div>
+    <p>모든 화면은 모바일 웹 기준이며 PC 접속 시에도 모바일 뷰로 동작합니다(NFR-01). 프레임 안의 텍스트는 <strong>전달받은 CSV의 실제 값</strong>입니다. 회색 점선 박스만이 아직 데이터가 없는 자리입니다.</p>
+
+    <div class="plates">
+
+      <!-- S-01 HOME -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-01</span><span class="plate-name">Home — Map Feed</span><span class="tag p0">P0</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar">
+              <span class="wf-logo">REAL LOCAL</span>
+              <span class="wf-spacer"></span>
+              <span class="wf-icon">◉</span>
+            </div>
+            <div class="wf-screen">
+              <div class="wf-pad">
+                <p class="wf-sec-label">9 maps by approved locals</p>
+                <div class="chips scroll" style="margin-bottom:14px">
+                  <span class="wf-chip on">All 9</span>
+                  <span class="wf-chip">Seoul 7</span>
+                  <span class="wf-chip">Seongsu 1</span>
+                  <span class="wf-chip">Busan 1</span>
+                </div>
+                <div class="stack-lg">
+
+                  <div class="wf-card">
+                    <div class="row" style="align-items:flex-start;gap:11px">
+                      <div class="wf-mini">
+                        <span class="pin dot" style="left:14px;top:18px"></span>
+                        <span class="pin dot" style="left:31px;top:12px"></span>
+                        <span class="pin dot" style="left:22px;top:33px"></span>
+                        <span class="pin dot" style="left:41px;top:29px"></span>
+                        <span class="pin dot" style="left:35px;top:45px"></span>
+                        <span class="pin dot" style="left:17px;top:47px"></span>
+                      </div>
+                      <div class="stack" style="flex:1;min-width:0">
+                        <span class="t-city">Seoul · 23 places</span>
+                        <span class="t-title">Mimyo&rsquo;s Everyday Euljiro</span>
+                        <span class="t-sub">Everyday Euljiro spots I keep coming back to.</span>
+                      </div>
+                      <span class="wf-star">☆</span>
+                    </div>
+                  </div>
+
+                  <div class="wf-card">
+                    <div class="row" style="align-items:flex-start;gap:11px">
+                      <div class="wf-mini">
+                        <span class="pin dot" style="left:19px;top:15px"></span>
+                        <span class="pin dot" style="left:36px;top:24px"></span>
+                        <span class="pin dot" style="left:27px;top:38px"></span>
+                        <span class="pin dot" style="left:44px;top:44px"></span>
+                        <span class="pin dot" style="left:13px;top:31px"></span>
+                      </div>
+                      <div class="stack" style="flex:1;min-width:0">
+                        <span class="t-city">Seoul · 19 places</span>
+                        <span class="t-title">Gwangjang Market Essentials</span>
+                        <span class="t-sub">Seoul&rsquo;s most iconic market through a local&rsquo;s eyes.</span>
+                      </div>
+                      <span class="wf-star on">★</span>
+                    </div>
+                  </div>
+
+                  <div class="wf-card">
+                    <div class="row" style="align-items:flex-start;gap:11px">
+                      <div class="wf-mini">
+                        <span class="pin dot" style="left:22px;top:20px"></span>
+                        <span class="pin dot" style="left:38px;top:35px"></span>
+                        <span class="pin dot" style="left:16px;top:42px"></span>
+                      </div>
+                      <div class="stack" style="flex:1;min-width:0">
+                        <span class="t-city">Busan · 5 places</span>
+                        <span class="t-title">Busan with friends</span>
+                        <span class="t-sub">Our friends&rsquo; favorite BBQ, cafes, bars, and bakeries in Busan.</span>
+                      </div>
+                      <span class="wf-star">☆</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="wf-tabbar">
+              <div class="wf-tab on"><i></i><b>HOME</b></div>
+              <div class="wf-tab"><i></i><b>SAVED</b></div>
+              <div class="wf-tab"><i></i><b>ME</b></div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>커버 사진 대신 <strong>핀 분포 미니맵</strong>. lat/lng 133건이 전부 있으므로 즉시 구현 가능하며, 카드마다 그림이 달라 식별성도 확보</span></li>
+          <li><span class="mk">2</span><span>도시 · 장소 수 라벨 — 부산 맵이 있으므로 필수 <span class="co-fr">city</span></span></li>
+          <li><span class="mk">3</span><span>제목 + subtitle 그대로 노출 <span class="co-fr">FR-20 · FR-10</span></span></li>
+          <li><span class="mk">4</span><span>도시 칩은 필터가 아닌 <strong>스크롤 앵커</strong>. 9개뿐이라 본격 필터는 과함</span></li>
+          <li><span class="mk">5</span><span>큐레이터 표기 없음 — Q3에서 MVP 제외 확정 <span class="co-fr">FR-03 제외</span></span></li>
+        </ol>
+      </figure>
+
+      <!-- S-02 MAP DETAIL -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-02</span><span class="plate-name">Map Detail</span><span class="tag p0">P0</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar">
+              <span class="wf-icon">←</span>
+              <span class="wf-spacer"></span>
+              <span class="wf-icon">↗</span>
+              <span class="wf-icon solid">★</span>
+            </div>
+            <div class="wf-screen">
+              <div class="wf-map">
+                <span class="pin" style="left:48px;top:36px"><span>1</span></span>
+                <span class="pin" style="left:126px;top:66px"><span>2</span></span>
+                <span class="pin hollow" style="left:92px;top:112px"><span>3</span></span>
+                <span class="pin hollow" style="left:194px;top:44px"><span>4</span></span>
+                <span class="pin hollow" style="left:166px;top:124px"><span>5</span></span>
+                <span class="pin hollow" style="left:60px;top:84px"><span>6</span></span>
+                <span class="wf-map-tag">GOOGLE MAPS · 23 PINS</span>
+              </div>
+              <div class="wf-pad">
+                <div class="stack">
+                  <span class="t-city">Seoul · 23 places</span>
+                  <span class="t-title lg">Mimyo&rsquo;s Everyday Euljiro</span>
+                  <span class="t-sub">Everyday Euljiro spots I keep coming back to.</span>
+                </div>
+                <div class="wf-div"></div>
+                <div class="wf-tabs">
+                  <span class="wf-tab-seg on">Places <b>23</b></span>
+                  <span class="wf-tab-seg">Reviews <b>3</b></span>
+                </div>
+
+                <div class="wf-list-row">
+                  <span class="wf-num">1</span>
+                  <div class="stack" style="flex:1;min-width:0;gap:2px">
+                    <span class="t-name">Dalmaji Plaza BBQ</span>
+                    <span class="t-addr">112-1 Eulji-ro, Jung District, Seoul</span>
+                    <span class="t-tip">Atmospheric Euljiro BBQ—chicken barbecue and draft beer, best with a group.</span>
+                  </div>
+                  <div class="stack" style="gap:5px">
+                    <span class="wf-star">☆</span>
+                    <span class="wf-star" style="font-size:9px">↗</span>
+                  </div>
+                </div>
+
+                <div class="wf-list-row">
+                  <span class="wf-num">2</span>
+                  <div class="stack" style="flex:1;min-width:0;gap:2px">
+                    <span class="t-name">Gyerim Sikdang</span>
+                    <span class="t-addr">39 Donhwamun-ro 4-gil, Jongno District</span>
+                    <span class="t-tip">Old-school garlicky dakdoritang (chicken stew)—add knife-cut noodles to the broth.</span>
+                  </div>
+                  <div class="stack" style="gap:5px">
+                    <span class="wf-star on">★</span>
+                    <span class="wf-star" style="font-size:9px">↗</span>
+                  </div>
+                </div>
+
+                <div class="wf-list-row">
+                  <span class="wf-num">3</span>
+                  <div class="stack" style="flex:1;min-width:0;gap:2px">
+                    <span class="t-name">Hyogye</span>
+                    <span class="t-addr">17 Eulji-ro 12-gil, Jung District, Seoul</span>
+                    <span class="t-tip">Grilled-for-you chicken BBQ in Euljiro—thigh, breast, and special cuts.</span>
+                  </div>
+                  <div class="stack" style="gap:5px">
+                    <span class="wf-star">☆</span>
+                    <span class="wf-star" style="font-size:9px;opacity:.4">–</span>
+                  </div>
+                </div>
+
+                <div class="wf-empty" style="margin-bottom:0">↑ Reviews 탭 전환 시<br>이 목록이 후기로 교체됨<br>#/m/:id/reviews</div>
+              </div>
+            </div>
+            <div class="wf-tabbar">
+              <div class="wf-tab on"><i></i><b>HOME</b></div>
+              <div class="wf-tab"><i></i><b>SAVED</b></div>
+              <div class="wf-tab"><i></i><b>ME</b></div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>상단 지도에 해당 맵의 전체 핀 표시. 최대 23개까지 <span class="co-fr">FR-21</span></span></li>
+          <li><span class="mk">2</span><span><strong>tip이 이 화면의 주인공.</strong> 사진이 없는 대신 로컬의 한 줄이 신뢰를 만듦 — Rev A에서 누락됐던 필드</span></li>
+          <li><span class="mk">3</span><span>핀 번호 = 리스트 순번. 등록 순서 고정 <span class="co-fr">FR-13 제외</span></span></li>
+          <li><span class="mk">4</span><span>↗ = 구글맵 길찾기. 링크 없는 18건은 lat/lng로 폴백, 회색 비활성 처리 금지</span></li>
+          <li><span class="mk">5</span><span><strong>Places / Reviews 탭.</strong> 후기를 목록 아래 두면 20곳 넘는 맵(9개 중 5개)에서 <strong>3.5~4.2화면</strong> 아래로 내려가 발견 자체가 안 됨. 비어 있던 헤더 우측 공간을 씀 — 세로 길이 증가 0 <span class="co-fr">FR-41</span></span></li>
+          <li><span class="mk">6</span><span>탭 줄은 지도 바로 아래 <strong>sticky</strong>. 20곳을 훑는 내내 따라와야 후기로 넘어갈 때 거슬러 올라오지 않음</span></li>
+          <li><span class="mk">7</span><span><strong>탭은 진짜 라우트</strong> <code>#/m/:id/reviews</code>. JS 상태로만 두면 ① 후기를 공유할 수 없고 ② 뒤로가기가 홈으로 튐</span></li>
+          <li><span class="mk">8</span><span>Reviews 탭에서 <strong>핀을 누르면 Places 탭으로 자동 복귀</strong> 후 해당 행 강조. 안 하면 강조할 행이 DOM에 없어 핀이 죽은 것처럼 보임</span></li>
+          <li><span class="mk">9</span><span>후기 0건이면 탭의 숫자를 감춤 — <code>Reviews 0</code>은 비어 있다는 사실만 강조함. 오픈 시점엔 전 맵이 0건 <span class="co-fr">FR-40</span></span></li>
+        </ol>
+      </figure>
+
+      <!-- S-03 SAVED -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-03</span><span class="plate-name">Saved</span><span class="tag p0">P0</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar"><span class="wf-logo">SAVED</span></div>
+            <div class="wf-screen">
+              <div class="wf-pad">
+                <div class="wf-seg" style="margin-bottom:14px">
+                  <div class="on">Maps 2</div>
+                  <div>Places 7</div>
+                </div>
+                <div class="stack-lg">
+                  <div class="row" style="align-items:flex-start;gap:11px">
+                    <div class="wf-mini" style="width:52px;height:52px">
+                      <span class="pin dot" style="left:15px;top:13px"></span>
+                      <span class="pin dot" style="left:30px;top:22px"></span>
+                      <span class="pin dot" style="left:21px;top:34px"></span>
+                    </div>
+                    <div class="stack" style="flex:1;min-width:0">
+                      <span class="t-city">Seoul · 19 places</span>
+                      <span class="t-title">Gwangjang Market Essentials</span>
+                      <span class="t-sub">Seoul&rsquo;s most iconic market through a local&rsquo;s eyes.</span>
+                    </div>
+                    <span class="wf-star on">★</span>
+                  </div>
+                  <div class="row" style="align-items:flex-start;gap:11px">
+                    <div class="wf-mini" style="width:52px;height:52px">
+                      <span class="pin dot" style="left:18px;top:18px"></span>
+                      <span class="pin dot" style="left:33px;top:30px"></span>
+                    </div>
+                    <div class="stack" style="flex:1;min-width:0">
+                      <span class="t-city">Seoul · 10 places</span>
+                      <span class="t-title">Noodle Goodness</span>
+                      <span class="t-sub">Only the #1 spot for each ramen style.</span>
+                    </div>
+                    <span class="wf-star on">★</span>
+                  </div>
+                </div>
+                <div class="wf-div"></div>
+                <div class="wf-empty">PLACES 탭 전환 시<br>저장한 장소 7곳으로 교체<br>(맵 저장과 완전 독립)</div>
+              </div>
+            </div>
+            <div class="wf-tabbar">
+              <div class="wf-tab"><i></i><b>HOME</b></div>
+              <div class="wf-tab on"><i></i><b>SAVED</b></div>
+              <div class="wf-tab"><i></i><b>ME</b></div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>세그먼트 전환 — 저장한 맵 / 저장한 장소 <span class="co-fr">FR-32</span></span></li>
+          <li><span class="mk">2</span><span>두 리스트는 독립. 장소 저장이 맵 저장을 유발하지 않음 <span class="co-fr">FR-31</span></span></li>
+          <li><span class="mk">3</span><span>저장 리스트 통째 공유는 범위 밖 <span class="co-fr">FR-34 제외</span></span></li>
+          <li><span class="mk">4</span><span>맵 카드는 S-01과 동일 컴포넌트 재사용</span></li>
+        </ol>
+      </figure>
+
+      <!-- S-04 SIGN IN -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-04</span><span class="plate-name">Sign in</span><span class="tag p0">P0</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar"><span class="wf-icon">✕</span></div>
+            <div class="wf-screen">
+              <div class="wf-pad" style="padding-top:38px">
+                <div class="stack" style="align-items:center;gap:8px;margin-bottom:26px">
+                  <span class="wf-logo" style="font-size:13px">REAL LOCAL</span>
+                  <span class="t-sub" style="text-align:center">Save the spots you want to remember.</span>
+                </div>
+                <div class="stack-lg">
+                  <div class="stack">
+                    <div class="wf-field">EMAIL</div>
+                    <div class="wf-field">PASSWORD</div>
+                  </div>
+                  <div class="wf-btn">Continue</div>
+                  <div class="row" style="gap:8px">
+                    <div style="flex:1;height:1px;background:var(--rule)"></div>
+                    <span style="font-family:var(--mono);font-size:9px;color:var(--ink-3)">OR</span>
+                    <div style="flex:1;height:1px;background:var(--rule)"></div>
+                  </div>
+                  <div class="wf-btn ghost">Continue with Google</div>
+                  <div class="wf-empty" style="border-style:solid;text-align:left">RETURN-TO<br>로그인 성공 시 직전 화면과<br>시도했던 액션으로 자동 복귀</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>이메일 또는 소셜 로그인, 세션 유지 <span class="co-fr">FR-01</span></span></li>
+          <li><span class="mk">2</span><span>모달 형태 — 게이트에서 진입하므로 뒤 화면 컨텍스트 유지</span></li>
+          <li><span class="mk">3</span><span>복귀 처리가 저장 전환율의 핵심. 홈으로 튕기면 이탈</span></li>
+          <li><span class="mk">4</span><span>UI 언어는 전 화면 영어 <span class="co-fr">NFR-04</span></span></li>
+        </ol>
+      </figure>
+
+      <!-- S-05 MY PAGE -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-05</span><span class="plate-name">My Page</span><span class="tag p0">P0</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar"><span class="wf-logo">ME</span></div>
+            <div class="wf-screen">
+              <div class="wf-pad">
+                <div class="row" style="gap:12px;margin-bottom:18px">
+                  <div class="wf-gap" style="width:52px;height:52px;border-radius:50%">NO<br>IMG</div>
+                  <div class="stack" style="flex:1;min-width:0">
+                    <span class="t-name">curator@example.com</span>
+                    <div class="chips" style="margin-top:4px"><span class="wf-chip on">CURATOR</span></div>
+                  </div>
+                </div>
+                <div class="wf-div"></div>
+                <p class="wf-sec-label">Curator only</p>
+                <div class="wf-btn" style="margin-bottom:7px">+ Create a map</div>
+                <div class="wf-empty" style="text-align:left;margin-bottom:14px">role = curator 계정에만 노출<br>일반 유저에게는 이 블록 자체가 없음</div>
+                <div class="wf-div"></div>
+                <p class="wf-sec-label">Account</p>
+                <div class="stack">
+                  <div class="wf-list-row" style="align-items:center"><span class="t-name" style="flex:1;font-weight:400">Language — English</span><span style="color:var(--ink-3);font-size:11px">›</span></div>
+                  <div class="wf-list-row" style="align-items:center"><span class="t-name" style="flex:1;font-weight:400">Sign out</span><span style="color:var(--ink-3);font-size:11px">›</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="wf-tabbar">
+              <div class="wf-tab"><i></i><b>HOME</b></div>
+              <div class="wf-tab"><i></i><b>SAVED</b></div>
+              <div class="wf-tab on"><i></i><b>ME</b></div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>role 뱃지로 큐레이터/일반 유저 구분 <span class="co-fr">FR-02</span></span></li>
+          <li><span class="mk">2</span><span>&lsquo;Create a map&rsquo; 진입점은 큐레이터에게만 렌더 <span class="co-fr">FR-02</span></span></li>
+          <li><span class="mk">3</span><span>role 부여는 DB 수동 처리. 승인 플로우 UI 없음 <span class="co-fr">FR-03 제외</span></span></li>
+          <li><span class="mk">4</span><span>프로필 이미지 데이터 없음 — 이니셜 원형으로 대체 가능</span></li>
+        </ol>
+      </figure>
+
+      <!-- S-06 CREATE MAP -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-06</span><span class="plate-name">Create Map</span><span class="tag check">화요일 확인</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar">
+              <span class="wf-icon">←</span>
+              <span style="font-family:var(--mono);font-size:10px;letter-spacing:.12em">NEW MAP</span>
+              <span class="wf-spacer"></span>
+              <span style="font-family:var(--mono);font-size:9px;color:var(--ink-3)">SAVE</span>
+            </div>
+            <div class="wf-screen">
+              <div class="wf-pad">
+                <p class="wf-sec-label">Title <span style="color:var(--warn)">*</span></p>
+                <div class="wf-field" style="margin-bottom:14px">Mimyo&rsquo;s Everyday Euljiro</div>
+
+                <p class="wf-sec-label">One-line summary <span style="color:var(--warn)">*</span></p>
+                <div class="wf-field tall" style="line-height:1.5">Everyday Euljiro spots I keep coming back to.</div>
+                <div style="text-align:right;font-family:var(--mono);font-size:8.5px;color:var(--ink-3);margin-top:3px">45 / 80</div>
+
+                <p class="wf-sec-label" style="margin-top:14px">City <span style="color:var(--warn)">*</span></p>
+                <div class="chips" style="margin-bottom:16px">
+                  <span class="wf-chip on">Seoul</span>
+                  <span class="wf-chip">Busan</span>
+                  <span class="wf-chip">Seongsu</span>
+                  <span class="wf-chip">+ New</span>
+                </div>
+
+                <div class="wf-div"></div>
+                <p class="wf-sec-label">Places · 0</p>
+                <div class="wf-empty" style="margin-bottom:10px">아직 추가된 장소가 없습니다<br>최소 1곳 이상 필요</div>
+                <div class="wf-btn ghost sm" style="margin-bottom:16px">+ Add place</div>
+                <div class="wf-btn">Publish</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>입력 항목은 CSV 컬럼과 정확히 1:1 — title · subtitle · city <span class="co-fr">FR-10</span></span></li>
+          <li><span class="mk">2</span><span>subtitle 80자 제한. 실제 데이터 최대값이 68자이므로 여유 있음</span></li>
+          <li><span class="mk">3</span><span>커버 이미지 입력란 없음 — 미니맵 자동 생성이므로 불필요</span></li>
+          <li><span class="mk">4</span><span>동일 큐레이터가 맵 여러 개 생성 가능 <span class="co-fr">FR-12</span></span></li>
+          <li><span class="mk">5</span><span><strong>포함 여부 미확정</strong> — 06장 참조</span></li>
+        </ol>
+      </figure>
+
+      <!-- S-07 ADD PLACE -->
+      <figure class="plate">
+        <div class="plate-head"><span class="plate-id">S-07</span><span class="plate-name">Add Place</span><span class="tag check">화요일 확인</span></div>
+        <div class="plate-stage">
+          <div class="phone">
+            <div class="wf-status"><span>9:41</span><span>▮▮▮</span></div>
+            <div class="wf-appbar">
+              <span class="wf-icon">←</span>
+              <span style="font-family:var(--mono);font-size:10px;letter-spacing:.12em">ADD PLACE</span>
+            </div>
+            <div class="wf-screen">
+              <div class="wf-pad">
+                <div class="wf-field" style="margin-bottom:11px">🔍  Search a place</div>
+                <div class="stack" style="margin-bottom:6px">
+                  <div class="wf-list-row" style="padding:7px 0">
+                    <div class="stack" style="flex:1;min-width:0;gap:2px">
+                      <span class="t-name">Dalmaji Plaza BBQ</span>
+                      <span class="t-addr">112-1 Eulji-ro, Jung District, Seoul</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="wf-map sm" style="border-top:1px solid var(--rule)">
+                <span class="pin" style="left:130px;top:42px"><span>+</span></span>
+                <span class="wf-map-tag">37.5661, 126.9910</span>
+              </div>
+              <div class="wf-pad">
+                <p class="wf-sec-label">Name</p>
+                <div class="wf-field" style="margin-bottom:14px">Dalmaji Plaza BBQ</div>
+                <p class="wf-sec-label">Local tip <span style="color:var(--warn)">*</span></p>
+                <div class="wf-field tall" style="line-height:1.5;font-size:9px">Atmospheric Euljiro BBQ—chicken barbecue and draft beer…</div>
+                <div style="text-align:right;font-family:var(--mono);font-size:8.5px;color:var(--ink-3);margin:3px 0 16px">74 / 120</div>
+                <div class="wf-btn">Add to map</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ol class="callouts">
+          <li><span class="mk">1</span><span>장소 검색 → name · address · lat/lng · gmaps_url 자동 입력 <span class="co-fr">FR-11</span></span></li>
+          <li><span class="mk">2</span><span><strong>tip은 필수 입력.</strong> 이게 없으면 구글맵과 다를 게 없어짐</span></li>
+          <li><span class="mk">3</span><span>tip 120자 제한 — 실제 데이터 최대 105자 기준</span></li>
+          <li><span class="mk">4</span><span>카테고리 입력란 삭제 — CSV에 근거 데이터 없음</span></li>
+          <li><span class="mk">5</span><span><strong>포함 여부 미확정</strong> — 06장 참조</span></li>
+        </ol>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- ===== 06 SCOPE ===== -->
+  <section id="scope">
+    <div class="sec-head">
+      <span class="sec-no">06</span>
+      <h2>확인사항</h2>
+      <span class="sec-note">화요일 미팅 안건</span>
+    </div>
+
+    <p>화요일 미팅의 목적은 <strong>디자인과 구조가 의도대로 구성됐는지 확인</strong>하는 것입니다. Rev B에서 올렸던 5개 안건 중 <strong>3개는 이미 확정</strong>됐고, 실제로 논의가 필요한 것은 아래 3개입니다.</p>
+
+    <h3>확정된 사항</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>#</th><th>안건</th><th>결정</th><th>반영 상태</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="id">Q1</td>
+            <td>커버 사진 조달</td>
+            <td><strong>사진 없음으로 확정.</strong> 별도 조달하지 않음</td>
+            <td><span class="tag ok">반영 완료</span> 미니맵 카드</td>
+          </tr>
+          <tr>
+            <td class="id">Q3</td>
+            <td>큐레이터 정보 제공</td>
+            <td><strong>MVP 범위에서 제외.</strong> 이름·프로필 표기하지 않음</td>
+            <td><span class="tag ok">반영 완료</span> 표기 자리 삭제</td>
+          </tr>
+          <tr>
+            <td class="id">Q4</td>
+            <td>컬러 팔레트 · 가이드북</td>
+            <td><strong>가이드북 불발.</strong> 팔레트를 우리가 제안 — 베이지→화이트 handmade 안에서 A/B 2안</td>
+            <td><span class="tag ok">시안 제출</span> 별도 문서</td>
+          </tr>
+          <tr>
+            <td class="id">Q6</td>
+            <td>지도를 Google Maps로 교체할 것인가</td>
+            <td><strong>Google Maps로 확정.</strong> 키 발급·리퍼러 제한 완료, PRD NFR-03 충족</td>
+            <td><span class="tag ok">반영 완료</span> 키 없으면 Leaflet 폴백</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>남은 안건</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>#</th><th>안건</th><th>왜 지금 필요한가</th><th>미확정 시 기본 진행 방향</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="id">Q2</td>
+            <td><strong>S-06·S-07 큐레이터 제작 UI 포함 여부</strong></td>
+            <td>1차 인터뷰에서 “권한은 필요” / “맵 추가 기능은 관리자 영역” 두 발언이 상충. 개발량 차이 큼</td>
+            <td>제외하고 CSV 임포트로 시딩 (일정 기준 권장)</td>
+          </tr>
+          <tr>
+            <td class="id">Q5</td>
+            <td><strong>주소 표기 정규화 방침</strong></td>
+            <td><code>area</code> 필드 포맷이 뒤섞여 있음 (일부 역순 표기)</td>
+            <td>구글맵 기준으로 재조회해 통일</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>범위 요약</h3>
+    <div class="cols">
+      <div class="col">
+        <h4>도면에 반영됨</h4>
+        <ul>
+          <li>맵 목록 · 맵 상세 · 저장 탭 3축 구조</li>
+          <li>지도 임베드 + 핀 ↔ 리스트 연동</li>
+          <li>핀 분포 미니맵 (사진 대체)</li>
+          <li>로컬 팁 중심 장소 리스트</li>
+          <li>맵/장소 이중 저장 구조</li>
+          <li>맵 단위 후기 · 빈 상태</li>
+          <li>맵·장소 단위 링크 공유</li>
+          <li>role 기반 큐레이터 진입점</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>의도적으로 제외</h4>
+        <ul>
+          <li>검색 · 정렬 (도시 앵커만 유지)</li>
+          <li>장소 카테고리 (데이터 없음)</li>
+          <li>장소별 개별 후기</li>
+          <li>맵 내 순서 · 순위 편집</li>
+          <li>큐레이터 소개 페이지</li>
+          <li>큐레이터 승인 플로우 UI</li>
+          <li>실시간 위치 · 결제 · 네이티브 앱</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>다음 단계</h4>
+        <ol>
+          <li>CSV 임포트 스크립트 + DB 스키마</li>
+          <li>컬러 · 타이포 시안 적용</li>
+          <li>S-01 · S-02 프론트엔드 구현</li>
+          <li><strong>화요일 제출 · 구조 확인</strong></li>
+          <li>인증 · 저장 · 후기 백엔드</li>
+          <li><strong>목요일 최종 제출</strong></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="note info">
+      <span class="note-k">화요일 데모 권장 범위</span>
+      <p>실데이터 133건이 이미 확보돼 있으므로, 화요일에는 <strong>정적 목업이 아니라 실제 CSV가 들어간 S-01 · S-02 두 화면</strong>을 보여드리는 것을 권장합니다. 미니맵 카드가 실제 데이터에서 어떻게 보이는지, 23개 장소 리스트가 얼마나 긴지는 실물로 봐야 판단이 됩니다 — 이 두 가지가 이번 구조 설계의 가장 큰 판단 포인트입니다.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>REAL LOCAL · WF-01 · REV C</span>
+    <span>DATASET: 9 MAPS · 133 PLACES</span>
+    <span>2026.07.26</span>
+  </footer>
+
+</div>
+</body>
+</html>

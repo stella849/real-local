@@ -3,11 +3,18 @@ node_modules/
 Thumbs.db
 *.log
 
-# Internal planning docs — meeting notes, PRD, wireframes.
+# Internal planning docs — meeting notes, PRD, design sources.
 # Held back because this repository is public and these contain the
-# client's budget and internal scope discussion. Remove this line to
-# publish them, or move the repo to private first.
-docs/
+# client's budget and internal scope discussion.
+#
+# 'docs/' 가 아니라 'docs/*' 인 이유: 디렉터리 자체를 제외하면 git 이
+# 안으로 내려가지 않아 아래 예외 규칙이 아예 적용되지 않는다.
+docs/*
+
+# 와이어프레임만 예외. 클라이언트에게 보여주는 산출물이고 예산·연락처가
+# 들어 있지 않다(확인함). 이 파일에 새 내용을 넣을 때는 공개된다는 것을
+# 전제할 것 — 특히 이메일 주소와 금액.
+!docs/04_wireframe_userflow.html
 
 # agent runtime scratch
 .bkit/
