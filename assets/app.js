@@ -88,21 +88,20 @@ async function share(title, url) {
    The dataset ships no photography, so each card is identified by
    the shape of its own pin cluster — computed from lat/lng at
    build time, drawn here as SVG.
+
+   Structure is fixed by the client, so only the rendering changed:
+   the pins are pen circles now rather than two offset print passes.
    ------------------------------------------------------------ */
 function coverSvg(map) {
-  const dot = (p, i, fill, dx, dy, r) =>
-    `<circle cx="${(p.x * 100 + dx).toFixed(2)}" cy="${(p.y * 100 + dy).toFixed(2)}" r="${r}" fill="${fill}"/>`;
-
-  // knocked-out-of-register underlay, then the ink pass on top
-  const under = map.cover.map((p, i) => dot(p, i, '#DDCDB2', 1.6, 1.6, 4.4)).join('');
-  const ink = map.cover.map((p, i) => {
-    const o = 0.42 + (0.58 * (map.cover.length - i)) / map.cover.length;
-    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${i === 0 ? 4.2 : 3.4}" fill="#2C2620" opacity="${o.toFixed(2)}"/>`;
+  const dots = map.cover.map((p, i) => {
+    const o = 0.5 + (0.5 * (map.cover.length - i)) / map.cover.length;
+    const r = i === 0 ? 4.2 : 3.2;
+    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${r}"
+             fill="#F3EADD" stroke="#2C2620" stroke-width="2" opacity="${o.toFixed(2)}"/>`;
   }).join('');
 
-  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <g>${under}</g><g>${ink}</g>
-  </svg>`;
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
+               filter="url(#pen-soft)" aria-hidden="true">${dots}</svg>`;
 }
 
 /* ------------------------------------------------------------
@@ -113,39 +112,40 @@ function coverSvg(map) {
    colours sit slightly out of register.
    ------------------------------------------------------------ */
 function heroArt() {
-  const ridgeFar =
-    'M0 72 C42 56 64 66 98 53 C134 39 152 59 188 53 C224 47 246 32 284 42 '
-    + 'C318 51 352 38 390 46 L390 150 L0 150 Z';
-  const ridgeNear =
-    'M0 100 C34 84 54 90 80 77 C106 64 130 80 158 73 C188 65 208 84 238 79 '
-    + 'C268 74 290 60 320 71 C346 80 368 70 390 75 L390 150 L0 150 Z';
-
+  const INK = '#2C2620';
   const EAVE = 124;   // lowest point of the eave, at the centre of the span
   const GROUND = 146;
 
-  /* A giwa roof from the front. The defining move is that the eave line
-     itself lifts at the corners — the tips sit ABOVE the centre of the
-     eave, so the roof reads as a shallow crescent rather than a cap.
-     Both edges are arcs: the ridge over the top, the eave underside
-     dipping back down to EAVE at mid-span. */
+  // ridgelines are drawn as open strokes now, not filled masses
+  const ridgeFar =
+    'M0 72 C42 56 64 66 98 53 C134 39 152 59 188 53 C224 47 246 32 284 42 C318 51 352 38 390 46';
+  const ridgeNear =
+    'M0 100 C34 84 54 90 80 77 C106 64 130 80 158 73 C188 65 208 84 238 79 '
+    + 'C268 74 290 60 320 71 C346 80 368 70 390 75';
+
+  /* A giwa roof from the front. The eave line lifts at the corners —
+     the tips sit ABOVE the centre of the eave — so it reads as a shallow
+     crescent rather than a cap. Outlined rather than filled: the pen
+     line is what carries the texture now. */
   const roof = (x, w, h) => {
-    const lift = h * 0.42;                 // how far the corners ride up
+    const lift = h * 0.42;
     const tip = (EAVE - lift).toFixed(1);
     const cx = x + w * 0.5;
-    // control pulled below EAVE so the curve's midpoint lands exactly on
-    // it — otherwise the underside stops short and the roof floats
     return `<path d="M${x} ${tip} `
       + `Q${cx} ${(EAVE - h * 1.35).toFixed(1)} ${x + w} ${tip} `
-      + `Q${cx} ${(EAVE + lift).toFixed(1)} ${x} ${tip} Z" fill="#2C2620"/>`;
+      + `Q${cx} ${(EAVE + lift).toFixed(1)} ${x} ${tip} Z"
+      fill="#E8E4DC" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>`;
   };
 
-  /* wall below the eave, with a doorway punched out of it */
+  /* wall below the eave, drawn as posts and a doorway rather than a slab */
   const wall = (cx, w) => {
     const x = cx - w / 2;
-    const dw = Math.max(7, w * 0.26);
-    const dh = 13;
-    return `<rect x="${x}" y="${EAVE - 2}" width="${w}" height="${GROUND - EAVE + 2}" fill="#2C2620" opacity=".8"/>`
-      + `<rect x="${(cx - dw / 2).toFixed(1)}" y="${GROUND - dh}" width="${dw.toFixed(1)}" height="${dh}" fill="#F6F0E4" opacity=".92"/>`;
+    const dw = Math.max(8, w * 0.3);
+    return `<path d="M${x} ${EAVE} L${x} ${GROUND} M${x + w} ${EAVE} L${x + w} ${GROUND}"
+              stroke="${INK}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <path d="M${(cx - dw / 2).toFixed(1)} ${GROUND} L${(cx - dw / 2).toFixed(1)} ${GROUND - 14}
+                     L${(cx + dw / 2).toFixed(1)} ${GROUND - 14} L${(cx + dw / 2).toFixed(1)} ${GROUND}"
+              stroke="${INK}" stroke-width="2.2" fill="none" stroke-linejoin="round"/>`;
   };
 
   const village = [
@@ -162,24 +162,28 @@ function heroArt() {
 
   /* 전통 구름 — the motif sheet pairs giwa with these curls and calls
      the pair "지도의 상징", so the hero carries both */
-  const cloud = (x, y, s, op) => `
-    <g transform="translate(${x} ${y}) scale(${s})" fill="#AFCBDD" opacity="${op}">
-      <path d="M0 10 C0 4 5 0 11 0 C16 0 20 3 21 8 C25 6 30 9 31 13
-               C36 13 39 16 39 20 C39 24 36 27 32 27 L7 27 C3 27 0 24 0 20 Z"/>
-      <circle cx="11" cy="9" r="5.6" fill="none" stroke="#AFCBDD" stroke-width="2.6"/>
-      <circle cx="11" cy="9" r="1.9"/>
+  const cloud = (x, y, s) => `
+    <g transform="translate(${x} ${y}) scale(${s})">
+      <path d="M2 26 C-2 20 1 12 8 11 C9 4 16 0 23 3 C27 -1 35 0 37 6
+               C44 6 48 13 45 19 C43 24 38 26 33 26 Z"
+            fill="#DCEAF2" stroke="#7FA3BC" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M8 11 C13 8 19 10 20 15 C21 19 18 22 15 21"
+            fill="none" stroke="#7FA3BC" stroke-width="2.2" stroke-linecap="round"/>
     </g>`;
 
-  return `<svg viewBox="0 28 390 128" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <circle cx="318" cy="52" r="16" fill="#EFE5D3"/>
-    ${cloud(20, 40, 1.15, 0.9)}
-    ${cloud(214, 34, 0.85, 0.72)}
-    ${cloud(292, 74, 0.6, 0.5)}
-    <path d="${ridgeFar}" fill="#DDCDB2" opacity=".45"/>
-    <path d="${ridgeNear}" fill="#DDCDB2" opacity=".8"/>
+  return `<svg viewBox="0 28 390 128" preserveAspectRatio="xMidYMid meet"
+               filter="url(#pen-soft)" aria-hidden="true">
+    <circle cx="318" cy="52" r="15" fill="none" stroke="#C9BEA9" stroke-width="2.2"/>
+    ${cloud(14, 36, 1.0)}
+    ${cloud(206, 30, 0.76)}
+    ${cloud(288, 70, 0.54)}
+    <path d="${ridgeFar}" fill="none" stroke="#C9BEA9" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="${ridgeNear}" fill="none" stroke="#B3A794" stroke-width="2.4" stroke-linecap="round"/>
     ${buildings}
-    <rect x="0" y="${GROUND}" width="390" height="1.2" fill="#2C2620" opacity=".28"/>
   </svg>`;
+  /* no ground rule — a full-width 2px line is exactly what the
+     displacement filter shreds, and the posts already sit the
+     village on a baseline without it */
 }
 
 /* ------------------------------------------------------------

@@ -78,15 +78,6 @@
 
   --shell:480px;
 
-  /* --- hand-print layer ---------------------------------------
-     The brief asked for handmade, and the closer reference is
-     hand-PRINT: hanji grain, carved blocks, ink that sits unevenly
-     on the paper. All of it is generated, so it costs no assets
-     and stays crisp at any density.
-     ------------------------------------------------------------ */
-  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
-  /* coarser fibre for the cream panels */
-  --fibre:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04 0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23f)'/%3E%3C/svg%3E");
 }
 
 /* The source brand ships no dark-mode palette (documented gap), so this
@@ -130,19 +121,6 @@ a{color:inherit}
   .shell{border-inline:1px solid var(--hairline-soft)}
 }
 
-/* paper the whole sheet sits on — fixed so it reads as stock,
-   not as something that scrolls with the ink */
-.shell::before{
-  content:"";
-  position:fixed;inset:0;
-  max-width:var(--shell);margin:0 auto;
-  background-image:var(--grain);
-  opacity:.055;
-  mix-blend-mode:multiply;
-  pointer-events:none;
-  z-index:1;
-}
-.topbar,.view,.footer,.tabbar,.stripe{position:relative;z-index:2}
 
 /* ============================================================
    Top bar
@@ -196,10 +174,9 @@ a{color:inherit}
 }
 
 /* ============================================================
-   Hero — a carved block, printed
-   Ink sits on hanji: layered ridgelines and hanok eaves, with a
-   second pass knocked slightly out of register the way a hand
-   pull never lines up perfectly.
+   Hero — drawn, not printed
+   Ridgelines and hanok eaves as pen outlines. The line carries the
+   texture now, so nothing is laid over the paper.
    ============================================================ */
 .hero{
   position:relative;
@@ -210,11 +187,6 @@ a{color:inherit}
 /* height follows width so the block is never cropped */
 .hero-art{position:relative;display:block;width:100%}
 .hero-art svg{display:block;width:100%;height:auto}
-.hero::after{
-  content:"";position:absolute;inset:0;
-  background-image:var(--fibre);
-  opacity:.2;mix-blend-mode:multiply;pointer-events:none;
-}
 .hero-copy{
   position:relative;z-index:2;
   padding:var(--sp-md) var(--sp-md) var(--sp-sm);
@@ -226,15 +198,13 @@ a{color:inherit}
   font-size:13.5px;margin-bottom:0;color:var(--ink-tint);
 }
 
-/* hand-cut rule — an inked edge that wavers, not a ruled line */
+/* 손으로 그은 구분선 — 자가 아니라 펜으로 그은 한 줄.
+   굵기가 고르지 않게 흔들리는 SVG 획을 가로로 늘려 쓴다. */
 .cut{
-  height:4px;flex:none;border:0;margin:0;
-  background:
-    repeating-linear-gradient(90deg,
-      var(--beige-deep) 0 17px, transparent 17px 20px,
-      var(--beige-deep) 20px 44px, transparent 44px 46px,
-      var(--beige-deep) 46px 61px, transparent 61px 65px);
-  opacity:.5;
+  height:7px;flex:none;border:0;margin:0;
+  background:center/100% 7px no-repeat
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='7' viewBox='0 0 400 7'%3E%3Cpath d='M2 4.2 C48 2.3 96 5.1 148 3.4 C204 1.6 252 5.4 300 3.2 C338 1.6 370 4.6 398 3' fill='none' stroke='%23C9BEA9' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E");
+  opacity:.85;
 }
 
 /* ============================================================
@@ -279,16 +249,21 @@ a{color:inherit}
 }
 .feed-item .card-save svg{width:15px;height:15px}
 
+/* 손그림 상자 — 네 모서리의 반지름을 서로 다르게 줘서
+   컴퍼스로 그린 티를 없앤다. 값 자체는 미세하지만 8장이 나란히
+   놓이면 같은 상자를 복제한 느낌이 사라진다. */
 .card{
   display:flex;align-items:center;gap:var(--sp-sm);
   background:var(--canvas);
-  border:1px solid var(--hairline-soft);
-  border-radius:var(--r-lg);
+  border:1.5px solid var(--hairline-strong);
+  border-radius:14px 11px 15px 12px;
   padding:var(--sp-xs);
   text-decoration:none;
   transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease;
 }
-.card:hover{box-shadow:var(--e2);border-color:var(--beige-deep)}
+.card:nth-child(even){border-radius:12px 15px 11px 14px}
+.card:nth-child(3n){border-radius:15px 12px 13px 11px}
+.card:hover{box-shadow:var(--e2);border-color:var(--ink)}
 .card:active{transform:scale(.995)}
 
 /* the block the cluster is printed on */
@@ -296,14 +271,9 @@ a{color:inherit}
   position:relative;flex:none;
   width:88px;height:88px;
   background:var(--cream);
-  border:1px solid var(--beige-deep);
-  border-radius:var(--r-md);
+  border:1.5px solid var(--hairline-strong);
+  border-radius:11px 8px 10px 9px;
   overflow:hidden;
-}
-.cover::after{
-  content:"";position:absolute;inset:0;
-  background-image:var(--fibre);
-  opacity:.13;mix-blend-mode:multiply;pointer-events:none;
 }
 .cover svg{position:absolute;inset:0;width:100%;height:100%}
 
@@ -337,11 +307,6 @@ a{color:inherit}
   background:var(--cream-light);
   border-bottom:1px solid var(--beige-deep);
   position:relative;
-}
-.detail-head::after{
-  content:"";position:absolute;inset:0;
-  background-image:var(--fibre);
-  opacity:.16;mix-blend-mode:multiply;pointer-events:none;
 }
 .detail-head > *{position:relative;z-index:1}
 .detail-title{
@@ -497,15 +462,10 @@ a{color:inherit}
 .tiger-plate{
   position:relative;
   background:var(--paper-tiger);
-  border:1px solid var(--beige-deep);
-  border-radius:var(--r-lg);
+  border:1.5px solid var(--hairline-strong);
+  border-radius:15px 12px 14px 11px;
   overflow:hidden;
   padding:var(--sp-md) var(--sp-md) 0;
-}
-.tiger-plate::after{
-  content:"";position:absolute;inset:0;
-  background-image:var(--fibre);
-  opacity:.18;mix-blend-mode:multiply;pointer-events:none;
 }
 .tiger-plate .motif-img{max-width:300px;margin:0 auto}
 .tiger-plate .plate-copy{
@@ -525,8 +485,8 @@ a{color:inherit}
   margin:var(--sp-md);
   padding:var(--sp-xxl) var(--sp-lg);
   background:var(--cream-light);
-  border:1px solid var(--beige-deep);
-  border-radius:var(--r-lg);
+  border:1.5px solid var(--hairline-strong);
+  border-radius:13px 16px 12px 15px;
   text-align:center;
 }
 .empty .motif{margin-bottom:var(--sp-sm)}
@@ -545,8 +505,8 @@ a{color:inherit}
   margin:var(--sp-md);
   padding:var(--sp-sm) var(--sp-md);
   background:var(--cream);
-  border:1px solid var(--beige-deep);
-  border-radius:var(--r-md);
+  border:1.5px solid var(--hairline-strong);
+  border-radius:10px 13px 9px 12px;
   font-size:13px;line-height:1.5;color:var(--ink-tint);
 }
 .notice b{font-weight:600}

@@ -21,6 +21,23 @@
 </head>
 <body>
 
+<!-- 손그림 펜 — 반듯한 벡터 선을 흔들어 손으로 그은 선으로 만든다.
+     한 번만 정의하고 장식용 SVG가 filter="url(#pen)"으로 참조한다. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <filter id="pen" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"
+                         xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="pen-soft" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6"
+                         xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
 <div class="shell">
   <header class="topbar" id="topbar"></header>
   <main class="view" id="view" tabindex="-1"></main>
