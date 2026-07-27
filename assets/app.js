@@ -225,6 +225,8 @@ function renderHome() {
         <h1 class="lede">Korea, from the people who live there.</h1>
         <p class="lede-sub">${DATA.mapCount} maps · ${DATA.placeCount} places — the ones a local would actually take you to.</p>
       </div>
+      <!-- 시안이 선택되기 전까지는 비어 있고, :empty 규칙으로 접힌다 -->
+      <div class="hero-art" id="hero-art"></div>
     </section>
     <hr class="cut">
 
@@ -241,6 +243,9 @@ function renderHome() {
       <div class="feed-more">
         <button class="btn btn-secondary btn-block" id="more">Show ${plural(rest, 'more map')}</button>
       </div>` : ''}`;
+
+  // 시안(assets/theme.js)이 얹히면 여기에 메인 이미지를 그린다
+  window.RL_ART?.hero?.(view.querySelector('#hero-art'), DATA);
 
   view.querySelectorAll('[data-city]').forEach((b) => {
     b.onclick = () => { activeCity = b.dataset.city; shown = PAGE; renderHome(); };
@@ -278,8 +283,35 @@ function bindCardSave(after) {
 
 /* ------------------------------------------------------------
    Map detail
+
+   장소 목록과 리뷰를 탭으로 나눈다. 20곳이 넘는 지도가 9개 중 5개라,
+   리뷰를 목록 아래 두면 4화면쯤 내려가야 나온다 — 있는지도 모른다.
+
+   탭은 진짜 링크(#/m/:id, #/m/:id/reviews)다. 상태를 JS 변수로만
+   들고 있으면 리뷰를 공유할 수 없고 뒤로가기가 홈으로 튄다.
+
+   지도는 탭이 바뀌어도 다시 만들지 않는다. 아래 detail 이 지금 무엇이
+   그려져 있는지 들고 있어서, 같은 지도면 패널만 갈아끼운다.
    ------------------------------------------------------------ */
-function renderMap(m) {
+const mapHash = (id, tab) => `#/m/${id}${tab === 'reviews' ? '/reviews' : ''}`;
+
+let detail = { id: null, tab: null };
+
+function renderMap(m, tab = 'places') {
+  if (detail.id === m.id) {
+    if (detail.tab !== tab) {         // 같은 지도, 탭만 바뀜 — 지도는 그대로 둔다
+      detail.tab = tab;
+      syncTabs(m);
+      renderPanel(m);
+      /* 탭은 진짜 링크라 브라우저가 해시 이동 뒤 알아서 맨 위로 올린다.
+         탭 줄 위치로 맞추려 해봤자 그 스크롤에 덮여 결과가 들쭉날쭉해진다.
+         브라우저와 싸우지 말고 같은 곳으로 보낸다. */
+      window.scrollTo(0, 0);
+    }
+    return;
+  }
+
+  detail = { id: m.id, tab };
   const savedMap = isSaved('maps', m.id);
 
   view.innerHTML = `
@@ -302,10 +334,61 @@ function renderMap(m) {
 
     <div id="map" role="img" aria-label="Map of ${esc(m.title)}"></div>
 
-    <div class="section-head">
-      <h2>Places</h2><span class="count">${m.placeCount}</span>
+    <div class="segmented detail-tabs" role="tablist">
+      <a class="seg" role="tab" id="tab-places" href="${mapHash(m.id)}"
+         aria-controls="panel">Places<span class="n">${m.placeCount}</span></a>
+      <a class="seg" role="tab" id="tab-reviews" href="${mapHash(m.id, 'reviews')}"
+         aria-controls="panel">Reviews<span class="n" id="tab-review-n"></span></a>
     </div>
 
+    <div id="panel" role="tabpanel"></div>`;
+
+  view.querySelector('#save-map').onclick = async (e) => {
+    const btn = e.currentTarget;
+    const on = await toggleSaved('maps', m.id);
+    if (on === null) return;
+    btn.setAttribute('aria-pressed', String(on));
+    btn.innerHTML = `${on ? icon.bookmarkOn : icon.bookmark}<span>${on ? 'Saved' : 'Save this map'}</span>`;
+    toast(on ? 'Saved to your maps' : 'Removed from your maps');
+  };
+
+  syncTabs(m);
+  renderPanel(m);
+  mountMap(m);
+
+  /* 리뷰 탭의 개수는 어느 탭에 있든 보여야 한다. 목록을 미리 받아
+     캐시에 넣어두면 리뷰 탭으로 넘어갈 때 다시 부르지 않는다. */
+  loadReviews(m.id).then(() => { if (detail.id === m.id) syncTabs(m); });
+}
+
+/** 탭의 선택 상태와 리뷰 개수를 현재 상태에 맞춘다. */
+function syncTabs(m) {
+  const places = document.getElementById('tab-places');
+  const reviews = document.getElementById('tab-reviews');
+  if (!places || !reviews) return;
+
+  const onReviews = detail.tab === 'reviews';
+  places.setAttribute('aria-selected', String(!onReviews));
+  reviews.setAttribute('aria-selected', String(onReviews));
+  document.getElementById('panel')?.setAttribute(
+    'aria-labelledby', onReviews ? 'tab-reviews' : 'tab-places');
+
+  // 0건이면 숫자를 숨긴다. 'Reviews 0' 은 비어 있다는 사실만 강조한다
+  const n = reviewCache.id === m.id && reviewCache.list ? reviewCache.list.length : null;
+  document.getElementById('tab-review-n').textContent = n ? String(n) : '';
+}
+
+function renderPanel(m) {
+  const panel = document.getElementById('panel');
+  if (!panel) return;
+
+  if (detail.tab === 'reviews') {
+    panel.innerHTML = '';
+    renderReviews(m);
+    return;
+  }
+
+  panel.innerHTML = `
     <ul class="places">
       ${m.places.map((p) => {
         const on = isSaved('places', p.id);
@@ -327,21 +410,9 @@ function renderMap(m) {
           </div>
         </li>`;
       }).join('')}
-    </ul>
+    </ul>`;
 
-    <div class="section-head"><h2>Reviews</h2><span class="count" id="review-count"></span></div>
-    <div id="reviews"></div>`;
-
-  view.querySelector('#save-map').onclick = async (e) => {
-    const btn = e.currentTarget;
-    const on = await toggleSaved('maps', m.id);
-    if (on === null) return;
-    btn.setAttribute('aria-pressed', String(on));
-    btn.innerHTML = `${on ? icon.bookmarkOn : icon.bookmark}<span>${on ? 'Saved' : 'Save this map'}</span>`;
-    toast(on ? 'Saved to your maps' : 'Removed from your maps');
-  };
-
-  view.querySelectorAll('[data-save]').forEach((b) => {
+  panel.querySelectorAll('[data-save]').forEach((b) => {
     b.onclick = async () => {
       const on = await toggleSaved('places', b.dataset.save, { map_id: m.id });
       if (on === null) return;
@@ -351,23 +422,48 @@ function renderMap(m) {
     };
   });
 
-  mountMap(m);
-  renderReviews(m);
+  // 목록이 새로 그려졌으므로 지도와 다시 묶고, 고르던 행이 있으면 되살린다
+  bindRowsToMap(m);
+  if (selectedId) document.getElementById(`p-${selectedId}`)?.classList.add('is-active');
+}
+
+/* 지도 핀을 눌렀는데 리뷰 탭이 열려 있으면 강조할 행이 DOM 에 없다.
+   그냥 두면 핀이 죽은 것처럼 보이므로 목록 탭으로 돌려놓고 고른다.
+   주소는 replaceState 로만 맞춘다 — hashchange 를 일으켜 다시 그리면
+   바로 아래 selectPlace 가 사라진 행을 찾게 된다. */
+function ensurePlacesTab(m) {
+  if (detail.tab === 'places') return;
+  detail.tab = 'places';
+  syncTabs(m);
+  renderPanel(m);
+  history.replaceState(null, '', mapHash(m.id));
 }
 
 /* ------------------------------------------------------------
    리뷰 — 지도 단위. 읽기는 비로그인도 가능하고, 쓰기만 막는다.
+
+   목록은 지도당 한 번만 받아 캐시한다. 탭 개수 표시와 리뷰 패널이
+   같은 데이터를 쓰기 때문에, 캐시가 없으면 상세 화면을 열 때마다
+   같은 요청을 두 번 보내게 된다. 쓰기·삭제 뒤에는 강제로 다시 받는다.
    ------------------------------------------------------------ */
-async function renderReviews(m) {
-  const box = document.getElementById('reviews');
-  if (!box) return;
+let reviewCache = { id: null, list: null };
 
-  const list = await db.reviews(m.id);
-  // 지도를 벗어난 뒤 응답이 오면 버린다
-  if (!document.getElementById('reviews')) return;
+async function loadReviews(mapId, force = false) {
+  if (!force && reviewCache.id === mapId && reviewCache.list) return reviewCache.list;
+  const list = await db.reviews(mapId);
+  reviewCache = { id: mapId, list };
+  return list;
+}
 
-  const countEl = document.getElementById('review-count');
-  if (countEl) countEl.textContent = list.length || '';
+async function renderReviews(m, force = false) {
+  const box = document.getElementById('panel');
+  if (!box || detail.tab !== 'reviews') return;
+
+  const list = await loadReviews(m.id, force);
+  // 화면을 벗어났거나 탭이 바뀐 뒤 응답이 오면 버린다
+  if (detail.id !== m.id || detail.tab !== 'reviews') return;
+
+  syncTabs(m);
 
   const mine = db.user() ? list.find((r) => r.user_id === db.user().id) : null;
 
@@ -394,7 +490,8 @@ async function renderReviews(m) {
     ? `<ul class="reviews">${items}</ul>${db.user() ? composer : signinPrompt()}`
     : `<div class="empty">
          <h3>No reviews yet</h3>
-         <p>Reviews are left on the map as a whole, not on individual places.</p>
+         <p>Reviews are left on the map as a whole, not on individual places.
+            Be the first to leave one.</p>
        </div>${db.user() ? composer : signinPrompt()}`;
 
   const saveBtn = box.querySelector('#review-save');
@@ -406,7 +503,7 @@ async function renderReviews(m) {
       try {
         await db.writeReview(m.id, body);
         toast(mine ? 'Review updated' : 'Review posted');
-        renderReviews(m);
+        renderReviews(m, true);
       } catch (e) { toast(e.message); saveBtn.disabled = false; }
     };
   }
@@ -416,7 +513,7 @@ async function renderReviews(m) {
     delBtn.onclick = async () => {
       await db.deleteReview(m.id);
       toast('Review deleted');
-      renderReviews(m);
+      renderReviews(m, true);
     };
   }
 
@@ -447,6 +544,14 @@ const reviewDate = (iso) => new Date(iso).toLocaleDateString('en-GB', {
 let googleAuthFailed = false;
 let currentMapData = null;
 
+/* 지도를 한 번 띄우는 동안 마운트는 한 번만 일어나야 한다.
+
+   구글 인증이 거부되면 gm_authFailure 가 Leaflet 으로 갈아끼우는데,
+   그 사이 loadGoogleMaps 의 then 이 뒤늦게 도착해 같은 자리에 Leaflet 을
+   한 번 더 올린다. 두 번째 마운트가 컨테이너에 포커스를 주면서 sticky
+   지도가 화면 위로 당겨져, 제목과 지도 사이에 빈 띠가 생겼다. */
+let mountToken = 0;
+
 /* Auth errors — a wrong key, or a referrer outside the allow-list —
    are not thrown. Google paints its own grey "Something went wrong" panel
    over the map and calls this hook instead, so this is the only place
@@ -455,17 +560,25 @@ let currentMapData = null;
 window.gm_authFailure = () => {
   googleAuthFailed = true;
   console.warn('Google Maps auth rejected (check the API key referrer list); using Leaflet');
-  if (currentMapData) mountLeaflet(currentMapData);
+  if (!currentMapData) return;
+  mountToken++;                       // 뒤늦게 도착할 then 을 무효화한다
+  mountLeaflet(currentMapData);
 };
 
 function mountMap(m) {
   currentMapData = m;
+
   const key = window.RL_CONFIG?.googleMapsApiKey?.trim();
   if (!key || googleAuthFailed) return mountLeaflet(m);
 
+  const token = ++mountToken;
   loadGoogleMaps(key)
-    .then(() => (googleAuthFailed ? mountLeaflet(m) : mountGoogle(m)))
+    .then(() => {
+      if (token !== mountToken) return;          // 이미 다른 쪽이 처리했다
+      if (googleAuthFailed) mountLeaflet(m); else mountGoogle(m);
+    })
     .catch((e) => {
+      if (token !== mountToken) return;
       console.warn('Google Maps unavailable, falling back to Leaflet:', e.message);
       mountLeaflet(m);
     });
@@ -542,7 +655,7 @@ async function mountGoogle(m) {
         label: { text: String(p.n), color: '#ffffff', fontSize: '12px', fontWeight: '600' },
       });
     }
-    marker.addListener('click', () => selectPlace(p, { scroll: true }));
+    marker.addListener('click', () => { ensurePlacesTab(m); selectPlace(p, { scroll: true }); });
     marker.rlNumber = p.n;
     markers.set(p.id, marker);
   }
@@ -572,7 +685,7 @@ function mountLeaflet(m) {
       icon: pinIcon(p.n, false),
     }).addTo(leafletMap);
     marker.rlNumber = p.n;
-    marker.on('click', () => selectPlace(p, { scroll: true }));
+    marker.on('click', () => { ensurePlacesTab(m); selectPlace(p, { scroll: true }); });
     markers.set(p.id, marker);
   }
   markerIndex = markers;
@@ -590,10 +703,18 @@ function teardownMap() {
   // remove() first — it also clears Leaflet's marker on the element
   if (leafletMap) { leafletMap.remove(); leafletMap = null; }
   if (gmap) {
-    // Google leaves its DOM behind, including the grey auth-error panel,
-    // so falling back would otherwise draw Leaflet on top of the error
     const el = document.getElementById('map');
-    if (el) el.innerHTML = '';
+    if (el) {
+      // Google leaves its DOM behind, including the grey auth-error panel,
+      // so falling back would otherwise draw Leaflet on top of the error
+      el.innerHTML = '';
+      /* It also writes position:relative inline on the container. That
+         outranks our sticky rule, and the leftover top:56px then shoves
+         the map down 56px — a gap under the header, the map overlapping
+         the list below. Leaflet honours whatever position it finds, so
+         the damage outlives Google. Strip it. */
+      el.removeAttribute('style');
+    }
     gmap = null;
   }
   markerIndex = new Map();
@@ -875,10 +996,11 @@ const mapUrl = (id) => `${location.origin}${location.pathname}#/m/${id}`;
 
 function parse() {
   const h = location.hash.replace(/^#/, '') || '/';
-  const m = h.match(/^\/m\/(.+)$/);
+  // 슬러그에는 / 가 없으므로 마지막 조각으로 탭을 가른다
+  const m = h.match(/^\/m\/([^/]+)(?:\/(reviews))?$/);
   if (m) {
     const found = DATA.maps.find((x) => x.id === m[1]);
-    return found ? { name: 'map', map: found } : { name: 'home' };
+    return found ? { name: 'map', map: found, tab: m[2] ? 'reviews' : 'places' } : { name: 'home' };
   }
   if (h === '/saved') return { name: 'saved' };
   if (h === '/me') return { name: 'me' };
@@ -888,20 +1010,28 @@ function parse() {
 
 function render() {
   const route = parse();
+  const staying = route.name === 'map' && detail.id === route.map.id;
+
   renderTopbar(route);
   renderTabbar(route);
 
-  if (route.name === 'map') renderMap(route.map);
-  else if (route.name === 'saved') renderSaved();
-  else if (route.name === 'me') renderMe();
-  else if (route.name === 'signin') renderSignIn();
-  else renderHome();
+  if (route.name === 'map') {
+    renderMap(route.map, route.tab);
+  } else {
+    detail = { id: null, tab: null };   // 상세를 떠났다
+    if (route.name === 'saved') renderSaved();
+    else if (route.name === 'me') renderMe();
+    else if (route.name === 'signin') renderSignIn();
+    else renderHome();
+  }
 
   document.title = route.name === 'map'
     ? `${route.map.title} — Real Local`
     : 'Real Local — Korea, from the people who live there';
 
-  window.scrollTo(0, 0);
+  // 탭만 바꾼 것이라면 renderMap 이 탭 줄 위치로 옮긴다. 여기서 0으로
+  // 올려버리면 지도부터 다시 스크롤해 내려와야 한다.
+  if (!staying) window.scrollTo(0, 0);
 }
 
 /* ------------------------------------------------------------
