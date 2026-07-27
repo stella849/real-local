@@ -14,27 +14,46 @@
    ============================================================ */
 
 :root{
-  /* --- cream / neutral warm (kept) --- */
-  --cream:#fff8e0;
-  --cream-light:#fffaeb;
-  --cream-deeper:#fff0c2;
-  --beige-deep:#e6d5a8;
+  /* --- cream / neutral warm ---------------------------------
+     Mistral's cream leans yellow; the client's own motif sheet
+     (docs/reference/브랜드_모티프_시트.png) is warmer and greyer.
+     These are pulled off that sheet, so the surfaces now match
+     the artwork that sits on them.
+     ---------------------------------------------------------- */
+  --cream:#F6F0E4;
+  --cream-light:#FBF7EF;
+  --cream-deeper:#EFE5D3;
+  --beige-deep:#DDCDB2;
+  /* sampled off assets/img/tiger.png — the panel behind the plate
+     uses the artwork's own paper so the bitmap has no visible edge */
+  --paper-tiger:#DECDB2;
 
-  /* --- text (kept) --- */
-  --ink:#1f1f1f;
-  --ink-tint:#3d3d3d;
-  --charcoal:#2c2c2c;
-  --slate:#4a4a4a;
-  --steel:#6a6a6a;
-  --stone:#8a8a8a;
-  --muted:#a8a8a8;
+  /* --- text --- */
+  --ink:#2C2620;
+  --ink-tint:#4A423A;
+  --charcoal:#3A332C;
+  --slate:#5A5149;
+  --steel:#7A7166;
+  --stone:#9A9186;
+  --muted:#B5ADA2;
+
+  /* --- 전통 모티프 accent ------------------------------------
+     Low-saturation only. The coral is the peony's, well below the
+     Mistral orange that was pulled for being too hot; the clay is
+     the tiger's stripe accent. Both stay decorative — no CTA,
+     no active state, so the ink-led hierarchy is untouched.
+     ---------------------------------------------------------- */
+  --clay:#C4633F;
+  --coral:#E39A6E;
+  --sky:#AFCBDD;
+  --leaf:#95AD8D;
 
   /* --- surface (kept) --- */
-  --canvas:#ffffff;
-  --surface:#fafafa;
-  --hairline:#e5e5e5;
-  --hairline-soft:#ededed;
-  --hairline-strong:#c7c7c7;
+  --canvas:#FFFDF9;
+  --surface:#F2ECE1;
+  --hairline:#E4DCCD;
+  --hairline-soft:#EDE6D9;
+  --hairline-strong:#C9BEA9;
 
   /* --- radius --- */
   --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
@@ -43,8 +62,13 @@
   --sp-xxs:4px; --sp-xs:8px; --sp-sm:12px; --sp-md:16px; --sp-lg:20px;
   --sp-xl:24px; --sp-xxl:32px; --sp-xxxl:40px; --sp-section:64px;
 
-  /* --- type --- */
-  --font-display:"Instrument Serif","PP Editorial Old",Georgia,"Times New Roman",serif;
+  /* --- type ---------------------------------------------------
+     Instrument Serif carries no Hangul, so a myeongjo (serif)
+     fallback follows it — otherwise Korean drops to a sans and the
+     display/UI contrast that carries the brand voice disappears.
+     ------------------------------------------------------------ */
+  --font-display:"Instrument Serif","PP Editorial Old",Georgia,"Times New Roman",
+                 "Nanum Myeongjo","Gowun Batang","Apple SD Gothic Neo",Batang,serif;
   --font-ui:"Inter",ui-sans-serif,system-ui,-apple-system,"Malgun Gothic",sans-serif;
 
   /* --- elevation --- */
@@ -79,6 +103,11 @@ body{
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  /* Korean wraps per character by default, which splits 어절 mid-word
+     ("사람들이" -> "사람들 / 이"). keep-all restores word-boundary
+     breaks; the companion rule keeps long latin names from overflowing. */
+  word-break:keep-all;
+  overflow-wrap:anywhere;
 }
 img{max-width:100%;display:block}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
@@ -240,6 +269,16 @@ a{color:inherit}
   display:flex;flex-direction:column;gap:var(--sp-xs);
   padding:0 var(--sp-md);margin:0;list-style:none;
 }
+/* the bookmark is a sibling of the card link, laid over its top-right.
+   Scoped to .feed-item so the size wins over the base .act below. */
+.feed-item{position:relative}
+.feed-item .card-save{
+  position:absolute;top:var(--sp-sm);right:var(--sp-sm);
+  width:32px;height:32px;
+  background:var(--canvas);
+}
+.feed-item .card-save svg{width:15px;height:15px}
+
 .card{
   display:flex;align-items:center;gap:var(--sp-sm);
   background:var(--canvas);
@@ -268,7 +307,8 @@ a{color:inherit}
 }
 .cover svg{position:absolute;inset:0;width:100%;height:100%}
 
-.card-body{min-width:0;flex:1;padding-right:var(--sp-xxs)}
+/* right padding clears the bookmark so long titles don't run under it */
+.card-body{min-width:0;flex:1;padding-right:34px}
 .card-title{
   font-family:var(--font-display);
   font-size:19px;font-weight:400;line-height:1.2;letter-spacing:-.2px;
@@ -325,11 +365,15 @@ a{color:inherit}
 }
 .badge.quiet{background:transparent;color:var(--steel);border:1px solid var(--hairline);font-weight:500}
 
+/* Map holds the top of the screen while the list scrolls under it —
+   place counts run 5..23, so the long maps would otherwise push the
+   map off-screen and take the pin <-> row link with it. */
 #map{
+  position:sticky;top:56px;   /* 56px = .topbar height */
   height:260px;
   background:var(--cream);
   border-block:1px solid var(--hairline-soft);
-  z-index:0;
+  z-index:1;
 }
 .leaflet-container{font-family:var(--font-ui)}
 
@@ -435,6 +479,48 @@ a{color:inherit}
 /* ============================================================
    Empty / notice
    ============================================================ */
+/* ============================================================
+   전통 모티프
+   Illustration fills the slots the dataset leaves empty — no
+   photography exists, and none is coming (Q1 확정).
+   ============================================================ */
+.motif{
+  display:block;width:100%;height:auto;margin:0 auto;
+  max-width:132px;
+}
+.motif.sm{max-width:96px}
+/* no blend mode — the plate already carries the artwork's own paper,
+   and multiplying it against a matching ground just darkens the box */
+.motif-img{display:block;width:100%;height:auto}
+
+/* the tiger plate — its own paper tone so the bitmap has no edge */
+.tiger-plate{
+  position:relative;
+  background:var(--paper-tiger);
+  border:1px solid var(--beige-deep);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  padding:var(--sp-md) var(--sp-md) 0;
+}
+.tiger-plate::after{
+  content:"";position:absolute;inset:0;
+  background-image:var(--fibre);
+  opacity:.18;mix-blend-mode:multiply;pointer-events:none;
+}
+.tiger-plate .motif-img{max-width:300px;margin:0 auto}
+.tiger-plate .plate-copy{
+  position:relative;z-index:1;
+  padding:var(--sp-xs) 0 var(--sp-md);
+  text-align:center;
+}
+.tiger-plate .plate-copy h3{
+  font-family:var(--font-display);
+  font-size:20px;font-weight:400;line-height:1.25;margin:0 0 3px;
+}
+.tiger-plate .plate-copy p{
+  font-size:13px;line-height:1.5;color:var(--ink-tint);margin:0 auto;max-width:30ch;
+}
+
 .empty{
   margin:var(--sp-md);
   padding:var(--sp-xxl) var(--sp-lg);
@@ -443,9 +529,14 @@ a{color:inherit}
   border-radius:var(--r-lg);
   text-align:center;
 }
+.empty .motif{margin-bottom:var(--sp-sm)}
 .empty h3{
   font-family:var(--font-display);
   font-size:22px;font-weight:400;line-height:1.25;margin:0 0 var(--sp-xxs);
+}
+.empty .motif-cap{
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--stone);margin:var(--sp-sm) 0 0;
 }
 .empty p{font-size:14px;line-height:1.5;color:var(--steel);margin:0 auto;max-width:34ch}
 .empty .btn{margin-top:var(--sp-md)}

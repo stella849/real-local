@@ -8,3 +8,7 @@ Thumbs.db
 # client's budget and internal scope discussion. Remove this line to
 # publish them, or move the repo to private first.
 docs/
+
+# agent runtime scratch
+.bkit/
+.omc/
