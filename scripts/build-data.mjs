@@ -77,6 +77,66 @@ function coverPins(places) {
 const rawMaps = parseCsv(readFileSync(MAPS_CSV, 'utf8'));
 const rawPlaces = parseCsv(readFileSync(PLACES_CSV, 'utf8'));
 
+/* ------------------------------------------------------------
+   주소 정규화 (Q5)
+
+   원본 area 필드에 세 가지 순서가 섞여 있다.
+
+     112-1 Eulji-ro, Jung District, Seoul, South Korea      100건 (정상)
+     Jung District, Supyo-ro, 42-7, Seoul, South Korea       25건 (구가 앞)
+     South Korea, Seoul, Seongdong-gu, Ttukseom-ro, 433       6건 (완전 역순)
+
+   순서마다 규칙을 만들면 새 데이터가 들어올 때마다 규칙이 늘어난다.
+   그래서 순서를 보지 않고 조각의 '종류'를 알아내 다시 조립한다 —
+   어떤 순서로 들어와도 같은 결과가 나온다.
+
+   구 표기도 -gu(79) 와 District(53) 로 갈려 있었다. -gu 로 통일한다:
+   도로명주소 영문 표기의 공식 형태이고, 여행자가 표지판이나 지도
+   검색에서 마주치는 쪽도 이쪽이다.
+
+   원본 CSV 는 고치지 않는다. 클라이언트가 준 입력값이고, 다시 받아도
+   여기를 지나면 같은 형태가 되어야 한다.
+   ------------------------------------------------------------ */
+const CITY = /^(Seoul|Busan|Incheon|Daegu|Daejeon|Gwangju|Ulsan|Sejong|Jeju)$/i;
+
+// 지도의 city 는 동네 이름일 수 있다. 주소에 들어갈 것은 행정 도시다.
+const CITY_OF = { Seoul: 'Seoul', Seongsu: 'Seoul', Busan: 'Busan' };
+
+function normalizeAddress(raw, fallbackCity) {
+  const parts = String(raw ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+  const num = [], road = [], dong = [];
+  let gu = null, city = null, unit = null;
+
+  for (const s of parts) {
+    if (/^south korea$/i.test(s)) continue;                 // 마지막에 다시 붙인다
+    if (CITY.test(s)) { city ||= s; continue; }
+    if (/(-gu|\s+District)$/i.test(s)) { gu ||= s.replace(/\s+District$/i, '-gu'); continue; }
+    if (/^\d+[-\d]*ho$/i.test(s)) { unit ||= s; continue; } // 301ho 같은 호수
+    if (/^\d+[-\d]*$/.test(s)) { num.push(s); continue; }   // 번지만 떨어져 나온 경우
+
+    // '42-7 Supyo-ro' 처럼 번지가 붙어 있으면 쪼갠다. 쪼갠 뒤에도
+    // '116-6 Jangsa-dong'(지번 주소)은 번지+이름으로 남아야 하므로
+    // 동 판정은 앞에 숫자가 없는 조각에만 적용한다.
+    const m = s.match(/^(\d+[-\d]*)\s+(.+)$/);
+    if (m) { num.push(m[1]); road.push(m[2]); continue; }
+    if (/-(dong|ga)$/i.test(s)) { dong.push(s); continue; }
+    road.push(s);
+  }
+
+  let street = [num.shift(), road.shift()].filter(Boolean).join(' ');
+
+  /* 도로가 없는 지번 주소 — 'Jongno District, Jongno 4(sa)-ga, 188' 처럼
+     번지와 '가/동'만 있는 경우다. 그대로 두면 번지가 조각으로 떨어져
+     '188, Jongno 4(sa)-ga' 가 된다. 번지는 그 이름에 붙어야 한다. */
+  if (/^\d+[-\d]*$/.test(street) && dong.length) street = `${street} ${dong.shift()}`;
+
+  // 예상 못 한 조각이 있어도 버리지 않는다
+  const extra = [...num, ...road];
+
+  return [unit, street, ...extra, ...dong, gu, city || fallbackCity, 'South Korea']
+    .filter(Boolean).join(', ');
+}
+
 const byTitle = new Map();
 for (const p of rawPlaces) {
   if (!byTitle.has(p.map_title)) byTitle.set(p.map_title, []);
@@ -100,11 +160,17 @@ const maps = rawMaps.map((m) => {
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) warnings.push(`bad coords: ${r.name}`);
     if (!r.tip) warnings.push(`missing tip: ${r.name}`);
 
+    /* 정규화는 순서를 바로잡을 뿐, 없는 조각을 지어내지는 않는다.
+       구나 번지가 빠진 원본은 눈에 보이게 남겨 둔다. */
+    const address = normalizeAddress(r.area, CITY_OF[m.city] ?? m.city);
+    if (!/-gu,/.test(address)) warnings.push(`address has no district: ${r.name}`);
+    else if (!/^(?:\d+[-\d]*ho, )?\d/.test(address)) warnings.push(`address has no street number: ${r.name}`);
+
     return {
       id,
       n: i + 1,
       name: r.name,
-      address: r.area,
+      address,
       tip: r.tip || '',
       lat,
       lng,
