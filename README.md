@@ -59,12 +59,29 @@ node scripts/build-data.mjs   # data-source/*.csv -> data/maps.json
 
 | # | 안건 | 현재 상태 |
 |---|---|---|
-| 지도 | 화면 안의 지도는 **Google Maps가 아니라 Leaflet + CARTO 타일**입니다. PRD NFR-03과 불일치하며 API 키가 없어 이렇게 구현했습니다. Google Maps는 장소별 외부 길찾기 링크에만 사용됩니다. | 결정 필요 |
+| 지도 (Q6) | 기본은 **Leaflet + CARTO 타일**이며 PRD NFR-03과 불일치합니다. `assets/config.js`에 키를 넣으면 Google Maps로 자동 전환됩니다 (아래 참조). | 결정 필요 |
 | UI 언어 | 현재 전 화면 한국어. PRD NFR-04는 영어(타깃이 외국인 관광객). | 결정 필요 |
 | 저장소 | `localStorage`. 클라이언트가 기기 저장만으로는 안 된다고 명시한 부분이라 임시 구현입니다. `assets/app.js`의 `store` 객체 4개 함수만 교체하면 됩니다. | Supabase 대기 |
 | 큐레이터 제작 UI | 미구현. 초기 데이터는 CSV 시딩. | 결정 필요 |
 
 ---
+
+## Google Maps 전환
+
+빌드 단계가 없는 정적 사이트라 `.env`를 읽을 주체가 없습니다. 설정은 `assets/config.js`에 직접 적습니다.
+
+```js
+window.RL_CONFIG = {
+  googleMapsApiKey: '여기에 키',
+  googleMapsMapId: '',   // 선택 — 넣으면 번호 핀이 앱과 같은 모양으로
+};
+```
+
+키를 넣는 즉시 Google Maps로 전환되고, 비워 두면 Leaflet으로 돕니다. 키가 잘못됐거나 스크립트 로드가 실패하면 Leaflet으로 되돌아가므로 지도가 빈 채로 남지는 않습니다.
+
+**필요한 API는 Maps JavaScript API 하나입니다.** Embed API는 iframe이라 마커를 제어할 수 없고, Static API는 상호작용이 없어 핀↔목록 연동이 불가능합니다.
+
+> **키를 넣기 전에 반드시 제한을 걸어야 합니다.** 이 파일은 브라우저로 그대로 전송되고 레포도 public이라 키는 공개된다고 전제해야 합니다. Google Maps 키는 원래 공개를 전제로 설계됐고 보안은 제한으로 겁니다 — Cloud Console에서 ① 애플리케이션 제한을 HTTP 리퍼러로 두고 배포 도메인과 localhost만 허용, ② API 제한을 Maps JavaScript API 하나로 좁히세요. 제한 없는 키는 절대 커밋하지 마세요.
 
 ## 로컬 실행
 

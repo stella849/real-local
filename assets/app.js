@@ -10,6 +10,7 @@ const toastEl = document.getElementById('toast');
 
 let DATA = null;
 let leafletMap = null;
+let gmap = null;
 
 /* ------------------------------------------------------------
    Saved state
@@ -291,13 +292,100 @@ function renderMap(m) {
 
   view.querySelector('#review-cta').onclick = () => toast('로그인은 백엔드 빌드와 함께 열려요');
 
-  mountLeaflet(m);
+  mountMap(m);
+}
+
+/* ------------------------------------------------------------
+   Map
+
+   Two backends. Leaflet + CARTO needs no key and is what ships by
+   default; Google Maps takes over as soon as a key is present in
+   assets/config.js. Q6 decides which one we keep — until then the
+   app must run correctly with no key at all, so any failure on the
+   Google path falls back rather than leaving a blank panel.
+   ------------------------------------------------------------ */
+function mountMap(m) {
+  const key = window.RL_CONFIG?.googleMapsApiKey?.trim();
+  if (!key) return mountLeaflet(m);
+
+  loadGoogleMaps(key)
+    .then(() => mountGoogle(m))
+    .catch((e) => {
+      console.warn('Google Maps unavailable, falling back to Leaflet:', e.message);
+      mountLeaflet(m);
+    });
+}
+
+let googleLoader = null;
+function loadGoogleMaps(key) {
+  if (window.google?.maps) return Promise.resolve();
+  if (googleLoader) return googleLoader;
+
+  googleLoader = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&libraries=marker&loading=async&v=weekly`;
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('script failed to load'));
+    document.head.appendChild(s);
+  });
+  return googleLoader;
+}
+
+function mountGoogle(m) {
+  const el = document.getElementById('map');
+  if (!el || !m.places.length) return;
+  teardownMap();
+
+  const mapId = window.RL_CONFIG?.googleMapsMapId?.trim();
+  gmap = new google.maps.Map(el, {
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+    scrollwheel: false,
+    ...(mapId ? { mapId } : {}),
+  });
+
+  const bounds = new google.maps.LatLngBounds();
+  const markers = new Map();
+
+  for (const p of m.places) {
+    const pos = { lat: p.lat, lng: p.lng };
+    bounds.extend(pos);
+
+    // AdvancedMarkerElement needs a Map ID; without one, fall back to
+    // the classic marker so the map still works on a bare key
+    let marker;
+    if (mapId && google.maps.marker?.AdvancedMarkerElement) {
+      const node = document.createElement('span');
+      node.className = 'pin-marker';
+      node.textContent = String(p.n);
+      marker = new google.maps.marker.AdvancedMarkerElement({
+        map: gmap, position: pos, title: p.name, content: node,
+      });
+      marker.rlNode = node;
+      marker.addListener('click', () => selectPlace(p, { scroll: true }));
+    } else {
+      marker = new google.maps.Marker({
+        map: gmap, position: pos, title: p.name,
+        label: { text: String(p.n), color: '#ffffff', fontSize: '12px', fontWeight: '600' },
+      });
+      marker.addListener('click', () => selectPlace(p, { scroll: true }));
+    }
+    marker.rlNumber = p.n;
+    markers.set(p.id, marker);
+  }
+
+  markerIndex = markers;
+  selectedId = null;
+  gmap.fitBounds(bounds, 34);
+  bindRowsToMap(m);
 }
 
 function mountLeaflet(m) {
-  if (leafletMap) { leafletMap.remove(); leafletMap = null; }
   const el = document.getElementById('map');
   if (!el || !window.L || !m.places.length) return;
+  teardownMap();
 
   leafletMap = L.map(el, { scrollWheelZoom: false, zoomControl: true, attributionControl: true });
 
@@ -324,11 +412,21 @@ function mountLeaflet(m) {
     maxZoom: 16,
   });
 
-  // tapping a row drives the map, mirroring the pin -> row direction
+  bindRowsToMap(m);
+}
+
+function teardownMap() {
+  if (leafletMap) { leafletMap.remove(); leafletMap = null; }
+  gmap = null;
+  markerIndex = new Map();
+}
+
+/* tapping a row drives the map, mirroring the pin -> row direction */
+function bindRowsToMap(m) {
   view.querySelectorAll('.place-main').forEach((el) => {
     const row = el.closest('.place');
     const p = m.places.find((x) => `p-${x.id}` === row.id);
-    el.onclick = () => selectPlace(p, { scroll: false, pan: true });
+    if (p) el.onclick = () => selectPlace(p, { scroll: false, pan: true });
   });
 }
 
@@ -342,15 +440,36 @@ const pinIcon = (n, active) => L.divIcon({
 let markerIndex = new Map();
 let selectedId = null;
 
+/* Marker highlighting differs per backend: Leaflet swaps a divIcon,
+   AdvancedMarkerElement owns a DOM node we can just toggle a class on,
+   and the classic google Marker only has a label to recolour. */
+function markMarker(marker, n, active) {
+  if (!marker) return;
+  if (typeof marker.setIcon === 'function' && !marker.rlNode && window.L && marker instanceof L.Marker) {
+    marker.setIcon(pinIcon(n, active));
+  } else if (marker.rlNode) {
+    marker.rlNode.classList.toggle('is-active', active);
+  } else if (typeof marker.setLabel === 'function') {
+    marker.setLabel({
+      text: String(n), fontSize: '12px', fontWeight: '600',
+      color: active ? '#18181b' : '#ffffff',
+    });
+    if (typeof marker.setZIndex === 'function') marker.setZIndex(active ? 999 : n);
+  }
+}
+
 function selectPlace(p, { scroll = false, pan = false } = {}) {
   const prev = selectedId && markerIndex.get(selectedId);
-  if (prev) prev.setIcon(pinIcon(prev.rlNumber, false));
+  if (prev) markMarker(prev, prev.rlNumber, false);
   document.querySelectorAll('.place.is-active').forEach((n) => n.classList.remove('is-active'));
 
   selectedId = p.id;
-  const marker = markerIndex.get(p.id);
-  if (marker) marker.setIcon(pinIcon(p.n, true));
-  if (pan && leafletMap) leafletMap.panTo([p.lat, p.lng], { animate: true });
+  markMarker(markerIndex.get(p.id), p.n, true);
+
+  if (pan) {
+    if (leafletMap) leafletMap.panTo([p.lat, p.lng], { animate: true });
+    else if (gmap) gmap.panTo({ lat: p.lat, lng: p.lng });
+  }
 
   const row = document.getElementById(`p-${p.id}`);
   if (!row) return;
