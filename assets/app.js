@@ -304,12 +304,27 @@ function renderMap(m) {
    app must run correctly with no key at all, so any failure on the
    Google path falls back rather than leaving a blank panel.
    ------------------------------------------------------------ */
+let googleAuthFailed = false;
+let currentMapData = null;
+
+/* Auth errors — a wrong key, or a referrer outside the allow-list —
+   are not thrown. Google paints its own grey "문제가 발생했습니다" panel
+   over the map and calls this hook instead, so this is the only place
+   the failure can be caught. Without it a misconfigured key leaves the
+   demo showing an error panel where the map should be. */
+window.gm_authFailure = () => {
+  googleAuthFailed = true;
+  console.warn('Google Maps auth rejected (check the API key referrer list); using Leaflet');
+  if (currentMapData) mountLeaflet(currentMapData);
+};
+
 function mountMap(m) {
+  currentMapData = m;
   const key = window.RL_CONFIG?.googleMapsApiKey?.trim();
-  if (!key) return mountLeaflet(m);
+  if (!key || googleAuthFailed) return mountLeaflet(m);
 
   loadGoogleMaps(key)
-    .then(() => mountGoogle(m))
+    .then(() => (googleAuthFailed ? mountLeaflet(m) : mountGoogle(m)))
     .catch((e) => {
       console.warn('Google Maps unavailable, falling back to Leaflet:', e.message);
       mountLeaflet(m);
@@ -428,8 +443,15 @@ function mountLeaflet(m) {
 }
 
 function teardownMap() {
+  // remove() first — it also clears Leaflet's marker on the element
   if (leafletMap) { leafletMap.remove(); leafletMap = null; }
-  gmap = null;
+  if (gmap) {
+    // Google leaves its DOM behind, including the grey auth-error panel,
+    // so falling back would otherwise draw Leaflet on top of the error
+    const el = document.getElementById('map');
+    if (el) el.innerHTML = '';
+    gmap = null;
+  }
   markerIndex = new Map();
 }
 
