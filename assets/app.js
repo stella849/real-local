@@ -3,6 +3,8 @@
    Static data, hash routing, no build step (deploys as-is to Pages).
    ============================================================ */
 
+import * as db from './data.js';
+
 const view = document.getElementById('view');
 const topbar = document.getElementById('topbar');
 const tabbar = document.getElementById('tabbar');
@@ -13,35 +15,46 @@ let leafletMap = null;
 let gmap = null;
 
 /* ------------------------------------------------------------
-   Saved state
+   저장 상태
 
-   Browser-local for now. The client was explicit that a real
-   service cannot keep this on the device only, so this is the
-   frontend stand-in until auth lands — swapping the four
-   functions below for Supabase calls is the whole migration.
+   진짜 데이터는 Supabase에 있고, 여기서는 렌더 직전에 받아둔
+   스냅샷만 들고 있는다. 화면 그리는 코드가 전부 비동기가 되는 것을
+   막기 위해서다. 토글은 낙관적으로 화면을 먼저 바꾸고, 실패하면
+   data.js가 되돌린 뒤 다시 그린다.
    ------------------------------------------------------------ */
-const store = {
-  key: 'reallocal.saved.v1',
-  read() {
-    try {
-      const v = JSON.parse(localStorage.getItem(this.key) || '{}');
-      return { maps: v.maps ?? [], places: v.places ?? [] };
-    } catch {
-      return { maps: [], places: [] };
-    }
-  },
-  write(v) {
-    try { localStorage.setItem(this.key, JSON.stringify(v)); } catch { /* private mode */ }
-  },
-  has(kind, id) { return this.read()[kind].includes(id); },
-  toggle(kind, id) {
-    const v = this.read();
-    const i = v[kind].indexOf(id);
-    if (i === -1) v[kind].push(id); else v[kind].splice(i, 1);
-    this.write(v);
-    return i === -1;
-  },
-};
+let savedSnap = { maps: new Set(), places: new Set() };
+
+async function refreshSaved() {
+  if (!db.user()) { savedSnap = { maps: new Set(), places: new Set() }; return; }
+  const [mm, pp] = await Promise.all([db.savedMaps(), db.savedPlaces()]);
+  savedSnap = { maps: new Set(mm), places: new Set(pp) };
+}
+
+const isSaved = (kind, id) => savedSnap[kind].has(id);
+
+/* 로그인이 필요한 동작 앞에 세우는 게이트. 로그인 후 원래 하려던
+   화면으로 돌아오도록 돌아갈 곳을 남긴다. */
+let returnTo = null;
+function requireAuth() {
+  if (db.user()) return true;
+  returnTo = location.hash || '#/';
+  location.hash = '#/signin';
+  return false;
+}
+
+/** 저장 토글 공통 처리. 성공하면 스냅샷을 갱신한다. */
+async function toggleSaved(kind, id, extra) {
+  if (!requireAuth()) return null;
+  try {
+    const on = await db.toggleSaved(kind, id, extra);
+    if (on === null) return null;
+    if (on) savedSnap[kind].add(id); else savedSnap[kind].delete(id);
+    return on;
+  } catch (e) {
+    toast(e.message);
+    return null;
+  }
+}
 
 /* ------------------------------------------------------------
    Helpers
@@ -118,7 +131,9 @@ function renderTopbar(route) {
     return;
   }
 
-  const label = route.name === 'saved' ? '저장' : route.name === 'me' ? '내 정보' : null;
+  const label = route.name === 'saved' ? '저장'
+    : route.name === 'me' ? '내 정보'
+    : route.name === 'signin' ? '로그인' : null;
   topbar.innerHTML = label
     ? `<span class="wordmark">${label}</span>`
     : `<a class="wordmark" href="#/">Real Local</a>`;
@@ -130,7 +145,7 @@ function renderTabbar(route) {
     { id: 'saved', href: '#/saved', label: '저장', svg: icon.saved },
     { id: 'me', href: '#/me', label: '내 정보', svg: icon.me },
   ];
-  const active = route.name === 'map' ? 'home' : route.name;
+  const active = route.name === 'map' ? 'home' : route.name === 'signin' ? 'me' : route.name;
   tabbar.innerHTML = tabs.map((t) => `
     <a class="tab" href="${t.href}"${t.id === active ? ' aria-current="page"' : ''}>
       ${t.svg}<span>${t.label}</span>
@@ -150,7 +165,7 @@ const cityLabel = (c) => CITY_KO[c] ?? c;
    The bookmark sits outside the <a> — nesting a button inside a link
    is invalid, and the click would navigate before it toggled. */
 const cardHtml = (m) => {
-  const on = store.has('maps', m.id);
+  const on = isSaved('maps', m.id);
   return `
   <li class="feed-item">
     <a class="card" href="#/m/${m.id}">
@@ -202,9 +217,10 @@ function renderHome() {
    Saved tab passes its own handler, because there the row has to go. */
 function bindCardSave(after) {
   view.querySelectorAll('[data-savemap]').forEach((b) => {
-    b.onclick = () => {
+    b.onclick = async () => {
       const id = b.dataset.savemap;
-      const on = store.toggle('maps', id);
+      const on = await toggleSaved('maps', id);
+      if (on === null) return;
       const title = DATA.maps.find((m) => m.id === id).title;
       b.setAttribute('aria-pressed', String(on));
       b.setAttribute('aria-label', `${title} ${on ? '저장 해제' : '저장'}`);
@@ -218,7 +234,7 @@ function bindCardSave(after) {
    Map detail
    ------------------------------------------------------------ */
 function renderMap(m) {
-  const savedMap = store.has('maps', m.id);
+  const savedMap = isSaved('maps', m.id);
 
   view.innerHTML = `
     <div class="detail-head">
@@ -245,7 +261,7 @@ function renderMap(m) {
 
     <ul class="places">
       ${m.places.map((p) => {
-        const on = store.has('places', p.id);
+        const on = isSaved('places', p.id);
         return `
         <li class="place" id="p-${p.id}" data-n="${p.n}">
           <span class="place-n">${p.n}</span>
@@ -266,34 +282,105 @@ function renderMap(m) {
       }).join('')}
     </ul>
 
-    <div class="section-head"><h2>리뷰</h2><span class="count">0</span></div>
-    <div class="empty">
-      <h3>아직 리뷰가 없어요</h3>
-      <p>리뷰는 개별 장소가 아니라 지도 전체에 대해 남깁니다. 로그인하고 첫 리뷰를 남겨보세요.</p>
-      <button class="btn btn-secondary" id="review-cta">리뷰 쓰기</button>
-    </div>`;
+    <div class="section-head"><h2>리뷰</h2><span class="count" id="review-count"></span></div>
+    <div id="reviews"></div>`;
 
-  view.querySelector('#save-map').onclick = (e) => {
-    const on = store.toggle('maps', m.id);
+  view.querySelector('#save-map').onclick = async (e) => {
     const btn = e.currentTarget;
+    const on = await toggleSaved('maps', m.id);
+    if (on === null) return;
     btn.setAttribute('aria-pressed', String(on));
     btn.innerHTML = `${on ? icon.bookmarkOn : icon.bookmark}<span>${on ? '저장됨' : '이 지도 저장하기'}</span>`;
     toast(on ? '내 지도에 저장했어요' : '내 지도에서 뺐어요');
   };
 
   view.querySelectorAll('[data-save]').forEach((b) => {
-    b.onclick = () => {
-      const on = store.toggle('places', b.dataset.save);
+    b.onclick = async () => {
+      const on = await toggleSaved('places', b.dataset.save, { map_id: m.id });
+      if (on === null) return;
       b.setAttribute('aria-pressed', String(on));
       b.innerHTML = on ? icon.bookmarkOn : icon.bookmark;
       toast(on ? '내 장소에 저장했어요' : '내 장소에서 뺐어요');
     };
   });
 
-  view.querySelector('#review-cta').onclick = () => toast('로그인은 백엔드 빌드와 함께 열려요');
-
   mountMap(m);
+  renderReviews(m);
 }
+
+/* ------------------------------------------------------------
+   리뷰 — 지도 단위. 읽기는 비로그인도 가능하고, 쓰기만 막는다.
+   ------------------------------------------------------------ */
+async function renderReviews(m) {
+  const box = document.getElementById('reviews');
+  if (!box) return;
+
+  const list = await db.reviews(m.id);
+  // 지도를 벗어난 뒤 응답이 오면 버린다
+  if (!document.getElementById('reviews')) return;
+
+  const countEl = document.getElementById('review-count');
+  if (countEl) countEl.textContent = list.length || '';
+
+  const mine = db.user() ? list.find((r) => r.user_id === db.user().id) : null;
+
+  const composer = `
+    <div class="pad" style="padding-top:0">
+      <textarea class="field" id="review-body" rows="3" maxlength="1000"
+        placeholder="${mine ? '리뷰 수정하기' : '이 지도는 어땠나요?'}">${mine ? esc(mine.body) : ''}</textarea>
+      <div class="row-end">
+        ${mine ? '<button class="btn btn-secondary sm" id="review-del">삭제</button>' : ''}
+        <button class="btn btn-dark sm" id="review-save">${mine ? '수정' : '리뷰 남기기'}</button>
+      </div>
+    </div>`;
+
+  const items = list.map((r) => `
+    <li class="review">
+      <div class="review-head">
+        <b>${esc(r.author_name)}</b>
+        <time>${new Date(r.created_at).toLocaleDateString('ko-KR')}</time>
+      </div>
+      <p>${esc(r.body)}</p>
+    </li>`).join('');
+
+  box.innerHTML = list.length
+    ? `<ul class="reviews">${items}</ul>${db.user() ? composer : signinPrompt()}`
+    : `<div class="empty">
+         <h3>아직 리뷰가 없어요</h3>
+         <p>리뷰는 개별 장소가 아니라 지도 전체에 대해 남깁니다.</p>
+       </div>${db.user() ? composer : signinPrompt()}`;
+
+  const saveBtn = box.querySelector('#review-save');
+  if (saveBtn) {
+    saveBtn.onclick = async () => {
+      const body = box.querySelector('#review-body').value.trim();
+      if (!body) return toast('내용을 적어주세요');
+      saveBtn.disabled = true;
+      try {
+        await db.writeReview(m.id, body);
+        toast(mine ? '리뷰를 수정했어요' : '리뷰를 남겼어요');
+        renderReviews(m);
+      } catch (e) { toast(e.message); saveBtn.disabled = false; }
+    };
+  }
+
+  const delBtn = box.querySelector('#review-del');
+  if (delBtn) {
+    delBtn.onclick = async () => {
+      await db.deleteReview(m.id);
+      toast('리뷰를 지웠어요');
+      renderReviews(m);
+    };
+  }
+
+  const cta = box.querySelector('#review-signin');
+  if (cta) cta.onclick = () => requireAuth();
+}
+
+const signinPrompt = () => `
+  <div class="pad" style="padding-top:0">
+    <button class="btn btn-secondary btn-block" id="review-signin">로그인하고 리뷰 남기기</button>
+  </div>`;
 
 /* ------------------------------------------------------------
    Map
@@ -517,10 +604,19 @@ function selectPlace(p, { scroll = false, pan = false } = {}) {
 let savedTab = 'maps';
 
 function renderSaved() {
-  const saved = store.read();
-  const maps = DATA.maps.filter((m) => saved.maps.includes(m.id));
+  if (!db.user()) {
+    view.innerHTML = `<div class="empty">
+      <h3>로그인하면 저장할 수 있어요</h3>
+      <p>저장한 지도와 장소는 계정을 따라다녀서 다른 기기에서도 그대로 보여요.</p>
+      <button class="btn btn-dark" id="go-signin">로그인</button>
+    </div>`;
+    view.querySelector('#go-signin').onclick = () => requireAuth();
+    return;
+  }
+
+  const maps = DATA.maps.filter((m) => savedSnap.maps.has(m.id));
   const places = DATA.maps.flatMap((m) =>
-    m.places.filter((p) => saved.places.includes(p.id)).map((p) => ({ ...p, from: m.title, mapId: m.id })));
+    m.places.filter((p) => savedSnap.places.has(p.id)).map((p) => ({ ...p, from: m.title, mapId: m.id })));
 
   const body = savedTab === 'maps' ? savedMapsHtml(maps) : savedPlacesHtml(places);
 
@@ -533,10 +629,7 @@ function renderSaved() {
         장소<span class="n">${places.length}</span>
       </button>
     </div>
-    ${body}
-    <div class="notice">
-      <b>지금은 이 기기에만 저장돼요.</b> 로그인과 클라우드 동기화는 백엔드 빌드와 함께 들어옵니다. 그때부터는 이 목록이 계정을 따라다녀요.
-    </div>`;
+    ${body}`;
 
   view.querySelectorAll('[data-tab]').forEach((b) => {
     b.onclick = () => { savedTab = b.dataset.tab; renderSaved(); };
@@ -544,8 +637,9 @@ function renderSaved() {
 
   // unsaving here drops the row, so re-render rather than swap the icon
   view.querySelectorAll('[data-unsave]').forEach((b) => {
-    b.onclick = () => {
-      store.toggle('places', b.dataset.unsave);
+    b.onclick = async () => {
+      const on = await toggleSaved('places', b.dataset.unsave);
+      if (on === null) return;
       toast('내 장소에서 뺐어요');
       renderSaved();
     };
@@ -597,30 +691,121 @@ function savedPlacesHtml(places) {
    Me
    ------------------------------------------------------------ */
 function renderMe() {
-  const saved = store.read();
+  const u = db.user();
+
+  if (!u) {
+    view.innerHTML = `
+      <div class="pad">
+        <p class="eyebrow">계정</p>
+        <h1 class="lede">로그인하지 않았어요</h1>
+        <p class="lede-sub">로그인하면 저장 목록이 계정을 따라다니고 지도 리뷰도 남길 수 있어요.</p>
+        <button class="btn btn-dark btn-block" id="signin">로그인 / 가입</button>
+      </div>
+      <div class="notice">
+        <b>큐레이터 도구는 이번 빌드에 없어요.</b> 여기 있는 지도 9개는 큐레이터가 직접 정리한 목록을 그대로 가져온 것입니다.
+      </div>`;
+    view.querySelector('#signin').onclick = () => requireAuth();
+    return;
+  }
+
   view.innerHTML = `
     <div class="pad">
       <p class="eyebrow">계정</p>
-      <h1 class="lede">로그인하지 않았어요</h1>
-      <p class="lede-sub">로그인하면 여러 기기에서 저장 목록을 쓰고 지도 리뷰도 남길 수 있어요. 백엔드 빌드와 함께 제공됩니다.</p>
-      <button class="btn btn-dark btn-block" id="signin">로그인</button>
+      <h1 class="lede">${esc(db.displayName())}</h1>
+      <p class="lede-sub">${esc(u.email)}</p>
     </div>
 
-    <div class="section-head"><h2>이 기기에 저장됨</h2></div>
+    <div class="section-head"><h2>저장한 항목</h2></div>
     <div class="pad" style="padding-top:0">
-      <p class="card-summary">이 기기에 지도 ${saved.maps.length}개 · 장소 ${saved.places.length}곳이 저장돼 있어요.</p>
-      <button class="btn btn-secondary btn-block" id="clear" style="margin-top:var(--sp-sm)">저장 항목 모두 지우기</button>
+      <p class="card-summary">지도 ${savedSnap.maps.size}개 · 장소 ${savedSnap.places.size}곳</p>
+      <a class="btn btn-secondary btn-block" href="#/saved" style="margin-top:var(--sp-sm)">저장 목록 보기</a>
+      <button class="btn btn-secondary btn-block" id="signout" style="margin-top:var(--sp-xs)">로그아웃</button>
     </div>
 
     <div class="notice">
-      <b>큐레이터 도구는 이번 빌드에 없어요.</b> 여기 있는 지도 9개는 큐레이터가 직접 정리한 목록을 그대로 가져온 것입니다. 큐레이터에게 앱 안의 편집기를 줄지는 화요일에 정할 문제예요.
+      <b>큐레이터 도구는 이번 빌드에 없어요.</b> 여기 있는 지도 9개는 큐레이터가 직접 정리한 목록을 그대로 가져온 것입니다.
     </div>`;
 
-  view.querySelector('#signin').onclick = () => toast('로그인은 백엔드 빌드와 함께 열려요');
-  view.querySelector('#clear').onclick = () => {
-    store.write({ maps: [], places: [] });
-    toast('모두 지웠어요');
-    renderMe();
+  view.querySelector('#signout').onclick = async () => {
+    await db.signOut();
+    await refreshSaved();
+    toast('로그아웃했어요');
+    location.hash = '#/';
+  };
+}
+
+/* ------------------------------------------------------------
+   Sign in — 게이트에서 넘어오므로 성공하면 원래 자리로 돌려보낸다
+   ------------------------------------------------------------ */
+let signinMode = 'in';   // 'in' | 'up'
+
+function renderSignIn() {
+  const isUp = signinMode === 'up';
+  view.innerHTML = `
+    <div class="pad" style="padding-top:var(--sp-xl)">
+      <p class="eyebrow">Real Local</p>
+      <h1 class="lede">${isUp ? '가입하기' : '로그인'}</h1>
+      <p class="lede-sub">${isUp
+        ? '저장 목록과 리뷰를 계정에 담아둡니다.'
+        : '저장한 곳을 어디서든 다시 볼 수 있어요.'}</p>
+
+      <form id="auth-form" novalidate>
+        <input class="field" id="email" type="email" inputmode="email"
+               autocomplete="email" placeholder="이메일" required>
+        <input class="field" id="password" type="password"
+               autocomplete="${isUp ? 'new-password' : 'current-password'}"
+               placeholder="비밀번호${isUp ? ' (6자 이상)' : ''}" required>
+        <p class="form-error" id="auth-error" role="alert"></p>
+        <button class="btn btn-dark btn-block" id="auth-submit" type="submit">
+          ${isUp ? '가입하기' : '로그인'}
+        </button>
+      </form>
+
+      <button class="btn btn-secondary btn-block" id="auth-switch" style="margin-top:var(--sp-xs)">
+        ${isUp ? '이미 계정이 있어요' : '계정이 없어요, 가입할래요'}
+      </button>
+    </div>`;
+
+  const err = view.querySelector('#auth-error');
+  const btn = view.querySelector('#auth-submit');
+
+  view.querySelector('#auth-switch').onclick = () => {
+    signinMode = isUp ? 'in' : 'up';
+    renderSignIn();
+  };
+
+  view.querySelector('#auth-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const email = view.querySelector('#email').value.trim();
+    const password = view.querySelector('#password').value;
+    if (!email || !password) { err.textContent = '이메일과 비밀번호를 입력해주세요'; return; }
+
+    err.textContent = '';
+    btn.disabled = true;
+    btn.textContent = '잠시만요…';
+
+    try {
+      if (isUp) {
+        const { needsConfirm } = await db.signUp(email, password);
+        if (needsConfirm) {
+          view.innerHTML = `<div class="empty">
+            <h3>메일함을 확인해주세요</h3>
+            <p><b>${esc(email)}</b>로 확인 메일을 보냈어요. 링크를 누르면 로그인할 수 있습니다.</p>
+          </div>`;
+          return;
+        }
+      } else {
+        await db.signIn(email, password);
+      }
+      await refreshSaved();
+      const back = returnTo && returnTo !== '#/signin' ? returnTo : '#/';
+      returnTo = null;
+      if (location.hash === back) render(); else location.hash = back;
+    } catch (e2) {
+      err.textContent = e2.message;
+      btn.disabled = false;
+      btn.textContent = isUp ? '가입하기' : '로그인';
+    }
   };
 }
 
@@ -638,6 +823,7 @@ function parse() {
   }
   if (h === '/saved') return { name: 'saved' };
   if (h === '/me') return { name: 'me' };
+  if (h === '/signin') return { name: 'signin' };
   return { name: 'home' };
 }
 
@@ -649,6 +835,7 @@ function render() {
   if (route.name === 'map') renderMap(route.map);
   else if (route.name === 'saved') renderSaved();
   else if (route.name === 'me') renderMe();
+  else if (route.name === 'signin') renderSignIn();
   else renderHome();
 
   document.title = route.name === 'map'
@@ -676,6 +863,21 @@ function render() {
 
   document.getElementById('footer-stats').textContent =
     `지도 ${DATA.mapCount}개 · 장소 ${DATA.placeCount}곳 · 데이터 ${DATA.generatedAt}`;
+
+  // 세션 복구와 저장 목록을 먼저 받아온다. 실패해도 앱은 뜬다 —
+  // 지도 탐색은 로그인과 무관하게 동작해야 한다.
+  await db.init();
+  await refreshSaved().catch((e) => console.warn('저장 목록 조회 실패:', e.message));
+
+  let lastUid = db.user()?.id ?? null;
+  db.onAuth(async (sess) => {
+    const uid = sess?.user?.id ?? null;
+    if (uid === lastUid) return;      // 토큰 갱신만으로는 다시 그리지 않는다
+    lastUid = uid;
+    db.resetCache();
+    await refreshSaved();
+    render();
+  });
 
   window.addEventListener('hashchange', render);
   render();

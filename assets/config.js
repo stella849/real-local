@@ -36,4 +36,17 @@ window.RL_CONFIG = {
      넣으면 번호 핀이 앱과 똑같은 모양(AdvancedMarkerElement)으로 뜨고,
      비워 두면 구글 기본 마커에 번호 라벨만 얹힌다. 없어도 동작한다. */
   googleMapsMapId: '',
+
+  /* ----------------------------------------------------------
+     Supabase — 로그인 · 저장 목록 · 리뷰
+
+     publishable 키도 브라우저에 그대로 나간다. 이 역시 정상이며,
+     접근 제어는 키를 숨기는 것이 아니라 Row Level Security가
+     담당한다. supabase/schema.sql 을 먼저 실행해야 동작한다.
+
+     ⚠️ secret / service_role 키는 절대 여기 넣지 말 것. 그 키는
+        RLS를 통째로 우회하므로 유출되면 DB 전체가 열린다.
+     ---------------------------------------------------------- */
+  supabaseUrl: 'https://fmitgfcqmhbtntsmhoqp.supabase.co',
+  supabaseKey: 'sb_publishable_K26z128WSdAkuSb1plCQ4A_aentoWgp',
 };

@@ -371,3 +371,35 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important;transition-duration:.01ms !important}
 }
+
+/* ============================================================
+   Auth form / reviews  (디자인 미적용 — 구조만)
+   ============================================================ */
+.field{
+  display:block;width:100%;
+  font:inherit;font-size:16px;   /* 16px 미만이면 iOS가 확대한다 */
+  color:var(--text);
+  background:var(--canvas);
+  border:1px solid var(--line-strong);
+  border-radius:var(--r-md);
+  padding:11px var(--sp-sm);
+  margin-bottom:var(--sp-xs);
+}
+.field:focus{outline:2px solid var(--text);outline-offset:-1px}
+textarea.field{resize:vertical;min-height:76px;line-height:1.5}
+
+.form-error{
+  min-height:18px;margin:0 0 var(--sp-xs);
+  font-size:13px;line-height:1.4;color:#b3261e;
+}
+.row-end{display:flex;justify-content:flex-end;gap:var(--sp-xs)}
+
+.reviews{list-style:none;margin:0;padding:0 var(--sp-md)}
+.review{padding:var(--sp-sm) 0;border-bottom:1px solid var(--line)}
+.review:last-child{border-bottom:0}
+.review-head{
+  display:flex;align-items:baseline;gap:var(--sp-xs);
+  font-size:13px;color:var(--text-3);margin-bottom:3px;
+}
+.review-head b{font-size:14px;font-weight:600;color:var(--text)}
+.review p{margin:0;font-size:14px;line-height:1.5;color:var(--text-2)}
