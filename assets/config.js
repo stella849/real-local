@@ -30,7 +30,7 @@ window.RL_CONFIG = {
      제한을 건 키를 넣으면 Google Maps로 자동 전환된다.
      키가 잘못됐거나 스크립트 로드가 실패하면 Leaflet으로 되돌아가므로
      지도가 빈 채로 남는 일은 없다. */
-  googleMapsApiKey: '',
+  googleMapsApiKey: 'AIzaSyDtQJxJDWVP8FDZZxEiFz7_aT83VrEl7V0',
 
   /* 선택 사항. Cloud Console > 지도 스타일에서 만드는 Map ID.
      넣으면 번호 핀이 앱과 똑같은 모양(AdvancedMarkerElement)으로 뜨고,

@@ -318,27 +318,39 @@ function mountMap(m) {
 
 let googleLoader = null;
 function loadGoogleMaps(key) {
-  if (window.google?.maps) return Promise.resolve();
+  if (window.google?.maps?.importLibrary) return Promise.resolve();
   if (googleLoader) return googleLoader;
 
   googleLoader = new Promise((resolve, reject) => {
     const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&libraries=marker&loading=async&v=weekly`;
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&v=weekly&loading=async&callback=__rlGmapsReady`;
     s.async = true;
-    s.onload = () => resolve();
+    // loading=async defers everything behind importLibrary(), so the
+    // bootstrap only signals that the loader itself is ready
+    window.__rlGmapsReady = () => resolve();
     s.onerror = () => reject(new Error('script failed to load'));
+    setTimeout(() => reject(new Error('timed out')), 10000);
     document.head.appendChild(s);
   });
   return googleLoader;
 }
 
-function mountGoogle(m) {
+async function mountGoogle(m) {
   const el = document.getElementById('map');
   if (!el || !m.places.length) return;
+
+  /* Under loading=async nothing hangs off google.maps directly —
+     each library has to be imported before use. */
+  const [{ Map: GMap }, { LatLngBounds }, markerLib] = await Promise.all([
+    google.maps.importLibrary('maps'),
+    google.maps.importLibrary('core'),
+    google.maps.importLibrary('marker').catch(() => ({})),
+  ]);
+
   teardownMap();
 
   const mapId = window.RL_CONFIG?.googleMapsMapId?.trim();
-  gmap = new google.maps.Map(el, {
+  gmap = new GMap(el, {
     mapTypeControl: false,
     streetViewControl: false,
     fullscreenControl: false,
@@ -346,32 +358,32 @@ function mountGoogle(m) {
     ...(mapId ? { mapId } : {}),
   });
 
-  const bounds = new google.maps.LatLngBounds();
+  const bounds = new LatLngBounds();
   const markers = new Map();
+  // AdvancedMarkerElement needs a Map ID; without one fall back to the
+  // classic marker so a bare key still renders numbered pins
+  const useAdvanced = Boolean(mapId && markerLib.AdvancedMarkerElement);
 
   for (const p of m.places) {
     const pos = { lat: p.lat, lng: p.lng };
     bounds.extend(pos);
 
-    // AdvancedMarkerElement needs a Map ID; without one, fall back to
-    // the classic marker so the map still works on a bare key
     let marker;
-    if (mapId && google.maps.marker?.AdvancedMarkerElement) {
+    if (useAdvanced) {
       const node = document.createElement('span');
       node.className = 'pin-marker';
       node.textContent = String(p.n);
-      marker = new google.maps.marker.AdvancedMarkerElement({
+      marker = new markerLib.AdvancedMarkerElement({
         map: gmap, position: pos, title: p.name, content: node,
       });
       marker.rlNode = node;
-      marker.addListener('click', () => selectPlace(p, { scroll: true }));
     } else {
-      marker = new google.maps.Marker({
-        map: gmap, position: pos, title: p.name,
+      marker = new markerLib.Marker({
+        map: gmap, position: pos, title: p.name, zIndex: p.n,
         label: { text: String(p.n), color: '#ffffff', fontSize: '12px', fontWeight: '600' },
       });
-      marker.addListener('click', () => selectPlace(p, { scroll: true }));
     }
+    marker.addListener('click', () => selectPlace(p, { scroll: true }));
     marker.rlNumber = p.n;
     markers.set(p.id, marker);
   }
