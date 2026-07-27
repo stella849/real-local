@@ -176,6 +176,14 @@ function renderTabbar(route) {
    ------------------------------------------------------------ */
 let activeCity = 'all';
 
+/* 첫 화면에 몇 개까지 보일지.
+
+   9개를 한 번에 깔면 홈이 모바일 화면 여섯 장 분량이 된다. 목록을
+   끝까지 훑는 화면이 아니라 "무엇을 파는 서비스인지" 파악하는
+   화면이므로 3개만 보여주고 나머지는 요청할 때 편다. */
+const PAGE = 3;
+let shown = PAGE;
+
 // the dataset ships city names in English; label them in Korean for this build
 const CITY_KO = { Seoul: '서울', Seongsu: '성수', Busan: '부산' };
 const cityLabel = (c) => CITY_KO[c] ?? c;
@@ -205,6 +213,8 @@ const cardHtml = (m) => {
 function renderHome() {
   const cities = [{ city: 'all', count: DATA.mapCount }, ...DATA.cities];
   const list = activeCity === 'all' ? DATA.maps : DATA.maps.filter((m) => m.city === activeCity);
+  const page = list.slice(0, shown);
+  const rest = list.length - page.length;
 
   view.innerHTML = `
     <section class="hero">
@@ -223,11 +233,26 @@ function renderHome() {
         </button>`).join('')}
     </div>
 
-    <ul class="feed">${list.map(cardHtml).join('')}</ul>`;
+    <ul class="feed">${page.map(cardHtml).join('')}</ul>
+
+    ${rest > 0 ? `
+      <div class="feed-more">
+        <button class="btn btn-secondary btn-block" id="more">지도 ${rest}개 더 보기</button>
+      </div>` : ''}`;
 
   view.querySelectorAll('[data-city]').forEach((b) => {
-    b.onclick = () => { activeCity = b.dataset.city; renderHome(); };
+    b.onclick = () => { activeCity = b.dataset.city; shown = PAGE; renderHome(); };
   });
+
+  /* 펼친 뒤에는 새로 나온 첫 카드로 초점을 옮긴다. 버튼이 사라지면서
+     화면이 위로 밀려 사용자가 자기 위치를 잃는 것을 막는다. */
+  const more = view.querySelector('#more');
+  if (more) more.onclick = () => {
+    const from = shown;
+    shown = Infinity;
+    renderHome();
+    view.querySelectorAll('.feed-item')[from]?.scrollIntoView({ block: 'nearest' });
+  };
 
   bindCardSave(({ title, on }) => toast(on ? '내 지도에 저장했어요' : '내 지도에서 뺐어요'));
 }

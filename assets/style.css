@@ -173,6 +173,8 @@ a{color:inherit}
 }
 .feed-item .card-save svg{width:16px;height:16px}
 
+.feed-more{padding:var(--sp-sm) var(--sp-md) 0}
+
 /* ============================================================
    Map detail
    ============================================================ */
