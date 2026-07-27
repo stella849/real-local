@@ -41,9 +41,12 @@ body{
   font-size:16px;
   line-height:1.55;
   overflow-x:hidden;
-  /* 한국어는 기본값이 글자 단위로 끊어 어절을 쪼갠다 */
+  /* UI는 영어지만 데이터에 한글 주소가 섞여 들어온다. keep-all은 그
+     한글을 어절 단위로 끊고 영어에는 아무 영향이 없다. break-word는
+     자리에 안 들어가는 긴 단어만 쪼갠다 — anywhere로 두면 평범한
+     영어 단어까지 아무 데서나 잘린다. */
   word-break:keep-all;
-  overflow-wrap:anywhere;
+  overflow-wrap:break-word;
 }
 img{max-width:100%;display:block}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}

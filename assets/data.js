@@ -61,7 +61,7 @@ export const isReady = () => Boolean(sb);
 /** 리뷰 작성자 표기. 이메일 아이디 부분만 쓴다. */
 export function displayName(u = user()) {
   if (!u) return '';
-  return (u.user_metadata?.name || u.email || '').split('@')[0] || '여행자';
+  return (u.user_metadata?.name || u.email || '').split('@')[0] || 'Traveller';
 }
 
 /* ------------------------------------------------------------
@@ -69,7 +69,7 @@ export function displayName(u = user()) {
    ------------------------------------------------------------ */
 export async function signIn(email, password) {
   await init();
-  if (!sb) throw new Error('연결할 수 없어요');
+  if (!sb) throw new Error("Can't connect right now");
   const { error } = await sb.auth.signInWithPassword({ email, password });
   if (error) throw new Error(authMessage(error));
 }
@@ -77,7 +77,7 @@ export async function signIn(email, password) {
 /** 가입. 이메일 확인이 켜져 있으면 needsConfirm 을 돌려준다. */
 export async function signUp(email, password) {
   await init();
-  if (!sb) throw new Error('연결할 수 없어요');
+  if (!sb) throw new Error("Can't connect right now");
   const { data, error } = await sb.auth.signUp({ email, password });
   if (error) throw new Error(authMessage(error));
   return { needsConfirm: !data.session };
@@ -88,23 +88,23 @@ export async function signOut() {
   if (sb) await sb.auth.signOut();
 }
 
-/** Supabase 오류를 사람이 읽을 수 있는 한국어로. */
+/** Supabase 오류를 사람이 읽을 수 있는 문장으로. UI 언어는 영어다. */
 function authMessage(error) {
   const m = (error?.message || '').toLowerCase();
   const code = (error?.code || '').toLowerCase();
-  if (m.includes('invalid login')) return '이메일 또는 비밀번호가 맞지 않아요';
-  if (m.includes('already registered') || m.includes('already been registered')) return '이미 가입된 이메일이에요';
-  if (m.includes('password') && m.includes('6')) return '비밀번호는 6자 이상이어야 해요';
+  if (m.includes('invalid login')) return "That email and password don't match";
+  if (m.includes('already registered') || m.includes('already been registered')) return 'That email is already registered';
+  if (m.includes('password') && m.includes('6')) return 'Password must be at least 6 characters';
   if (m.includes('not confirmed') || (m.includes('email') && m.includes('confirm'))) {
-    return '이메일 확인이 아직 안 됐어요. 받은 메일함을 확인해주세요';
+    return 'Your email isn’t confirmed yet — check your inbox';
   }
   // Supabase 기본 메일 발송은 시간당 한도가 매우 낮다. 확인 메일을 끄면
   // 가입 즉시 로그인되고 이 한도에 걸리지 않는다.
   if (code.includes('email_send_rate') || m.includes('rate limit')) {
-    return '가입 요청이 너무 많아요. 잠시 후 다시 시도해주세요';
+    return 'Too many sign-up attempts. Try again in a moment';
   }
-  if (m.includes('is invalid') && m.includes('email')) return '사용할 수 없는 이메일 주소예요';
-  return error?.message || '문제가 생겼어요';
+  if (m.includes('is invalid') && m.includes('email')) return "That email address can't be used";
+  return error?.message || 'Something went wrong';
 }
 
 /* ------------------------------------------------------------
@@ -162,7 +162,7 @@ export async function toggleSaved(kind, id, extra = {}) {
 
   if (error) {
     if (had) map.set(id, prev); else map.delete(id);   // 되돌린다
-    throw new Error('저장에 실패했어요');
+    throw new Error("Couldn't save that");
   }
   return !had;
 }
@@ -204,7 +204,7 @@ export async function deleteReview(mapId) {
 
 function reviewMessage(error) {
   const m = (error?.message || '').toLowerCase();
-  if (m.includes('violates check constraint')) return '리뷰 내용을 확인해주세요';
-  if (m.includes('could not find the table')) return '데이터베이스가 아직 준비되지 않았어요';
-  return '리뷰를 저장하지 못했어요';
+  if (m.includes('violates check constraint')) return 'Check what you wrote and try again';
+  if (m.includes('could not find the table')) return "The database isn't set up yet";
+  return "Couldn't post your review";
 }

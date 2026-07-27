@@ -107,7 +107,7 @@ async function share(title, url) {
   }
   try {
     await navigator.clipboard.writeText(url);
-    toast('링크를 복사했어요');
+    toast('Link copied');
   } catch {
     toast(url);
   }
@@ -139,10 +139,10 @@ function renderTopbar(route) {
   if (route.name === 'map') {
     const m = route.map;
     topbar.innerHTML = `
-      <button class="iconbtn" id="nav-back" aria-label="뒤로">${icon.back}</button>
+      <button class="iconbtn" id="nav-back" aria-label="Back">${icon.back}</button>
       <span class="topbar-title">${esc(m.title)}</span>
       <span class="topbar-spacer"></span>
-      <button class="iconbtn" id="nav-share" aria-label="이 지도 공유하기">${icon.share}</button>`;
+      <button class="iconbtn" id="nav-share" aria-label="Share this map">${icon.share}</button>`;
     topbar.querySelector('#nav-back').onclick = () => {
       if (history.length > 1) history.back(); else location.hash = '#/';
     };
@@ -150,9 +150,9 @@ function renderTopbar(route) {
     return;
   }
 
-  const label = route.name === 'saved' ? '저장'
-    : route.name === 'me' ? '내 정보'
-    : route.name === 'signin' ? '로그인' : null;
+  const label = route.name === 'saved' ? 'Saved'
+    : route.name === 'me' ? 'Account'
+    : route.name === 'signin' ? 'Sign in' : null;
   topbar.innerHTML = label
     ? `<span class="wordmark">${label}</span>`
     : `<a class="wordmark" href="#/">Real Local</a>`;
@@ -160,9 +160,9 @@ function renderTopbar(route) {
 
 function renderTabbar(route) {
   const tabs = [
-    { id: 'home', href: '#/', label: '홈', svg: icon.home },
-    { id: 'saved', href: '#/saved', label: '저장', svg: icon.saved },
-    { id: 'me', href: '#/me', label: '내 정보', svg: icon.me },
+    { id: 'home', href: '#/', label: 'Home', svg: icon.home },
+    { id: 'saved', href: '#/saved', label: 'Saved', svg: icon.saved },
+    { id: 'me', href: '#/me', label: 'Account', svg: icon.me },
   ];
   const active = route.name === 'map' ? 'home' : route.name === 'signin' ? 'me' : route.name;
   tabbar.innerHTML = tabs.map((t) => `
@@ -184,9 +184,11 @@ let activeCity = 'all';
 const PAGE = 3;
 let shown = PAGE;
 
-// the dataset ships city names in English; label them in Korean for this build
-const CITY_KO = { Seoul: '서울', Seongsu: '성수', Busan: '부산' };
-const cityLabel = (c) => CITY_KO[c] ?? c;
+/* The UI is English — the audience is foreign visitors to Korea (PRD
+   NFR-04). The dataset already ships city names, place names and
+   curator tips in English, so nothing here needs translating at
+   runtime; only the app's own copy does. */
+const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
 /* One card component shared by the home feed and the Saved tab.
    The bookmark sits outside the <a> — nesting a button inside a link
@@ -200,11 +202,11 @@ const cardHtml = (m) => {
       <div class="card-body">
         <h2 class="card-title">${esc(m.title)}</h2>
         <p class="card-summary">${esc(m.summary)}</p>
-        <p class="card-meta">${esc(cityLabel(m.city))} · ${m.placeCount}곳</p>
+        <p class="card-meta">${esc(m.city)} · ${plural(m.placeCount, 'place')}</p>
       </div>
     </a>
     <button class="act card-save" data-savemap="${m.id}" aria-pressed="${on}"
-            aria-label="${esc(m.title)} ${on ? '저장 해제' : '저장'}">
+            aria-label="${on ? 'Remove' : 'Save'} ${esc(m.title)}">
       ${on ? icon.bookmarkOn : icon.bookmark}
     </button>
   </li>`;
@@ -219,17 +221,17 @@ function renderHome() {
   view.innerHTML = `
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">인증된 로컬이 직접 골랐어요</p>
-        <h1 class="lede">그곳에 사는 사람들이 소개하는 한국.</h1>
-        <p class="lede-sub">지도 ${DATA.mapCount}개 · 장소 ${DATA.placeCount}곳 — 로컬이라면 직접 데려가 줄 곳들.</p>
+        <p class="eyebrow">Picked by verified locals</p>
+        <h1 class="lede">Korea, from the people who live there.</h1>
+        <p class="lede-sub">${DATA.mapCount} maps · ${DATA.placeCount} places — the ones a local would actually take you to.</p>
       </div>
     </section>
     <hr class="cut">
 
-    <div class="filters" role="group" aria-label="도시로 거르기">
+    <div class="filters" role="group" aria-label="Filter by city">
       ${cities.map((c) => `
         <button class="pill" data-city="${esc(c.city)}" aria-pressed="${c.city === activeCity}">
-          ${c.city === 'all' ? '전체' : esc(cityLabel(c.city))}<span class="n">${c.count}</span>
+          ${c.city === 'all' ? 'All' : esc(c.city)}<span class="n">${c.count}</span>
         </button>`).join('')}
     </div>
 
@@ -237,7 +239,7 @@ function renderHome() {
 
     ${rest > 0 ? `
       <div class="feed-more">
-        <button class="btn btn-secondary btn-block" id="more">지도 ${rest}개 더 보기</button>
+        <button class="btn btn-secondary btn-block" id="more">Show ${plural(rest, 'more map')}</button>
       </div>` : ''}`;
 
   view.querySelectorAll('[data-city]').forEach((b) => {
@@ -254,7 +256,7 @@ function renderHome() {
     view.querySelectorAll('.feed-item')[from]?.scrollIntoView({ block: 'nearest' });
   };
 
-  bindCardSave(({ title, on }) => toast(on ? '내 지도에 저장했어요' : '내 지도에서 뺐어요'));
+  bindCardSave(({ on }) => toast(on ? 'Saved to your maps' : 'Removed from your maps'));
 }
 
 /* The card stays put on the home feed, so swap the icon in place. The
@@ -267,7 +269,7 @@ function bindCardSave(after) {
       if (on === null) return;
       const title = DATA.maps.find((m) => m.id === id).title;
       b.setAttribute('aria-pressed', String(on));
-      b.setAttribute('aria-label', `${title} ${on ? '저장 해제' : '저장'}`);
+      b.setAttribute('aria-label', `${on ? 'Remove' : 'Save'} ${title}`);
       b.innerHTML = on ? icon.bookmarkOn : icon.bookmark;
       after({ id, title, on });
     };
@@ -285,22 +287,23 @@ function renderMap(m) {
       <h1 class="detail-title">${esc(m.title)}</h1>
       <p class="detail-summary">${esc(m.summary)}</p>
       <div class="detail-meta">
-        <span class="badge">${esc(cityLabel(m.city))}</span>
-        <span class="badge quiet">${m.placeCount}곳</span>
+        <span class="badge">${esc(m.city)}</span>
+        <span class="badge quiet">${plural(m.placeCount, 'place')}</span>
       </div>
-    </div>
 
-    <div id="map" role="img" aria-label="${esc(m.title)} 지도"></div>
-
-    <div class="pad" style="padding-bottom:0">
-      <button class="btn btn-dark btn-block" id="save-map" aria-pressed="${savedMap}">
+      <!-- 지도 위에 둔다. #map 이 sticky라 아래에 있으면 스크롤한 순간
+           지도에 덮여 탭이 지도로 먹힌다. -->
+      <button class="btn btn-dark btn-block" id="save-map" aria-pressed="${savedMap}"
+              style="margin-top:var(--sp-sm)">
         ${savedMap ? icon.bookmarkOn : icon.bookmark}
-        <span>${savedMap ? '저장됨' : '이 지도 저장하기'}</span>
+        <span>${savedMap ? 'Saved' : 'Save this map'}</span>
       </button>
     </div>
 
+    <div id="map" role="img" aria-label="Map of ${esc(m.title)}"></div>
+
     <div class="section-head">
-      <h2>장소</h2><span class="count">${m.placeCount}</span>
+      <h2>Places</h2><span class="count">${m.placeCount}</span>
     </div>
 
     <ul class="places">
@@ -316,17 +319,17 @@ function renderMap(m) {
           </div>
           <div class="place-actions">
             <button class="act" data-save="${p.id}" aria-pressed="${on}"
-                    aria-label="${esc(p.name)} ${on ? '저장 해제' : '저장'}">
+                    aria-label="${on ? 'Remove' : 'Save'} ${esc(p.name)}">
               ${on ? icon.bookmarkOn : icon.bookmark}
             </button>
             <a class="act" href="${esc(p.gmaps)}" target="_blank" rel="noopener noreferrer"
-               aria-label="구글 지도에서 ${esc(p.name)} 열기">${icon.external}</a>
+               aria-label="Open ${esc(p.name)} in Google Maps">${icon.external}</a>
           </div>
         </li>`;
       }).join('')}
     </ul>
 
-    <div class="section-head"><h2>리뷰</h2><span class="count" id="review-count"></span></div>
+    <div class="section-head"><h2>Reviews</h2><span class="count" id="review-count"></span></div>
     <div id="reviews"></div>`;
 
   view.querySelector('#save-map').onclick = async (e) => {
@@ -334,8 +337,8 @@ function renderMap(m) {
     const on = await toggleSaved('maps', m.id);
     if (on === null) return;
     btn.setAttribute('aria-pressed', String(on));
-    btn.innerHTML = `${on ? icon.bookmarkOn : icon.bookmark}<span>${on ? '저장됨' : '이 지도 저장하기'}</span>`;
-    toast(on ? '내 지도에 저장했어요' : '내 지도에서 뺐어요');
+    btn.innerHTML = `${on ? icon.bookmarkOn : icon.bookmark}<span>${on ? 'Saved' : 'Save this map'}</span>`;
+    toast(on ? 'Saved to your maps' : 'Removed from your maps');
   };
 
   view.querySelectorAll('[data-save]').forEach((b) => {
@@ -344,7 +347,7 @@ function renderMap(m) {
       if (on === null) return;
       b.setAttribute('aria-pressed', String(on));
       b.innerHTML = on ? icon.bookmarkOn : icon.bookmark;
-      toast(on ? '내 장소에 저장했어요' : '내 장소에서 뺐어요');
+      toast(on ? 'Saved to your places' : 'Removed from your places');
     };
   });
 
@@ -371,10 +374,10 @@ async function renderReviews(m) {
   const composer = `
     <div class="pad" style="padding-top:0">
       <textarea class="field" id="review-body" rows="3" maxlength="1000"
-        placeholder="${mine ? '리뷰 수정하기' : '이 지도는 어땠나요?'}">${mine ? esc(mine.body) : ''}</textarea>
+        placeholder="${mine ? 'Edit your review' : 'How was this map?'}">${mine ? esc(mine.body) : ''}</textarea>
       <div class="row-end">
-        ${mine ? '<button class="btn btn-secondary sm" id="review-del">삭제</button>' : ''}
-        <button class="btn btn-dark sm" id="review-save">${mine ? '수정' : '리뷰 남기기'}</button>
+        ${mine ? '<button class="btn btn-secondary sm" id="review-del">Delete</button>' : ''}
+        <button class="btn btn-dark sm" id="review-save">${mine ? 'Update' : 'Post review'}</button>
       </div>
     </div>`;
 
@@ -382,7 +385,7 @@ async function renderReviews(m) {
     <li class="review">
       <div class="review-head">
         <b>${esc(r.author_name)}</b>
-        <time>${new Date(r.created_at).toLocaleDateString('ko-KR')}</time>
+        <time>${reviewDate(r.created_at)}</time>
       </div>
       <p>${esc(r.body)}</p>
     </li>`).join('');
@@ -390,19 +393,19 @@ async function renderReviews(m) {
   box.innerHTML = list.length
     ? `<ul class="reviews">${items}</ul>${db.user() ? composer : signinPrompt()}`
     : `<div class="empty">
-         <h3>아직 리뷰가 없어요</h3>
-         <p>리뷰는 개별 장소가 아니라 지도 전체에 대해 남깁니다.</p>
+         <h3>No reviews yet</h3>
+         <p>Reviews are left on the map as a whole, not on individual places.</p>
        </div>${db.user() ? composer : signinPrompt()}`;
 
   const saveBtn = box.querySelector('#review-save');
   if (saveBtn) {
     saveBtn.onclick = async () => {
       const body = box.querySelector('#review-body').value.trim();
-      if (!body) return toast('내용을 적어주세요');
+      if (!body) return toast('Write something first');
       saveBtn.disabled = true;
       try {
         await db.writeReview(m.id, body);
-        toast(mine ? '리뷰를 수정했어요' : '리뷰를 남겼어요');
+        toast(mine ? 'Review updated' : 'Review posted');
         renderReviews(m);
       } catch (e) { toast(e.message); saveBtn.disabled = false; }
     };
@@ -412,7 +415,7 @@ async function renderReviews(m) {
   if (delBtn) {
     delBtn.onclick = async () => {
       await db.deleteReview(m.id);
-      toast('리뷰를 지웠어요');
+      toast('Review deleted');
       renderReviews(m);
     };
   }
@@ -423,8 +426,14 @@ async function renderReviews(m) {
 
 const signinPrompt = () => `
   <div class="pad" style="padding-top:0">
-    <button class="btn btn-secondary btn-block" id="review-signin">로그인하고 리뷰 남기기</button>
+    <button class="btn btn-secondary btn-block" id="review-signin">Sign in to write a review</button>
   </div>`;
+
+/* Day-month-year spelled out. The audience is international, so 07/08
+   would read as two different dates depending on where they're from. */
+const reviewDate = (iso) => new Date(iso).toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'short', year: 'numeric',
+});
 
 /* ------------------------------------------------------------
    Map
@@ -439,7 +448,7 @@ let googleAuthFailed = false;
 let currentMapData = null;
 
 /* Auth errors — a wrong key, or a referrer outside the allow-list —
-   are not thrown. Google paints its own grey "문제가 발생했습니다" panel
+   are not thrown. Google paints its own grey "Something went wrong" panel
    over the map and calls this hook instead, so this is the only place
    the failure can be caught. Without it a misconfigured key leaves the
    demo showing an error panel where the map should be. */
@@ -469,7 +478,11 @@ function loadGoogleMaps(key) {
 
   googleLoader = new Promise((resolve, reject) => {
     const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&v=weekly&loading=async&callback=__rlGmapsReady`;
+    /* language=en pins Google's own labels and controls to English.
+       Without it Google follows the browser locale, so a visitor on a
+       Korean phone gets Hangul street names — the one thing this app
+       exists to spare them. region=KR keeps Korean address formatting. */
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&v=weekly&loading=async&language=en&region=KR&callback=__rlGmapsReady`;
     s.async = true;
     // loading=async defers everything behind importLibrary(), so the
     // bootstrap only signals that the loader itself is ready
@@ -650,9 +663,9 @@ let savedTab = 'maps';
 function renderSaved() {
   if (!db.user()) {
     view.innerHTML = `<div class="empty">
-      <h3>로그인하면 저장할 수 있어요</h3>
-      <p>저장한 지도와 장소는 계정을 따라다녀서 다른 기기에서도 그대로 보여요.</p>
-      <button class="btn btn-dark" id="go-signin">로그인</button>
+      <h3>Sign in to save places</h3>
+      <p>Saved maps and places stay with your account, so they're there on any device.</p>
+      <button class="btn btn-dark" id="go-signin">Sign in</button>
     </div>`;
     view.querySelector('#go-signin').onclick = () => requireAuth();
     return;
@@ -667,10 +680,10 @@ function renderSaved() {
   view.innerHTML = `
     <div class="segmented" role="tablist">
       <button class="seg" role="tab" data-tab="maps" aria-selected="${savedTab === 'maps'}">
-        지도<span class="n">${maps.length}</span>
+        Maps<span class="n">${maps.length}</span>
       </button>
       <button class="seg" role="tab" data-tab="places" aria-selected="${savedTab === 'places'}">
-        장소<span class="n">${places.length}</span>
+        Places<span class="n">${places.length}</span>
       </button>
     </div>
     ${body}`;
@@ -684,13 +697,13 @@ function renderSaved() {
     b.onclick = async () => {
       const on = await toggleSaved('places', b.dataset.unsave);
       if (on === null) return;
-      toast('내 장소에서 뺐어요');
+      toast('Removed from your places');
       renderSaved();
     };
   });
 
   bindCardSave(({ on }) => {
-    toast(on ? '내 지도에 저장했어요' : '내 지도에서 뺐어요');
+    toast(on ? 'Saved to your maps' : 'Removed from your maps');
     renderSaved();
   });
 }
@@ -698,9 +711,9 @@ function renderSaved() {
 function savedMapsHtml(maps) {
   if (!maps.length) {
     return `<div class="empty">
-      <h3>아직 저장한 지도가 없어요</h3>
-      <p>지도에서 북마크를 누르면 여행 때 볼 수 있게 여기에 모여요.</p>
-      <a class="btn btn-secondary" href="#/">지도 둘러보기</a>
+      <h3>No saved maps yet</h3>
+      <p>Tap the bookmark on any map and it lands here, ready for your trip.</p>
+      <a class="btn btn-secondary" href="#/">Browse maps</a>
     </div>`;
   }
   return `<ul class="feed" style="padding-top:var(--sp-md)">${maps.map(cardHtml).join('')}</ul>`;
@@ -709,9 +722,9 @@ function savedMapsHtml(maps) {
 function savedPlacesHtml(places) {
   if (!places.length) {
     return `<div class="empty">
-      <h3>저장한 장소가 없어요</h3>
-      <p>지도 안에서 장소를 하나씩 저장할 수 있어요. 저장한 지도와는 별개로 여기에 모입니다.</p>
-      <a class="btn btn-secondary" href="#/">지도 둘러보기</a>
+      <h3>No saved places yet</h3>
+      <p>Save places one by one from inside a map. They collect here on their own, separately from saved maps.</p>
+      <a class="btn btn-secondary" href="#/">Browse maps</a>
     </div>`;
   }
   return `<ul class="places" style="padding-top:var(--sp-xs)">
@@ -721,11 +734,11 @@ function savedPlacesHtml(places) {
           <h3 class="place-name">${esc(p.name)}</h3>
           <p class="place-addr">${esc(p.address)}</p>
           ${p.tip ? `<p class="place-tip">${esc(p.tip)}</p>` : ''}
-          <p class="saved-from"><a href="#/m/${p.mapId}">${esc(p.from)}</a>에서</p>
+          <p class="saved-from">From <a href="#/m/${p.mapId}">${esc(p.from)}</a></p>
         </div>
         <div class="place-actions">
-          <button class="act" data-unsave="${p.id}" aria-pressed="true" aria-label="${esc(p.name)} 저장 해제">${icon.bookmarkOn}</button>
-          <a class="act" href="${esc(p.gmaps)}" target="_blank" rel="noopener noreferrer" aria-label="구글 지도에서 ${esc(p.name)} 열기">${icon.external}</a>
+          <button class="act" data-unsave="${p.id}" aria-pressed="true" aria-label="Remove ${esc(p.name)}">${icon.bookmarkOn}</button>
+          <a class="act" href="${esc(p.gmaps)}" target="_blank" rel="noopener noreferrer" aria-label="Open ${esc(p.name)} in Google Maps">${icon.external}</a>
         </div>
       </li>`).join('')}
   </ul>`;
@@ -740,13 +753,13 @@ function renderMe() {
   if (!u) {
     view.innerHTML = `
       <div class="pad">
-        <p class="eyebrow">계정</p>
-        <h1 class="lede">로그인하지 않았어요</h1>
-        <p class="lede-sub">로그인하면 저장 목록이 계정을 따라다니고 지도 리뷰도 남길 수 있어요.</p>
-        <button class="btn btn-dark btn-block" id="signin">로그인 / 가입</button>
+        <p class="eyebrow">Account</p>
+        <h1 class="lede">You're not signed in</h1>
+        <p class="lede-sub">Sign in to keep your saved list with your account and to review maps.</p>
+        <button class="btn btn-dark btn-block" id="signin">Sign in / Sign up</button>
       </div>
       <div class="notice">
-        <b>큐레이터 도구는 이번 빌드에 없어요.</b> 여기 있는 지도 9개는 큐레이터가 직접 정리한 목록을 그대로 가져온 것입니다.
+        <b>Curator tools aren't in this build.</b> The ${DATA.mapCount} maps here come straight from lists the curators put together themselves.
       </div>`;
     view.querySelector('#signin').onclick = () => requireAuth();
     return;
@@ -754,26 +767,26 @@ function renderMe() {
 
   view.innerHTML = `
     <div class="pad">
-      <p class="eyebrow">계정</p>
+      <p class="eyebrow">Account</p>
       <h1 class="lede">${esc(db.displayName())}</h1>
       <p class="lede-sub">${esc(u.email)}</p>
     </div>
 
-    <div class="section-head"><h2>저장한 항목</h2></div>
+    <div class="section-head"><h2>Saved</h2></div>
     <div class="pad" style="padding-top:0">
-      <p class="card-summary">지도 ${savedSnap.maps.size}개 · 장소 ${savedSnap.places.size}곳</p>
-      <a class="btn btn-secondary btn-block" href="#/saved" style="margin-top:var(--sp-sm)">저장 목록 보기</a>
-      <button class="btn btn-secondary btn-block" id="signout" style="margin-top:var(--sp-xs)">로그아웃</button>
+      <p class="card-summary">${plural(savedSnap.maps.size, 'map')} · ${plural(savedSnap.places.size, 'place')}</p>
+      <a class="btn btn-secondary btn-block" href="#/saved" style="margin-top:var(--sp-sm)">View saved list</a>
+      <button class="btn btn-secondary btn-block" id="signout" style="margin-top:var(--sp-xs)">Sign out</button>
     </div>
 
     <div class="notice">
-      <b>큐레이터 도구는 이번 빌드에 없어요.</b> 여기 있는 지도 9개는 큐레이터가 직접 정리한 목록을 그대로 가져온 것입니다.
+      <b>Curator tools aren't in this build.</b> The ${DATA.mapCount} maps here come straight from lists the curators put together themselves.
     </div>`;
 
   view.querySelector('#signout').onclick = async () => {
     await db.signOut();
     await refreshSaved();
-    toast('로그아웃했어요');
+    toast('Signed out');
     location.hash = '#/';
   };
 }
@@ -788,25 +801,25 @@ function renderSignIn() {
   view.innerHTML = `
     <div class="pad" style="padding-top:var(--sp-xl)">
       <p class="eyebrow">Real Local</p>
-      <h1 class="lede">${isUp ? '가입하기' : '로그인'}</h1>
+      <h1 class="lede">${isUp ? 'Create an account' : 'Sign in'}</h1>
       <p class="lede-sub">${isUp
-        ? '저장 목록과 리뷰를 계정에 담아둡니다.'
-        : '저장한 곳을 어디서든 다시 볼 수 있어요.'}</p>
+        ? 'Your saved list and reviews live in your account.'
+        : 'Pick up your saved places wherever you are.'}</p>
 
       <form id="auth-form" novalidate>
         <input class="field" id="email" type="email" inputmode="email"
-               autocomplete="email" placeholder="이메일" required>
+               autocomplete="email" placeholder="Email" required>
         <input class="field" id="password" type="password"
                autocomplete="${isUp ? 'new-password' : 'current-password'}"
-               placeholder="비밀번호${isUp ? ' (6자 이상)' : ''}" required>
+               placeholder="Password${isUp ? ' (6 characters or more)' : ''}" required>
         <p class="form-error" id="auth-error" role="alert"></p>
         <button class="btn btn-dark btn-block" id="auth-submit" type="submit">
-          ${isUp ? '가입하기' : '로그인'}
+          ${isUp ? 'Create account' : 'Sign in'}
         </button>
       </form>
 
       <button class="btn btn-secondary btn-block" id="auth-switch" style="margin-top:var(--sp-xs)">
-        ${isUp ? '이미 계정이 있어요' : '계정이 없어요, 가입할래요'}
+        ${isUp ? 'I already have an account' : 'No account yet? Sign up'}
       </button>
     </div>`;
 
@@ -822,19 +835,19 @@ function renderSignIn() {
     e.preventDefault();
     const email = view.querySelector('#email').value.trim();
     const password = view.querySelector('#password').value;
-    if (!email || !password) { err.textContent = '이메일과 비밀번호를 입력해주세요'; return; }
+    if (!email || !password) { err.textContent = 'Enter your email and password'; return; }
 
     err.textContent = '';
     btn.disabled = true;
-    btn.textContent = '잠시만요…';
+    btn.textContent = 'One moment…';
 
     try {
       if (isUp) {
         const { needsConfirm } = await db.signUp(email, password);
         if (needsConfirm) {
           view.innerHTML = `<div class="empty">
-            <h3>메일함을 확인해주세요</h3>
-            <p><b>${esc(email)}</b>로 확인 메일을 보냈어요. 링크를 누르면 로그인할 수 있습니다.</p>
+            <h3>Check your inbox</h3>
+            <p>We sent a confirmation email to <b>${esc(email)}</b>. Tap the link and you're in.</p>
           </div>`;
           return;
         }
@@ -850,7 +863,7 @@ function renderSignIn() {
     } catch (e2) {
       err.textContent = e2.message;
       btn.disabled = false;
-      btn.textContent = isUp ? '가입하기' : '로그인';
+      btn.textContent = isUp ? 'Create account' : 'Sign in';
     }
   };
 }
@@ -886,7 +899,7 @@ function render() {
 
   document.title = route.name === 'map'
     ? `${route.map.title} — Real Local`
-    : 'Real Local — 그곳에 사는 사람들이 소개하는 한국';
+    : 'Real Local — Korea, from the people who live there';
 
   window.scrollTo(0, 0);
 }
@@ -901,14 +914,14 @@ function render() {
     DATA = await res.json();
   } catch (e) {
     view.innerHTML = `<div class="empty">
-      <h3>지도를 불러오지 못했어요</h3>
+      <h3>Couldn't load the maps</h3>
       <p>${esc(e.message)}</p>
     </div>`;
     return;
   }
 
   document.getElementById('footer-stats').textContent =
-    `지도 ${DATA.mapCount}개 · 장소 ${DATA.placeCount}곳 · 데이터 ${DATA.generatedAt}`;
+    `${DATA.mapCount} maps · ${DATA.placeCount} places · data ${DATA.generatedAt}`;
 
   // 세션 복구와 저장 목록을 먼저 받아온다. 실패해도 앱은 뜬다 —
   // 지도 탐색은 로그인과 무관하게 동작해야 한다.
