@@ -1,0 +1,122 @@
+/* ============================================================
+   시안 B — Sketch
+
+   무엇을 파는 서비스로 보이는가: 친구가 노트에 그려준 동네 지도.
+
+   PRD 6장의 '베이지 → 화이트, handmade' 안에서 A안과 갈라지는 축은
+   색이 아니라 **무엇이 손맛을 만드느냐**다.
+
+     A · Paper   활자와 판형이 만든다. 세리프, 각진 모서리, 자로 그은 선
+     B · Sketch  선이 만든다. 산세리프, 둥근 모서리, 손으로 그은 선
+
+   그래서 이 안에서는 이미지에 SVG 필터(feTurbulence + feDisplacementMap)를
+   걸어 직선을 미세하게 떨리게 한다. 본문 활자에는 걸지 않는다 —
+   읽는 글자가 흔들리면 손맛이 아니라 불량으로 보인다.
+
+   accent는 따뜻한 흙색 한 가지. A안의 잉크블루와 온도가 반대라
+   같은 베이지 바탕에서도 두 안이 분명히 달라 보인다.
+   채도 높은 오렌지는 제외 요청이므로 죽여서 썼다.
+   ============================================================ */
+
+:root[data-theme="sketch"]{
+  --bg:#E7DDC9;          /* 셸 바깥 — 노트 표지 */
+  --canvas:#FDFAF3;      /* 지면 */
+  --surface:#F4ECDC;
+
+  --line:#DCD0B8;
+  --line-strong:#B49E7C;
+
+  --text:#2E2823;
+  --text-2:#6A5F51;
+  --text-3:#9A8C78;
+
+  --accent:#8C5A44;      /* 흙색 */
+  --accent-soft:#EFE4D3;
+
+  /* 손으로 그린 것은 각지지 않는다 */
+  --r-sm:6px; --r-md:10px; --r-lg:16px;
+}
+
+/* ---------- 활자 ---------- */
+/* A안이 세리프로 가므로 여기는 산세리프를 유지하고 크기와 굵기로 민다 */
+:root[data-theme="sketch"] .lede{font-size:25px;line-height:1.28;font-weight:700;letter-spacing:-.02em}
+:root[data-theme="sketch"] .card-title{font-size:17px;font-weight:700}
+:root[data-theme="sketch"] .detail-title{font-size:22px;font-weight:700;letter-spacing:-.02em}
+
+:root[data-theme="sketch"] .eyebrow,
+:root[data-theme="sketch"] .wordmark{
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:11px;
+  color:var(--accent);
+}
+
+/* 큐레이터의 한 줄 — 이 서비스의 유일한 차별점이라 A안과 마찬가지로
+   회색 부가정보에서 끌어올린다. 다만 여기서는 선이 아니라 종이를 깐다. */
+:root[data-theme="sketch"] .place-tip{
+  color:var(--text);
+  font-size:14px;
+  background:var(--accent-soft);
+  border-radius:var(--r-md);
+  padding:8px 12px;
+  margin-top:8px;
+}
+
+/* ---------- 컴포넌트 ---------- */
+:root[data-theme="sketch"] .pill[aria-pressed="true"],
+:root[data-theme="sketch"] .btn-dark{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#FDFAF3;
+}
+:root[data-theme="sketch"] .seg[aria-selected="true"]{
+  color:var(--accent);
+  border-bottom-color:var(--accent);
+}
+:root[data-theme="sketch"] .card{background:var(--canvas)}
+:root[data-theme="sketch"] .card:hover{border-color:var(--accent)}
+:root[data-theme="sketch"] .cover{background:var(--surface);border-color:var(--line)}
+
+/* 커버 미니맵의 점을 채운 원에서 손으로 그린 동그라미로 바꾼다.
+   카드 구조는 그대로 두고 그리는 방식만 바꾼 것이다.
+
+   여기에 손떨림 필터까지 걸어야 히어로 손그림과 같은 사람이 그린
+   것으로 읽힌다. 필터가 없으면 정확한 원 9장이 옆에 놓여 따로 논다. */
+:root[data-theme="sketch"] .cover svg{filter:url(#rl-hand)}
+:root[data-theme="sketch"] .cover svg circle{
+  fill:none;stroke:var(--accent);stroke-width:1.6;
+}
+
+:root[data-theme="sketch"] .act[aria-pressed="true"]{color:var(--accent)}
+:root[data-theme="sketch"] .pin-marker{background:var(--accent);border-color:#FDFAF3}
+:root[data-theme="sketch"] .tab[aria-current="page"]{color:var(--accent)}
+
+/* ---------- 메인 이미지 ---------- */
+:root[data-theme="sketch"] .hero-art{
+  padding:0 var(--sp-md) var(--sp-md);
+  background:var(--canvas);
+}
+/* 그림 자체에 여백과 둥근 모서리가 들어 있어 액자를 더 두르지 않는다 */
+:root[data-theme="sketch"] .hero-art img{
+  display:block;width:100%;height:auto;
+}
+:root[data-theme="sketch"] .art-paper{fill:var(--surface)}
+/* 길: 가장자리를 먼저 굵게 깔고 그 위에 흰 획을 덮어 테두리를 만든다 */
+:root[data-theme="sketch"] .art-road-edge{
+  fill:none;stroke:var(--line-strong);stroke-width:13;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+:root[data-theme="sketch"] .art-road{
+  fill:none;stroke:var(--canvas);stroke-width:11;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+:root[data-theme="sketch"] .art-bldg{
+  fill:var(--accent-soft);stroke:var(--line-strong);stroke-width:.9;
+}
+:root[data-theme="sketch"] .art-route{
+  fill:none;stroke:var(--accent);stroke-width:1.8;
+  stroke-dasharray:5 5;stroke-linecap:round;stroke-linejoin:round;
+}
+:root[data-theme="sketch"] .art-pin{fill:var(--accent)}
+:root[data-theme="sketch"] .art-pin-eye{fill:var(--canvas)}
+:root[data-theme="sketch"] .art-edge{fill:none;stroke:var(--line-strong);stroke-width:1.2}

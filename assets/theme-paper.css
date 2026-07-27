@@ -1,0 +1,107 @@
+/* ============================================================
+   시안 A — Paper
+
+   무엇을 파는 서비스로 보이는가: 사람이 손으로 적어 건네준 안내서.
+
+   사진이 없다는 것이 이 안에서는 약점이 아니라 전제다. 활자와 지도,
+   그리고 큐레이터가 쓴 한 줄(tip)만으로 화면이 성립하도록 짰다.
+   실제로 이 서비스의 유일한 차별점이 그 한 줄이므로, 여기서는 그것을
+   본문 크기로 키우고 색을 죽이지 않았다.
+
+   관광객이 낮에 길에서 꺼내 보는 앱이라는 점에서도 밝은 바탕이 맞다.
+
+   base(style.css) 위에 얹는 토큰 교체분이다. 구조는 건드리지 않는다.
+   ============================================================ */
+
+:root[data-theme="paper"]{
+  --bg:#E3DCCB;          /* 셸 바깥 — 책상에 놓인 종이 */
+  --canvas:#FBF7EF;      /* 지면 */
+  --surface:#F2ECDF;
+
+  --line:#DFD6C3;
+  --line-strong:#BCAF97;
+
+  --text:#23201B;        /* 순검정이 아니라 먹 */
+  --text-2:#5D5548;
+  --text-3:#8E8474;
+
+  /* 저채도 남색 하나만 쓴다. 채도 높은 오렌지 계열은 제외 요청. */
+  --accent:#33566B;
+  --accent-soft:#E7E1D2;
+
+  /* 표제는 세리프. 외부 요청 없이 시스템에 있는 것만 쓴다 —
+     Georgia가 없는 기기는 generic serif로 떨어진다. */
+  --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
+
+  --r-sm:2px; --r-md:3px; --r-lg:4px;   /* 종이는 모서리가 둥글지 않다 */
+}
+
+/* ---------- 활자 ---------- */
+:root[data-theme="paper"] .lede,
+:root[data-theme="paper"] .card-title,
+:root[data-theme="paper"] .detail-title,
+:root[data-theme="paper"] .place-name,
+:root[data-theme="paper"] .empty h3{
+  font-family:var(--font-display);
+  font-weight:400;
+  letter-spacing:-.005em;
+}
+:root[data-theme="paper"] .lede{font-size:25px;line-height:1.25}
+:root[data-theme="paper"] .detail-title{font-size:23px}
+:root[data-theme="paper"] .card-title{font-size:17px}
+
+:root[data-theme="paper"] .eyebrow,
+:root[data-theme="paper"] .wordmark{
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:11px;
+  color:var(--text-3);
+}
+
+/* 큐레이터의 한 줄 — 이 안에서 가장 중요한 텍스트다.
+   base에서는 부가정보 취급이라 회색이었다. */
+:root[data-theme="paper"] .place-tip{
+  color:var(--text);
+  font-size:14px;
+  border-left:2px solid var(--accent);
+  padding-left:10px;
+  margin-top:6px;
+}
+
+/* ---------- 컴포넌트 ---------- */
+:root[data-theme="paper"] .pill[aria-pressed="true"],
+:root[data-theme="paper"] .btn-dark{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#FBF7EF;
+}
+/* .seg 는 알약이 아니라 밑줄 탭이다 */
+:root[data-theme="paper"] .seg[aria-selected="true"]{
+  color:var(--accent);
+  border-bottom-color:var(--accent);
+}
+:root[data-theme="paper"] .card{background:var(--canvas)}
+:root[data-theme="paper"] .card:hover{border-color:var(--accent)}
+:root[data-theme="paper"] .cover{background:var(--accent-soft);border-color:var(--line)}
+:root[data-theme="paper"] .cover svg circle{fill:var(--accent)}
+:root[data-theme="paper"] .act[aria-pressed="true"]{color:var(--accent)}
+:root[data-theme="paper"] .badge{border-color:var(--line-strong)}
+:root[data-theme="paper"] .pin-marker{background:var(--accent);border-color:#FBF7EF}
+:root[data-theme="paper"] .tab[aria-current="page"]{color:var(--accent)}
+
+/* ---------- 메인 이미지 ---------- */
+/* 133곳의 실제 좌표를 그대로 찍은 편집 지도. 그리는 비용이 들지
+   않고, 장소가 늘면 그림도 같이 자란다. */
+:root[data-theme="paper"] .hero-art{
+  padding:0 var(--sp-md) var(--sp-md);
+  background:var(--canvas);
+}
+:root[data-theme="paper"] .art-frame rect{
+  fill:none;stroke:var(--line-strong);stroke-width:.7;
+}
+:root[data-theme="paper"] .art-dot circle{fill:var(--accent);opacity:.85}
+:root[data-theme="paper"] .art-label text{
+  fill:var(--text-3);
+  font-family:var(--font);
+  font-size:8px;letter-spacing:.12em;
+}

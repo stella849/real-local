@@ -32,6 +32,9 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/config.js"></script>
+<!-- 디자인 시안 A/B. ?theme= 이 없으면 아무 일도 하지 않는다.
+     app.js 보다 먼저, 동기로 실행돼야 첫 페인트 전에 시안이 걸린다. -->
+<script src="assets/theme.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="assets/app.js" type="module"></script>
