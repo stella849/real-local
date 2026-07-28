@@ -126,7 +126,7 @@ async function share(title, url) {
 function coverSvg(map) {
   const dots = map.cover.map((p, i) => {
     const r = i === 0 ? 3.6 : 2.8;
-    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${r}" fill="#52525b"/>`;
+    return `<circle cx="${(p.x * 100).toFixed(2)}" cy="${(p.y * 100).toFixed(2)}" r="${r}"/>`;
   }).join('');
   return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${dots}</svg>`;
 }
@@ -488,7 +488,7 @@ async function renderReviews(m, force = false) {
 
   box.innerHTML = list.length
     ? `<ul class="reviews">${items}</ul>${db.user() ? composer : signinPrompt()}`
-    : `<div class="empty">
+    : `<div class="empty empty-reviews">
          <h3>No reviews yet</h3>
          <p>Reviews are left on the map as a whole, not on individual places.
             Be the first to leave one.</p>
@@ -783,7 +783,7 @@ let savedTab = 'maps';
 
 function renderSaved() {
   if (!db.user()) {
-    view.innerHTML = `<div class="empty">
+    view.innerHTML = `<div class="empty empty-signin">
       <h3>Sign in to save places</h3>
       <p>Saved maps and places stay with your account, so they're there on any device.</p>
       <button class="btn btn-dark" id="go-signin">Sign in</button>
@@ -831,7 +831,7 @@ function renderSaved() {
 
 function savedMapsHtml(maps) {
   if (!maps.length) {
-    return `<div class="empty">
+    return `<div class="empty empty-maps">
       <h3>No saved maps yet</h3>
       <p>Tap the bookmark on any map and it lands here, ready for your trip.</p>
       <a class="btn btn-secondary" href="#/">Browse maps</a>
@@ -842,7 +842,7 @@ function savedMapsHtml(maps) {
 
 function savedPlacesHtml(places) {
   if (!places.length) {
-    return `<div class="empty">
+    return `<div class="empty empty-places">
       <h3>No saved places yet</h3>
       <p>Save places one by one from inside a map. They collect here on their own, separately from saved maps.</p>
       <a class="btn btn-secondary" href="#/">Browse maps</a>

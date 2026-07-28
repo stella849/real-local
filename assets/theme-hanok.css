@@ -1,0 +1,139 @@
+/* ============================================================
+   시안 C — Hanok
+
+   무엇을 파는 서비스로 보이는가: 한지에 먹으로 앉힌 안내서.
+
+   PRD 6장의 '베이지 → 화이트, handmade' 안에서 세 안이 갈라지는 축은
+   색이 아니라 무엇이 손맛을 만드느냐다.
+
+     A · Paper   활자와 판형이 만든다. 세리프, 각진 모서리, 잉크블루
+     B · Sketch  손으로 그은 선이 만든다. 굵은 산세리프, 둥근 모서리, 흙색
+     C · Hanok   여백이 만든다. 가는 산세리프, 넓은 자간, 단청 적색
+
+   A·B 와 결정적으로 다른 점: 메인 이미지가 카피 아래 붙는 배너가
+   아니라 카피가 얹히는 배경이다. 그림 가운데가 비어 있어서 글자가
+   그 여백에 앉고, 위 처마와 아래 지형이 글자를 액자처럼 감싼다.
+
+   accent 는 그림의 핀 계열에서 잡았다. A 의 잉크블루, B 의 흙색과
+   온도가 또 달라 같은 베이지 바탕에서도 세 안이 분명히 구분된다.
+   ============================================================ */
+
+:root[data-theme="hanok"]{
+  --bg:#E6DECB;          /* 셸 바깥 */
+  --canvas:#FAF5EA;      /* 한지 */
+  --surface:#F1E9D8;
+
+  --line:#DED3BD;
+  --line-strong:#B6A88C;
+  --text:#2A2622;        /* 먹 */
+  --text-2:#63594C;
+  --text-3:#968A79;
+
+  /* 붉은색은 낙관처럼 작게만 쓴다 — 버튼·필 같은 큰 면적은 먹이 맡는다.
+     아래 '컴포넌트'의 주석 참고. 큰 면적에서 빠지므로 대비를 위해
+     채도를 억지로 올릴 필요가 없고, 그만큼 화면이 베이지로 남는다. */
+  --accent:#A2705A;      /* 옅은 흙빛 붉은색 */
+  --accent-soft:#EDE2D6;
+
+  /* 커버 미니맵의 점 — 팔레트의 색을 그대로 쓴다.
+     먹을 투명도로 흐려 쓰면 팔레트에 없는 녹회색(#958B7D)이 나온다. */
+  --dot:var(--accent);
+
+  --r-sm:3px; --r-md:5px; --r-lg:7px;   /* 각지지도 둥글지도 않게 */
+}
+
+/* ---------- 활자 ----------
+   A 는 세리프로, B 는 굵기로 민다. C 는 반대로 힘을 뺀다 —
+   여백이 주인공인 그림 위에 굵은 활자가 앉으면 그림을 이긴다. */
+:root[data-theme="hanok"] .lede{
+  font-size:24px;line-height:1.38;font-weight:500;letter-spacing:-.005em;
+}
+:root[data-theme="hanok"] .card-title{font-size:16px;font-weight:600}
+:root[data-theme="hanok"] .detail-title{font-size:21px;font-weight:600}
+
+:root[data-theme="hanok"] .eyebrow,
+:root[data-theme="hanok"] .wordmark{
+  text-transform:uppercase;
+  letter-spacing:.22em;          /* 세 안 중 가장 넓다 */
+  font-size:10.5px;
+  color:var(--text-2);           /* 붉은색으로 두면 화면 맨 위부터 붉어진다 */
+}
+
+/* 큐레이터의 한 줄 — 세 안 모두에서 부가정보가 아니라 본문이다 */
+:root[data-theme="hanok"] .place-tip{
+  color:var(--text);
+  font-size:14px;
+  border-left:1px solid var(--accent);
+  padding-left:11px;
+  margin-top:7px;
+}
+
+/* ---------- 히어로 = 배경 ----------
+   .hero-art(배너 자리)는 쓰지 않는다. 이 안에서 그림은 아래 붙는
+   것이 아니라 글자가 얹히는 바닥이다.
+
+   min-height 는 그림의 '조용한 가운데 띠'에 카피 세 줄이 들어갈 만큼
+   확보한 값이다. 더 낮추면 카피가 처마나 능선에 걸린다. */
+:root[data-theme="hanok"] .hero{
+  min-height:296px;
+  background-image:url('img/hero-hanok.webp');
+  background-size:cover;
+  background-position:center;
+  display:flex;align-items:center;
+}
+:root[data-theme="hanok"] .hero-art{display:none}
+:root[data-theme="hanok"] .hero .lede-sub{color:var(--text-2)}
+
+/* ---------- 빈 화면 ----------
+
+   저장한 지도 없음 / 저장한 장소 없음 / 리뷰 없음 / 비로그인 저장 탭.
+   네 곳 모두 .empty 를 쓰므로 규칙 하나로 덮인다.
+
+   여기에 그림을 새로 그리지 않는다. 히어로 이미지의 위쪽 처마 부분만
+   잘라 머리말로 쓴다 — 같은 파일이라 내려받을 것이 늘지 않고(홈에서 이미
+   받은 이미지다), 나중에 그림을 교체해도 여기가 저절로 따라온다.
+
+   cover + top 은 폭이 얼마든 처마 띠만 보이게 만드는 조합이다.
+   height 를 키우면 아래 능선까지 끌려 들어온다. */
+:root[data-theme="hanok"] .empty{
+  padding-top:0;
+  overflow:hidden;              /* 처마가 둥근 모서리 밖으로 나가지 않게 */
+  background:var(--canvas);     /* 그림의 종이색과 같아 이음매가 안 보인다 */
+}
+:root[data-theme="hanok"] .empty::before{
+  content:'';
+  display:block;
+  height:84px;
+  margin:0 calc(-1 * var(--sp-lg)) var(--sp-lg);   /* 좌우 패딩만큼 되밀어 가장자리까지 */
+  background:url('img/hero-hanok.webp') top center / cover;
+  /* 그림의 종이색과 상자 배경이 미세하게 달라 자른 자리에 선이 보인다.
+     아래쪽을 녹여 없앤다 — 값을 맞추는 것보다 이쪽이 그림을 바꿔도 견딘다. */
+  -webkit-mask-image:linear-gradient(to bottom, #000 58%, transparent);
+  mask-image:linear-gradient(to bottom, #000 58%, transparent);
+}
+
+/* ---------- 컴포넌트 ----------
+
+   큰 면적(버튼·필·지도 핀)은 전부 먹이다. 붉은색을 여기 쓰면 화면이
+   붉어지고, 흰 글씨를 얹으려고 채도를 올리면 더 붉어진다.
+   대비도 먹 쪽이 훨씬 넉넉하다(먹/한지 13:1).
+
+   붉은색은 낙관처럼 작은 곳에만 남긴다 — 탭 밑줄, 큐레이터 한 줄의
+   세로선, 커버의 점(--dot), 저장 표시. */
+:root[data-theme="hanok"] .pill[aria-pressed="true"],
+:root[data-theme="hanok"] .btn-dark{
+  background:var(--text);
+  border-color:var(--text);
+  color:var(--canvas);
+}
+:root[data-theme="hanok"] .seg[aria-selected="true"]{
+  color:var(--text);
+  border-bottom-color:var(--accent);
+}
+:root[data-theme="hanok"] .card{background:var(--canvas)}
+:root[data-theme="hanok"] .card:hover{border-color:var(--line-strong)}
+:root[data-theme="hanok"] .cover{background:var(--surface);border-color:var(--line)}
+:root[data-theme="hanok"] .act[aria-pressed="true"]{color:var(--accent)}
+:root[data-theme="hanok"] .badge{border-color:var(--line-strong)}
+:root[data-theme="hanok"] .pin-marker{background:var(--text);border-color:var(--canvas)}
+:root[data-theme="hanok"] .tab[aria-current="page"]{color:var(--text)}

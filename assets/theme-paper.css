@@ -29,6 +29,8 @@
   --accent:#33566B;
   --accent-soft:#E7E1D2;
 
+  --dot:var(--accent);   /* 커버 미니맵의 점 */
+
   /* 표제는 세리프. 외부 요청 없이 시스템에 있는 것만 쓴다 —
      Georgia가 없는 기기는 generic serif로 떨어진다. */
   --font-display:Georgia,"Iowan Old Style","Times New Roman",serif;
@@ -83,7 +85,6 @@
 :root[data-theme="paper"] .card{background:var(--canvas)}
 :root[data-theme="paper"] .card:hover{border-color:var(--accent)}
 :root[data-theme="paper"] .cover{background:var(--accent-soft);border-color:var(--line)}
-:root[data-theme="paper"] .cover svg circle{fill:var(--accent)}
 :root[data-theme="paper"] .act[aria-pressed="true"]{color:var(--accent)}
 :root[data-theme="paper"] .badge{border-color:var(--line-strong)}
 :root[data-theme="paper"] .pin-marker{background:var(--accent);border-color:#FBF7EF}

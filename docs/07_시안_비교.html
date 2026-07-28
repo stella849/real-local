@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Local — 디자인 시안 A / B / C</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 33 33'><rect width='11' height='33' fill='%23FBF7EF'/><rect x='11' width='11' height='33' fill='%23FDFAF3'/><rect x='22' width='11' height='33' fill='%23FAF5EA'/><circle cx='5.5' cy='16' r='3' fill='%2333566B'/><circle cx='16.5' cy='16' r='3' fill='%238C5A44'/><circle cx='27.5' cy='16' r='3' fill='%23A2705A'/></svg>">
+<style>
+:root{
+  --paper-bg:#FBF7EF; --paper-ink:#23201B; --paper-accent:#33566B;
+  --paper-line:#DFD6C3; --paper-line2:#BCAF97; --paper-mid:#5D5548; --paper-soft:#E7E1D2;
+  --sk-bg:#FDFAF3; --sk-ink:#2E2823; --sk-accent:#8C5A44;
+  --sk-line:#DCD0B8; --sk-line2:#B49E7C; --sk-mid:#6A5F51; --sk-soft:#EFE4D3; --sk-surface:#F4ECDC;
+
+  --hk-bg:#FAF5EA; --hk-ink:#2A2622; --hk-accent:#A2705A;
+  --hk-line:#DED3BD; --hk-line2:#B6A88C; --hk-mid:#63594C; --hk-soft:#EDE2D6;
+
+  --page:#F7F7F6; --card:#fff; --line:#E2E2E0; --line2:#C9C9C6;
+  --text:#1A1A19; --text2:#57574F; --text3:#8A8A83;
+  --sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"Cascadia Mono","Consolas",monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--page);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.65;
+  word-break:keep-all;overflow-wrap:break-word;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+
+/* ---------- 머리말 ---------- */
+.masthead{border-bottom:2px solid var(--text);padding:44px 0 18px;margin-bottom:32px}
+.kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text3);margin:0 0 10px;
+}
+h1{font-size:clamp(28px,4.4vw,40px);line-height:1.15;margin:0 0 12px;letter-spacing:-.02em}
+.dek{font-size:17px;color:var(--text2);margin:0;max-width:64ch}
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px;
+  font-family:var(--mono);font-size:11.5px;color:var(--text3);letter-spacing:.04em;
+}
+
+h2{font-size:13px;font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;
+   color:var(--text3);margin:56px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+p{margin:0 0 12px}
+.lead{font-size:16px;color:var(--text2);max-width:74ch}
+
+/* ---------- 안내 상자 ---------- */
+.note{
+  border:1px solid var(--line2);border-left:3px solid var(--text);
+  background:var(--card);padding:18px 22px;margin:0 0 8px;border-radius:2px;
+}
+.note.brief{border-left-color:#4B7B4F;background:#F4F8F3}
+.note h4{margin:0 0 8px;font-size:15px}
+.note p:last-child{margin-bottom:0}
+blockquote{
+  margin:10px 0;padding:8px 0 8px 16px;border-left:2px solid var(--line2);
+  color:var(--text2);font-size:14.5px;
+}
+
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px;background:var(--card)}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+tr:last-child td{border-bottom:0}
+code{font-family:var(--mono);font-size:.88em;background:#EDEDEA;padding:1px 5px;border-radius:3px}
+.axis td:first-child{font-family:var(--mono);font-size:11.5px;color:var(--text3);
+  letter-spacing:.06em;text-transform:uppercase;width:120px}
+
+/* ---------- 세 안 나란히 ---------- */
+.duo{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:start}
+@media (max-width:1040px){.duo{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.duo{grid-template-columns:1fr}}
+
+.opt{background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.opt-head{padding:22px 24px 18px;border-bottom:1px solid var(--line)}
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  padding:3px 9px;border-radius:2px;margin-bottom:10px;color:#fff;
+}
+.opt-a .tag{background:var(--paper-accent)}
+.opt-b .tag{background:var(--sk-accent);border-radius:9px}
+/* C의 규칙이 '큰 면적은 먹, 붉은색은 낙관처럼 작게'라 라벨도 그 규칙대로 칠한다.
+   흙빛 붉은색 바탕에 흰 글씨를 얹으면 대비가 4.2:1 로 모자라기도 하다. */
+.opt-c .tag{background:var(--hk-ink);letter-spacing:.2em;box-shadow:inset 0 -2px 0 var(--hk-accent)}
+.opt-c .open{color:var(--hk-accent)}
+.pos{font-size:15px;color:var(--text2);margin:0}
+.opt-body{padding:20px 24px 24px}
+.opt-body h4{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text3);margin:20px 0 8px;
+}
+.opt-body h4:first-child{margin-top:0}
+.opt-body ul{margin:0;padding-left:18px}
+.opt-body li{margin-bottom:5px}
+.opt-body li:last-child{margin-bottom:0}
+
+/* ---------- 팔레트 ---------- */
+.swatches{display:flex;gap:0;border-radius:3px;overflow:hidden;border:1px solid var(--line)}
+.opt-b .swatches{border-radius:10px}
+.sw{flex:1;height:64px;position:relative}
+.sw span{
+  position:absolute;left:0;right:0;bottom:4px;text-align:center;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.02em;
+}
+
+/* ---------- 활자 견본 ---------- */
+.spec{padding:18px 20px;border:1px solid var(--line)}
+.spec .eb{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
+.spec .hd{font-size:23px;line-height:1.22;margin:0 0 8px}
+.spec .bd{font-size:13.5px;margin:0}
+.spec-a{background:var(--paper-bg);color:var(--paper-ink);border-radius:3px}
+.spec-a .eb{color:#8E8474}
+.spec-a .hd{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:400}
+.spec-a .bd{color:var(--paper-mid)}
+.spec-b{background:var(--sk-bg);color:var(--sk-ink);border-radius:14px}
+.spec-b .eb{color:var(--sk-accent)}
+.spec-b .hd{font-weight:700;letter-spacing:-.02em}
+.spec-b .bd{color:var(--sk-mid)}
+.spec-c{background:var(--hk-bg);color:var(--hk-ink);border-radius:4px}
+.spec-c .eb{color:var(--hk-accent);letter-spacing:.22em}
+.spec-c .hd{font-weight:500;line-height:1.38}
+.spec-c .bd{color:var(--hk-mid)}
+.hero-c{background:var(--hk-bg);border-radius:4px}
+.hero-c img{display:block;width:100%;height:auto}
+
+/* ---------- 메인 이미지 ---------- */
+.hero-shot{border:1px solid var(--line);overflow:hidden}
+.hero-shot svg{display:block;width:100%;height:auto}
+.hero-a{background:var(--paper-bg);padding:14px 16px;border-radius:3px}
+.hero-b{background:var(--sk-bg);padding:14px 16px;border-radius:14px}
+.hero-b img{display:block;width:100%;height:auto}
+.cap{
+  font-family:var(--mono);font-size:11px;color:var(--text3);
+  margin:8px 0 0;letter-spacing:.03em;
+}
+
+/* A안 히어로 내부 */
+.hero-a .art-frame rect{fill:none;stroke:var(--paper-line2);stroke-width:.7}
+.hero-a .art-dot circle{fill:var(--paper-accent);opacity:.85}
+.hero-a .art-label text{fill:#8E8474;font-family:var(--sans);font-size:8px;letter-spacing:.12em}
+/* B안 히어로 내부 */
+.hero-b .art-paper{fill:var(--sk-surface)}
+.hero-b .art-road-edge{fill:none;stroke:var(--sk-line2);stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
+.hero-b .art-road{fill:none;stroke:var(--sk-bg);stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.hero-b .art-bldg{fill:var(--sk-soft);stroke:var(--sk-line2);stroke-width:.9}
+.hero-b .art-route{fill:none;stroke:var(--sk-accent);stroke-width:1.8;stroke-dasharray:5 5;
+  stroke-linecap:round;stroke-linejoin:round}
+.hero-b .art-pin{fill:var(--sk-accent)}
+.hero-b .art-pin-eye{fill:var(--sk-bg)}
+.hero-b .art-edge{fill:none;stroke:var(--sk-line2);stroke-width:1.2}
+
+/* ---------- 실물 화면 ---------- */
+.phone{
+  width:100%;max-width:330px;margin:0 auto;
+  border:1px solid var(--line2);border-radius:14px;overflow:hidden;
+  background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.07);
+}
+.phone-inner{position:relative;width:100%;padding-top:216.4%} /* 844/390 */
+.phone iframe{
+  position:absolute;top:0;left:0;
+  width:390px;height:844px;border:0;
+  transform-origin:0 0;
+}
+.live{
+  display:flex;align-items:center;gap:7px;justify-content:center;
+  font-family:var(--mono);font-size:11px;color:var(--text3);
+  margin:0 0 10px;letter-spacing:.06em;
+}
+.live b{width:6px;height:6px;border-radius:50%;background:#2E9E5B;display:inline-block}
+.offline{
+  display:none;padding:20px;text-align:center;font-size:13px;color:var(--text2);
+  background:#FFF6E8;border:1px solid #E8D3A8;border-radius:4px;margin-top:10px;
+}
+.is-offline .offline{display:block}
+.is-offline .phone{display:none}
+
+.open{
+  display:inline-block;margin-top:12px;font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.08em;text-decoration:none;border-bottom:1px solid currentColor;
+  padding-bottom:1px;
+}
+.opt-a .open{color:var(--paper-accent)}
+.opt-b .open{color:var(--sk-accent)}
+
+.pick{background:var(--text);color:#fff;border-radius:4px;padding:26px 28px;margin-top:12px}
+.pick h3{color:#fff;margin-bottom:10px}
+.pick ol{margin:0;padding-left:20px;color:#DEDEDA}
+.pick li{margin-bottom:7px}
+.pick li:last-child{margin-bottom:0}
+.pick .caveat{margin:16px 0 0;padding-top:14px;border-top:1px solid #3A3A38;color:#BEBEB9;font-size:14px}
+
+footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
+       font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.05em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">Real Local · 디자인 시안</p>
+  <h1>A · Paper &nbsp;/&nbsp; B · Sketch &nbsp;/&nbsp; C · Hanok</h1>
+  <p class="dek">세 안 모두 <b>베이지 → 화이트, handmade</b> 안에 있다.
+     갈라지는 것은 색이 아니라 <b>무엇이 손맛을 만드느냐</b>다 —
+     A는 활자와 판형이, B는 손으로 그은 선이, C는 여백이 만든다.</p>
+  <div class="meta">
+    <span>2026-07-28 갱신</span><span>상태 · 확인 대기</span>
+    <span>지도 9 · 장소 133</span><span>PRD 6장 준수</span><span>시안 3안</span>
+  </div>
+</header>
+
+<div class="note">
+  <h4>07-27 이후 바뀐 것</h4>
+  <table>
+    <tr><th style="width:78px">대상</th><th>내용</th></tr>
+    <tr><td>세 안 공통</td><td>UI 문구를 <b>전부 영어</b>로 교체 · 홈 첫 화면을 9장에서 <b>3장 + “Show N more maps”</b>로 줄임
+      (전체 길이 1,588px → 870px) · 지도 상세를 <b>Places / Reviews 탭</b>으로 나눔 · 주소 표기 정규화(Q5)</td></tr>
+    <tr><td>B · Sketch</td><td>빈 화면 <b>3컷 적용 완료</b>(손그림 수령 · 3094px 원본에서 추출).
+      남은 1컷은 “Sign in to save places”</td></tr>
+    <tr><td>C · Hanok</td><td>메인 이미지 <b>교체 + 색 보정</b>(주홍 → 베이지) · accent를 단청 적색에서
+      <b>옅은 흙빛</b>으로 낮추고 큰 면적은 먹으로 넘김 · 빈 화면 4곳 <b>적용 완료</b></td></tr>
+    <tr><td>토큰</td><td>커버 미니맵의 점에 <code>--dot</code> 토큰 신설 — 글자색을 투명도로 흐려 쓰다가
+      팔레트에 없는 녹회색(<code>#958B7D</code>)이 나오던 것을 잡음</td></tr>
+  </table>
+</div>
+
+<div class="note brief">
+  <h4>브리프 (PRD 6장 · 미팅록 8장)</h4>
+  <blockquote>
+    컬러: <b>베이지 → 화이트 톤, handmade 무드</b><br>
+    레퍼런스: Airbnb (신뢰감 있는 구조/톤 참고, <b>컬러는 다름</b>)
+  </blockquote>
+  <p style="margin-bottom:0">어두운 배경과 고채도 오렌지는 검토 대상이 아니다.
+     세 안 모두 이 범위 안에서 만들었다.</p>
+</div>
+
+<h2>이 시안은 목업이 아니라 동작하는 앱이다</h2>
+<div class="note">
+  <p><code>style.css</code> 상단이 이미 토큰만 모아둔 구조라 시안 하나가 CSS 파일 한 장이다.
+     그래서 PNG를 그리는 대신 토큰 세 벌을 만들고 URL로 갈아끼우게 했다.
+     클라이언트는 자기 폰에서 <b>진짜 데이터 133곳</b>을 넘겨보며 고르고,
+     <b>고른 쪽이 그 자리에서 그대로 배포본이 된다.</b> 목업이었다면 고른 뒤 다시 구현해야 한다.</p>
+  <table>
+    <tr><th>링크</th><th>용도</th></tr>
+    <tr><td><code>?theme=paper</code></td><td>A안만 — 클라이언트 공유용 깨끗한 화면</td></tr>
+    <tr><td><code>?theme=sketch</code></td><td>B안만</td></tr>
+    <tr><td><code>?theme=hanok</code></td><td>C안만</td></tr>
+    <tr><td><code>?compare=1</code></td><td>화면 아래 A/B/C 스위처가 붙는다</td></tr>
+    <tr><td>(파라미터 없음)</td><td>지금까지의 무채색 빌드</td></tr>
+  </table>
+  <p style="margin-bottom:0"><b>주의</b> — 실시간 토글은 “A의 색에 B의 서체” 같은 요청을 부른다.
+     슬라이더가 아니라 <b>이름 붙은 완성안 3개</b>로 제시할 것.</p>
+</div>
+
+<h2>갈라지는 축</h2>
+<table class="axis">
+  <tr><th></th><th>A · Paper</th><th>B · Sketch</th><th>C · Hanok</th></tr>
+  <tr><td>손맛의 출처</td><td>활자와 판형</td><td>손으로 그은 선</td><td><b>여백</b></td></tr>
+  <tr><td>서체</td><td>세리프 (Georgia)</td><td>산세리프, 굵게</td><td>산세리프, 가늘게 · 자간 넓게</td></tr>
+  <tr><td>모서리</td><td>각짐 · 2–4px</td><td>둥긂 · 6–16px</td><td>중간 · 3–7px</td></tr>
+  <tr><td>Accent</td><td><code>#33566B</code> 잉크블루</td><td><code>#8C5A44</code> 흙색</td><td><code>#A2705A</code> 옅은 흙빛 붉은색</td></tr>
+  <tr><td>Accent 쓰는 법</td><td>표제·필·핀 전부</td><td>표제·필·핀 전부</td><td><b>낙관처럼 작게만.</b> 버튼·필 같은 큰 면적은 먹</td></tr>
+  <tr><td>메인 이미지</td><td>카피 아래 배너</td><td>카피 아래 배너</td><td><b>카피가 얹히는 배경</b></td></tr>
+  <tr><td>빈 화면 4곳</td><td>글자만 (추가 작화 0)</td><td>손그림 <b>3/4 적용</b></td><td>처마 띠 재활용 <b>4/4 적용</b></td></tr>
+  <tr><td>인상</td><td>정제된 안내서</td><td>친구가 그려준 쪽지</td><td>한지에 먹으로 앉힌 안내서</td></tr>
+</table>
+<p class="lead">accent 세 개는 <b>온도가 서로 다르다</b> — 차가운 잉크블루, 따뜻한 흙색, 낮춘 흙빛 붉은색.
+   같은 베이지 바탕에서도 세 안이 분명히 갈린다.
+   <b>C는 구조도 다르다</b> — A·B는 그림이 카피 아래 붙지만, C는 카피가 그림 위에 얹힌다.
+   <b>C는 accent를 쓰는 법도 다르다</b> — 붉은색이 큰 면적에서 빠져 있어 화면이 베이지로 남는다.</p>
+
+<h2>세 안</h2>
+<div class="duo">
+
+  <!-- ============ A ============ -->
+  <section class="opt opt-a">
+    <div class="opt-head">
+      <span class="tag">A · PAPER</span>
+      <h3>종이 / 가이드북</h3>
+      <p class="pos">사람이 손으로 적어 건네준 안내서.</p>
+    </div>
+    <div class="opt-body">
+      <h4>팔레트</h4>
+      <div class="swatches">
+        <div class="sw" style="background:#FBF7EF"><span style="color:#8E8474">#FBF7EF</span></div>
+        <div class="sw" style="background:#E7E1D2"><span style="color:#7A7263">#E7E1D2</span></div>
+        <div class="sw" style="background:#33566B"><span style="color:#fff">#33566B</span></div>
+        <div class="sw" style="background:#23201B"><span style="color:#B7AE9E">#23201B</span></div>
+      </div>
+
+      <h4>활자</h4>
+      <div class="spec spec-a">
+        <p class="eb">Picked by verified locals</p>
+        <p class="hd">Korea, from the people who live there.</p>
+        <p class="bd">9 maps · 133 places</p>
+      </div>
+
+      <h4>고른 이유가 되는 것</h4>
+      <ul>
+        <li><b>사진이 없다는 것이 약점이 아니라 전제가 된다.</b> 활자와 지도만으로 화면이 성립한다</li>
+        <li>큐레이터 코멘트를 회색 부가정보에서 <b>본문 크기로 끌어올렸다</b> — 이 서비스의 유일한 차별점이 그 한 줄이다</li>
+        <li>메인 이미지가 데이터에서 나와 <b>유지비가 0</b>이다</li>
+        <li>모서리를 거의 없앴다. 종이는 둥글지 않다</li>
+      </ul>
+
+      <h4>실물 화면</h4>
+      <p class="live"><b></b>LIVE · 실제 앱</p>
+      <div class="phone"><div class="phone-inner">
+        <iframe data-src="../index.html?theme=paper#/" title="A안 홈 화면" loading="lazy"></iframe>
+      </div></div>
+      <div class="offline">로컬 서버로 열어야 실물 화면이 보입니다.<br>
+        <code>npx serve .</code> 후 <code>/docs/07_시안_비교.html</code></div>
+      <a class="open" href="../index.html?theme=paper#/" target="_blank">A안 전체 화면으로 열기 →</a>
+    </div>
+  </section>
+
+  <!-- ============ B ============ -->
+  <section class="opt opt-b">
+    <div class="opt-head">
+      <span class="tag">B · SKETCH</span>
+      <h3>손그림 / 여행 노트</h3>
+      <p class="pos">친구가 노트에 그려준 동네 지도.</p>
+    </div>
+    <div class="opt-body">
+      <h4>팔레트</h4>
+      <div class="swatches">
+        <div class="sw" style="background:#FDFAF3"><span style="color:#9A8C78">#FDFAF3</span></div>
+        <div class="sw" style="background:#EFE4D3"><span style="color:#8A7A63">#EFE4D3</span></div>
+        <div class="sw" style="background:#8C5A44"><span style="color:#fff">#8C5A44</span></div>
+        <div class="sw" style="background:#2E2823"><span style="color:#B5A995">#2E2823</span></div>
+      </div>
+
+      <h4>활자</h4>
+      <div class="spec spec-b">
+        <p class="eb">Picked by verified locals</p>
+        <p class="hd">Korea, from the people who live there.</p>
+        <p class="bd">9 maps · 133 places</p>
+      </div>
+
+      <h4>고른 이유가 되는 것</h4>
+      <ul>
+        <li>클라이언트가 말한 <b>handmade에 가장 직접적으로 부합</b>한다</li>
+        <li>메인 이미지는 <b>실제로 그린 손그림</b>이다 (2026-07-27 수령, 적용 완료)</li>
+        <li>커버 미니맵 9장은 좌표에서 생성되므로 손으로 그릴 수 없다.
+            대신 <b>같은 손떨림 필터를 걸어 같은 사람이 그린 것처럼</b> 맞췄다.
+            카드 구조는 건드리지 않았다</li>
+        <li><b>본문 활자에는 필터를 걸지 않는다</b> — 읽는 글자가 흔들리면 손맛이 아니라 불량으로 보인다</li>
+        <li>빈 화면 <b>3컷 적용 완료</b>(07-28 수령) — 책 / 압정 보드 / 노트.
+            남은 한 컷은 “Sign in to save places”</li>
+      </ul>
+
+      <h4>실물 화면</h4>
+      <p class="live"><b></b>LIVE · 실제 앱</p>
+      <div class="phone"><div class="phone-inner">
+        <iframe data-src="../index.html?theme=sketch#/" title="B안 홈 화면" loading="lazy"></iframe>
+      </div></div>
+      <div class="offline">로컬 서버로 열어야 실물 화면이 보입니다.<br>
+        <code>npx serve .</code> 후 <code>/docs/07_시안_비교.html</code></div>
+      <a class="open" href="../index.html?theme=sketch#/" target="_blank">B안 전체 화면으로 열기 →</a>
+    </div>
+  </section>
+
+  <!-- ============ C ============ -->
+  <section class="opt opt-c">
+    <div class="opt-head">
+      <span class="tag">C · HANOK</span>
+      <h3>한지 / 여백</h3>
+      <p class="pos">한지에 먹으로 앉힌 안내서.</p>
+    </div>
+    <div class="opt-body">
+      <h4>팔레트</h4>
+      <div class="swatches">
+        <div class="sw" style="background:#FAF5EA"><span style="color:#968A79">#FAF5EA</span></div>
+        <div class="sw" style="background:#EDE2D6"><span style="color:#8A7A6C">#EDE2D6</span></div>
+        <div class="sw" style="background:#A2705A"><span style="color:#FAF5EA">#A2705A</span></div>
+        <div class="sw" style="background:#2A2622"><span style="color:#B3A899">#2A2622</span></div>
+      </div>
+
+      <h4>활자</h4>
+      <div class="spec spec-c">
+        <p class="eb">Picked by verified locals</p>
+        <p class="hd">Korea, from the people who live there.</p>
+        <p class="bd">9 maps · 133 places</p>
+      </div>
+
+      <h4>고른 이유가 되는 것</h4>
+      <ul>
+        <li><b>그림이 글자를 액자처럼 감싼다.</b> 위 처마와 아래 능선 사이 여백에 카피가 앉는다 —
+            A·B처럼 그림과 글자가 위아래로 나뉘지 않는다</li>
+        <li>세 안 중 <b>가장 힘을 뺀 활자</b>. 여백이 주인공인 그림 위에 굵은 글씨가 앉으면 그림을 이긴다</li>
+        <li><b>붉은색을 낙관처럼 작게만 쓴다</b> — 버튼·필·지도 핀 같은 큰 면적은 먹이 맡는다.
+            대비도 먹 쪽이 넉넉하고(먹/한지 13:1), 큰 면적에서 빠지므로 화면이 베이지로 남는다</li>
+        <li><b>위쪽 처마 띠를 떼어 빈 화면 4곳의 머리말로 재활용</b> — 적용 완료.
+            그림을 더 그리지 않았고, 홈에서 이미 받은 파일이라 내려받을 것도 늘지 않는다</li>
+      </ul>
+
+      <h4>실물 화면</h4>
+      <p class="live"><b></b>LIVE · 실제 앱</p>
+      <div class="phone"><div class="phone-inner">
+        <iframe data-src="../index.html?theme=hanok#/" title="C안 홈 화면" loading="lazy"></iframe>
+      </div></div>
+      <div class="offline">로컬 서버로 열어야 실물 화면이 보입니다.<br>
+        <code>npx serve .</code> 후 <code>/docs/07_시안_비교.html</code></div>
+      <a class="open" href="../index.html?theme=hanok#/" target="_blank">C안 전체 화면으로 열기 →</a>
+    </div>
+  </section>
+</div>
+
+<h2>메인 이미지 3종</h2>
+<p class="lead">사진이 없으므로 <b>없는 사진을 전제한 시안은 만들지 않았다.</b> 지킬 수 없는 약속이 된다.
+   A·B는 같은 대상(<b>지도</b>)을 정반대로 다루고, C는 그림을 아예 바닥으로 쓴다.</p>
+
+<div class="duo" style="margin-top:20px">
+  <div>
+    <div class="hero-shot hero-a"><svg viewBox="0 0 390 156" role="img" aria-label="All 133 places plotted by coordinate">
+      <g class="art-frame">
+        <rect x="10" y="6" width="284" height="132"></rect>
+        <rect x="304" y="6" width="76" height="132"></rect>
+      </g>
+      <g class="art-dot"><circle cx="166.0" cy="36.9" r="2.5"></circle><circle cx="143.4" cy="18.4" r="2.5"></circle><circle cx="170.2" cy="31.2" r="2.5"></circle><circle cx="166.7" cy="37.4" r="2.5"></circle><circle cx="170.6" cy="38.5" r="2.5"></circle><circle cx="165.7" cy="37.7" r="2.5"></circle><circle cx="168.6" cy="38.1" r="2.5"></circle><circle cx="167.1" cy="24.7" r="2.5"></circle><circle cx="168.8" cy="37.9" r="2.5"></circle><circle cx="168.8" cy="37.8" r="2.5"></circle><circle cx="171.0" cy="31.8" r="2.5"></circle><circle cx="164.0" cy="26.5" r="2.5"></circle><circle cx="161.6" cy="19.0" r="2.5"></circle><circle cx="170.7" cy="32.9" r="2.5"></circle><circle cx="165.6" cy="36.7" r="2.5"></circle><circle cx="145.8" cy="16.0" r="2.5"></circle><circle cx="167.3" cy="22.2" r="2.5"></circle><circle cx="171.4" cy="35.0" r="2.5"></circle><circle cx="166.7" cy="24.0" r="2.5"></circle><circle cx="166.8" cy="22.9" r="2.5"></circle><circle cx="175.6" cy="31.3" r="2.5"></circle><circle cx="171.2" cy="34.6" r="2.5"></circle><circle cx="173.2" cy="36.5" r="2.5"></circle><circle cx="83.5" cy="49.8" r="2.5"></circle><circle cx="76.0" cy="59.6" r="2.5"></circle><circle cx="79.9" cy="49.6" r="2.5"></circle><circle cx="75.5" cy="53.0" r="2.5"></circle><circle cx="77.5" cy="49.3" r="2.5"></circle><circle cx="83.8" cy="50.6" r="2.5"></circle><circle cx="75.5" cy="51.9" r="2.5"></circle><circle cx="79.6" cy="51.1" r="2.5"></circle><circle cx="79.4" cy="47.0" r="2.5"></circle><circle cx="76.8" cy="54.8" r="2.5"></circle><circle cx="78.1" cy="49.9" r="2.5"></circle><circle cx="79.0" cy="52.0" r="2.5"></circle><circle cx="79.0" cy="53.8" r="2.5"></circle><circle cx="77.6" cy="48.7" r="2.5"></circle><circle cx="75.1" cy="53.0" r="2.5"></circle><circle cx="77.0" cy="51.0" r="2.5"></circle><circle cx="74.6" cy="52.3" r="2.5"></circle><circle cx="77.4" cy="52.7" r="2.5"></circle><circle cx="76.3" cy="48.9" r="2.5"></circle><circle cx="77.0" cy="49.2" r="2.5"></circle><circle cx="102.1" cy="35.7" r="2.5"></circle><circle cx="102.3" cy="28.5" r="2.5"></circle><circle cx="103.4" cy="33.3" r="2.5"></circle><circle cx="101.6" cy="35.8" r="2.5"></circle><circle cx="104.3" cy="34.3" r="2.5"></circle><circle cx="101.3" cy="34.9" r="2.5"></circle><circle cx="104.8" cy="21.2" r="2.5"></circle><circle cx="100.4" cy="35.6" r="2.5"></circle><circle cx="104.8" cy="32.0" r="2.5"></circle><circle cx="103.1" cy="33.9" r="2.5"></circle><circle cx="103.3" cy="33.8" r="2.5"></circle><circle cx="102.5" cy="35.1" r="2.5"></circle><circle cx="108.2" cy="28.1" r="2.5"></circle><circle cx="105.6" cy="33.5" r="2.5"></circle><circle cx="101.9" cy="34.7" r="2.5"></circle><circle cx="101.3" cy="24.6" r="2.5"></circle><circle cx="107.2" cy="28.1" r="2.5"></circle><circle cx="102.9" cy="34.1" r="2.5"></circle><circle cx="101.8" cy="24.3" r="2.5"></circle><circle cx="98.2" cy="36.5" r="2.5"></circle><circle cx="235.0" cy="68.0" r="2.5"></circle><circle cx="236.9" cy="66.9" r="2.5"></circle><circle cx="240.2" cy="68.8" r="2.5"></circle><circle cx="219.0" cy="62.0" r="2.5"></circle><circle cx="223.2" cy="61.9" r="2.5"></circle><circle cx="238.6" cy="70.5" r="2.5"></circle><circle cx="230.9" cy="65.9" r="2.5"></circle><circle cx="229.6" cy="65.7" r="2.5"></circle><circle cx="237.4" cy="73.3" r="2.5"></circle><circle cx="235.1" cy="66.1" r="2.5"></circle><circle cx="233.0" cy="65.5" r="2.5"></circle><circle cx="234.4" cy="67.0" r="2.5"></circle><circle cx="237.4" cy="67.0" r="2.5"></circle><circle cx="236.5" cy="68.3" r="2.5"></circle><circle cx="234.2" cy="67.5" r="2.5"></circle><circle cx="233.5" cy="67.2" r="2.5"></circle><circle cx="244.8" cy="69.4" r="2.5"></circle><circle cx="229.6" cy="66.4" r="2.5"></circle><circle cx="235.2" cy="72.8" r="2.5"></circle><circle cx="240.2" cy="68.8" r="2.5"></circle><circle cx="176.9" cy="30.7" r="2.5"></circle><circle cx="176.5" cy="30.4" r="2.5"></circle><circle cx="176.5" cy="30.9" r="2.5"></circle><circle cx="175.6" cy="31.3" r="2.5"></circle><circle cx="175.9" cy="30.9" r="2.5"></circle><circle cx="174.0" cy="31.0" r="2.5"></circle><circle cx="174.6" cy="31.0" r="2.5"></circle><circle cx="177.0" cy="31.1" r="2.5"></circle><circle cx="176.4" cy="30.6" r="2.5"></circle><circle cx="174.6" cy="31.0" r="2.5"></circle><circle cx="177.0" cy="30.9" r="2.5"></circle><circle cx="176.2" cy="30.8" r="2.5"></circle><circle cx="175.6" cy="31.3" r="2.5"></circle><circle cx="175.6" cy="31.3" r="2.5"></circle><circle cx="176.4" cy="31.2" r="2.5"></circle><circle cx="174.6" cy="31.0" r="2.5"></circle><circle cx="174.6" cy="31.0" r="2.5"></circle><circle cx="177.5" cy="31.6" r="2.5"></circle><circle cx="176.4" cy="30.4" r="2.5"></circle><circle cx="80.5" cy="58.0" r="2.5"></circle><circle cx="93.5" cy="61.2" r="2.5"></circle><circle cx="86.6" cy="60.3" r="2.5"></circle><circle cx="96.4" cy="55.8" r="2.5"></circle><circle cx="98.5" cy="40.8" r="2.5"></circle><circle cx="217.9" cy="101.8" r="2.5"></circle><circle cx="207.6" cy="130.0" r="2.5"></circle><circle cx="166.7" cy="24.0" r="2.5"></circle><circle cx="96.0" cy="14.0" r="2.5"></circle><circle cx="160.9" cy="41.2" r="2.5"></circle><circle cx="215.9" cy="31.2" r="2.5"></circle><circle cx="236.1" cy="66.6" r="2.5"></circle><circle cx="189.4" cy="75.0" r="2.5"></circle><circle cx="269.8" cy="114.0" r="2.5"></circle><circle cx="196.5" cy="91.0" r="2.5"></circle><circle cx="222.5" cy="35.7" r="2.5"></circle><circle cx="149.8" cy="78.2" r="2.5"></circle><circle cx="34.2" cy="72.0" r="2.5"></circle><circle cx="101.4" cy="32.7" r="2.5"></circle><circle cx="105.4" cy="33.4" r="2.5"></circle><circle cx="101.9" cy="35.1" r="2.5"></circle><circle cx="101.0" cy="34.8" r="2.5"></circle><circle cx="101.8" cy="28.7" r="2.5"></circle><circle cx="103.5" cy="33.1" r="2.5"></circle><circle cx="107.7" cy="26.0" r="2.5"></circle><circle cx="103.1" cy="33.5" r="2.5"></circle><circle cx="312.0" cy="106.4" r="2.5"></circle><circle cx="372.0" cy="39.9" r="2.5"></circle><circle cx="362.0" cy="51.5" r="2.5"></circle><circle cx="320.2" cy="38.5" r="2.5"></circle><circle cx="320.3" cy="37.6" r="2.5"></circle></g>
+      <g class="art-label">
+        <text x="10" y="150">SEOUL — 128 PLACES</text>
+        <text x="304" y="150">BUSAN — 5</text>
+      </g>
+    </svg></div>
+    <p class="cap">A · 133곳의 실제 좌표를 찍은 편집 지도</p>
+    <p style="font-size:14px;color:var(--text2)">
+      자로 그은 선, 정확한 위치. 서울 128 / 부산 5를 두 판으로 나눴다 — 부산은 300km 밖이라
+      한 판에 그리면 서울이 점 하나로 뭉개진다.
+      <b>제작비가 들지 않고, 장소가 늘면 그림도 같이 자란다.</b>
+      남이 복제할 수 없는 유일한 그림이며, 카드 커버 미니맵과 자동으로 한 몸이 된다.</p>
+  </div>
+  <div>
+    <div class="hero-shot hero-b">
+      <img src="../assets/img/hero-sketch.webp" width="1200" height="521"
+           alt="손으로 그린 동네 지도">
+    </div>
+    <p class="cap">B · 손으로 그린 동네 지도 (실제 손그림)</p>
+    <p style="font-size:14px;color:var(--text2)">
+      정확하지 않고, 대신 사람이 그려준 것으로 보인다. 흰 길과 그 사이의 땅,
+      걸어간 자국(점선)과 찍힌 곳들.
+      <b>데이터와 무관한 장식이라 따로 관리해야 하고, 장소가 늘어도 그림은 그대로다.</b>
+      원본 5.2MB PNG → 화면에 필요한 1200px WebP <b>25KB</b>로 줄여 실었다.</p>
+  </div>
+  <div>
+    <div class="hero-shot hero-c">
+      <img src="../assets/img/hero-hanok.webp" width="1200" height="656" alt="한옥 처마와 마을">
+    </div>
+    <p class="cap">C · 처마와 마을 (배경으로 사용 · 색 보정본)</p>
+    <p style="font-size:14px;color:var(--text2)">
+      <b>배너가 아니라 바닥이다.</b> 가운데 여백에 카피가 앉고 위 처마와 아래 마을이 글자를 감싼다.
+      A·B와 달리 그림과 글자가 한 덩어리로 읽힌다.
+      받은 원본은 위쪽이 분홍빛으로 돌아 <b>색상만 베이지 쪽으로 옮겼다</b> —
+      채도를 일괄로 낮추면 지붕과 능선의 구분까지 바래므로, 색상환에서 주홍(20–30°)을
+      황토(30–40°)로 옮기고 <b>옅게 깔린 안개만</b> 빼고 핀은 남겼다.
+      원본 7.3MB PNG → 1200px WebP <b>62KB</b>.</p>
+  </div>
+</div>
+
+<h2>빈 화면 4곳</h2>
+<p class="lead">앱에는 아무것도 없는 상태로 열리는 화면이 넷 있다. 신규 사용자가
+   <b>처음 보는 화면이 대부분 이 넷</b>이라, 여기가 비어 있으면 시안이 아무리 좋아도
+   첫인상이 텅 빈 화면이 된다. <b>세 안이 갈리는 실질적인 지점</b>이기도 하다.</p>
+
+<table>
+  <tr><th>화면</th><th>언제 보이나</th><th>A · Paper</th><th>B · Sketch</th><th>C · Hanok</th></tr>
+  <tr><td><b>No saved maps yet</b></td><td>저장 탭 · 지도 0개</td>
+      <td>글자만</td><td>책 그림 ✓</td><td>처마 띠 ✓</td></tr>
+  <tr><td><b>No saved places yet</b></td><td>저장 탭 · 장소 0개</td>
+      <td>글자만</td><td>압정 보드 ✓</td><td>처마 띠 ✓</td></tr>
+  <tr><td><b>No reviews yet</b></td><td>지도 상세 · Reviews 탭</td>
+      <td>글자만</td><td>노트 그림 ✓</td><td>처마 띠 ✓</td></tr>
+  <tr><td><b>Sign in to save places</b></td><td>비로그인 상태로 저장 탭</td>
+      <td>글자만</td><td style="color:#9A4A2E"><b>미정</b></td><td>처마 띠 ✓</td></tr>
+</table>
+
+<div class="duo" style="margin-top:22px">
+  <div>
+    <div class="hero-shot" style="background:var(--sk-bg);border-radius:14px;padding:16px;
+         display:flex;gap:14px;align-items:center;justify-content:center">
+      <img src="../assets/img/empty-maps.webp" alt="거미줄 낀 책" style="height:78px">
+      <img src="../assets/img/empty-places.webp" alt="빈 압정 보드" style="height:78px">
+      <img src="../assets/img/empty-reviews.webp" alt="MY REVIEWS 노트" style="height:78px">
+    </div>
+    <p class="cap">B · 07-28 수령한 손그림 3컷 (3094px 원본에서 추출)</p>
+    <p style="font-size:14px;color:var(--text2)">
+      목업 안에서 <b>일러스트만 잘라냈다</b> — 캡션·탭 구분선·폰 프레임은 앱이 이미 그리는 것이라 뺐다.
+      자르는 좌표는 손으로 박지 않고 <b>이어진 획 중 가장 큰 덩어리</b>를 찾게 했다.
+      점선과 캡션 글자는 따로 놀기 때문에 자동으로 떨어진다 —
+      같은 목업을 다시 받아도 스크립트가 그대로 동작한다.
+      바깥 배경은 가장자리에서 채워 들어가며 투명하게 뺐다(그림 안쪽 밝은 면은 남는다).
+      화면에서 96px 높이로 쓰므로 <b>3배 화면 기준 300px</b>로 실었다 — 각각 25 / 12 / 25 KB.
+      <b>남는 그림을 네 번째 자리에 돌려 쓰지 않았다</b> — 책=저장한 지도, 보드=저장한 장소,
+      노트=후기로 뜻이 정해져 있어 다른 자리에 붙이면 다른 의미로 읽힌다.</p>
+  </div>
+  <div>
+    <div class="note" style="border-left-color:#9A4A2E;background:#FDF6F2">
+      <h4>B안이면 아직 필요한 것</h4>
+      <p><b>네 번째 컷</b> — “Sign in to save places”. 이것 하나만 남았다.</p>
+      <p>이 화면의 뜻은 <i>로그인하면 저장할 수 있고, 계정을 따라다녀 다른 기기에서도 보인다</i>이다.
+         자물쇠 걸린 노트, 잠긴 여행가방, 빈 배낭 같은 것이 어울린다.
+         받은 3컷과 <b>같은 목업 형식으로 주면</b> 같은 스크립트가 그대로 잘라낸다.</p>
+      <p style="margin-bottom:0">해상도는 해결됐다 — 처음 받은 610px 파일로는 195×99px밖에
+         나오지 않아 폰에서 뭉갰는데, <b>3094px 원본이 남아 있어 거기서 다시 뽑았다.</b>
+         3배 화면까지 선명하다.</p>
+    </div>
+  </div>
+  <div>
+    <div class="note">
+      <h4>C안이 여기서 유리한 이유</h4>
+      <p>새로 그리지 않고 <b>히어로 이미지의 위쪽 처마 띠만 잘라</b> 네 곳의 머리말로 쓴다.
+         네 화면 모두 같은 <code>.empty</code>를 쓰므로 CSS 규칙 하나로 덮인다.</p>
+      <p>자른 자리에 이음매가 생기는데, 색을 맞추는 대신 아래쪽을 그라데이션으로 녹였다 —
+         <b>그림을 교체해도 견디는 방식</b>이기 때문이다. 실제로 오늘 히어로를 색 보정했는데
+         빈 화면은 손대지 않아도 따라왔다.</p>
+      <p style="margin-bottom:0">홈에서 이미 받은 파일이라 <b>내려받을 것이 늘지 않는다</b>
+         (확인: 홈 1회 → 빈 화면 이동 후에도 1회).</p>
+    </div>
+  </div>
+</div>
+
+<h2>권장</h2>
+<div class="pick">
+  <h3>세 안 모두 채택 가능. 판단 기준은 취향이 아니라 아래 둘이다.</h3>
+  <ol>
+    <li><b>남은 작화가 얼마나 되는가</b> —
+        <b>A</b>는 그림이 데이터에서 나와 처음부터 0.
+        <b>B</b>는 3컷 받아 적용했고 <b>1컷</b>이 남았다.
+        <b>C</b>는 처마 띠 재활용으로 <b>0</b>이다</li>
+    <li><b>무엇을 파는 서비스로 보이고 싶은가</b> —
+        <b>A</b>는 정제된 안내서, <b>B</b>는 친구가 그려준 쪽지, <b>C</b>는 전통의 격</li>
+  </ol>
+  <p class="caveat"><b>C안에 대한 유보 하나</b> — 그림은 한옥 처마와 옛 마을인데
+     실제 데이터 133곳은 <b>전부 도시</b>다(을지로·성수·망원·연희·부산). 한옥마을도 산도 없다.
+     클라이언트가 첫 미팅에서 말한 차별점이 “기존 관광 정보에 없는 찐 로컬”이었는데,
+     전통 이미지는 정확히 그 기존 관광 정보의 얼굴이기도 하다.
+     <b>C의 강점은 소재가 아니라 구도</b>(위 처마 / 가운데 여백 / 아래 지형)이므로,
+     아래쪽을 골목·도심 배치로 다시 그리면 구도를 지키면서 내용을 맞출 수 있다.
+     그림을 갈아끼워도 빈 화면 4곳은 따라오므로, 이 교체의 비용은 그림 한 장뿐이다.</p>
+</div>
+
+<h2>미팅에서 물을 것</h2>
+<table>
+  <tr><th style="width:34px">#</th><th>안건</th></tr>
+  <tr><td>1</td><td>A / B / C 중 어느 쪽인가 — <b>섞지 말 것</b></td></tr>
+  <tr><td>2</td><td>B안이면 <b>“Sign in to save places” 한 컷</b>을 더 그릴 수 있는가 —
+      나머지 3컷은 적용 완료</td></tr>
+  <tr><td>3</td><td>C안이면 <b>아래쪽을 도심 배치로 다시 그릴 것인가</b> — 데이터 133곳이 전부 도시다</td></tr>
+  <tr><td>4</td><td>미팅록 8장에서 클라이언트가 주기로 한 <b>레퍼런스 가이드북은 불발</b>됐다.
+      컬러표 없이 우리가 제안한 세 팔레트로 확정할지</td></tr>
+  <tr><td>5</td><td>확정되면 <code>theme.js</code>와 스위처를 지우고 고른 토큰을 <code>style.css</code>에 병합한다</td></tr>
+</table>
+
+<footer>
+  Real Local · 디자인 시안 A/B/C · 2026-07-28 ·
+  assets/theme.js · theme-paper.css · theme-sketch.css · theme-hanok.css
+</footer>
+
+</div>
+
+<script>
+/* 폰 프레임 안의 실물 앱.
+   file:// 로 열면 iframe이 상대경로를 못 읽으므로 안내로 바꾼다. */
+(function () {
+  if (location.protocol === 'file:') {
+    document.body.classList.add('is-offline');
+    return;
+  }
+  // 프레임 폭에 맞춰 390px 화면을 축소한다
+  const fit = () => document.querySelectorAll('.phone-inner').forEach((box) => {
+    const f = box.querySelector('iframe');
+    if (f) f.style.transform = `scale(${box.clientWidth / 390})`;
+  });
+  document.querySelectorAll('iframe[data-src]').forEach((f) => { f.src = f.dataset.src; });
+  fit();
+  addEventListener('resize', fit);
+})();
+</script>
+</body>
+</html>

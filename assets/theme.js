@@ -19,6 +19,7 @@
   const THEMES = {
     paper:  { label: 'A · Paper',  css: 'assets/theme-paper.css',  themeColor: '#FBF7EF' },
     sketch: { label: 'B · Sketch', css: 'assets/theme-sketch.css', themeColor: '#FDFAF3' },
+    hanok:  { label: 'C · Hanok',  css: 'assets/theme-hanok.css',  themeColor: '#FAF5EA' },
   };
 
   const q = new URLSearchParams(location.search);
@@ -94,6 +95,9 @@
      ============================================================ */
   function hero(el, data, which) {
     if (!el) return;
+    // C안은 그림이 카피 아래 붙는 배너가 아니라 카피가 얹히는 배경이라
+    // 이 자리를 쓰지 않는다. CSS 가 .hero 에 직접 깐다.
+    if (which === 'hanok') { el.innerHTML = ''; return; }
     el.innerHTML = which === 'paper' ? paperHero(data) : sketchHero();
   }
 

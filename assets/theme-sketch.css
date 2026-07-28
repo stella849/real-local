@@ -33,6 +33,8 @@
   --accent:#8C5A44;      /* 흙색 */
   --accent-soft:#EFE4D3;
 
+  --dot:var(--accent);   /* 커버 미니맵의 점 — 여기서는 채우지 않고 획으로 쓴다 */
+
   /* 손으로 그린 것은 각지지 않는다 */
   --r-sm:6px; --r-md:10px; --r-lg:16px;
 }
@@ -84,12 +86,34 @@
    것으로 읽힌다. 필터가 없으면 정확한 원 9장이 옆에 놓여 따로 논다. */
 :root[data-theme="sketch"] .cover svg{filter:url(#rl-hand)}
 :root[data-theme="sketch"] .cover svg circle{
-  fill:none;stroke:var(--accent);stroke-width:1.6;
+  fill:none;stroke:var(--dot);stroke-width:1.6;
 }
 
 :root[data-theme="sketch"] .act[aria-pressed="true"]{color:var(--accent)}
 :root[data-theme="sketch"] .pin-marker{background:var(--accent);border-color:#FDFAF3}
 :root[data-theme="sketch"] .tab[aria-current="page"]{color:var(--accent)}
+
+/* ---------- 빈 화면 ----------
+
+   손그림 3컷을 각 자리에 넣는다. 그림이 없는 '로그인 필요' 화면에는
+   아무 것도 깔지 않는다 — 남는 그림을 아무 데나 돌려 쓰면 다른 뜻으로
+   읽히기 때문이다(책=저장한 지도, 압정 보드=저장한 장소, 노트=후기).
+
+   높이만 고정하고 contain 으로 두면 세 컷의 가로세로가 달라도
+   같은 크기로 앉는다. */
+:root[data-theme="sketch"] .empty-maps::before,
+:root[data-theme="sketch"] .empty-places::before,
+:root[data-theme="sketch"] .empty-reviews::before{
+  content:'';
+  display:block;
+  height:96px;
+  margin:0 0 var(--sp-sm);
+  background:center/contain no-repeat;
+  /* 바깥 배경은 투명하게 빼둔 파일이라 바탕 위에 그대로 앉는다 */
+}
+:root[data-theme="sketch"] .empty-maps::before   {background-image:url('img/empty-maps.webp')}
+:root[data-theme="sketch"] .empty-places::before {background-image:url('img/empty-places.webp')}
+:root[data-theme="sketch"] .empty-reviews::before{background-image:url('img/empty-reviews.webp')}
 
 /* ---------- 메인 이미지 ---------- */
 :root[data-theme="sketch"] .hero-art{

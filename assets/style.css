@@ -21,6 +21,10 @@
   --text-2:#52525b;
   --text-3:#8a8a92;
 
+  /* 커버 미니맵의 점. 글자색을 빌려 쓰면 시안마다 투명도로 맞추게 되고,
+     그러면 팔레트에 없는 색이 화면에 나타난다. 점은 점의 토큰을 갖는다. */
+  --dot:#52525b;
+
   --r-sm:4px; --r-md:6px; --r-lg:8px; --r-full:9999px;
 
   --sp-xxs:4px; --sp-xs:8px; --sp-sm:12px; --sp-md:16px;
@@ -172,6 +176,7 @@ a{color:inherit}
   overflow:hidden;
 }
 .cover svg{position:absolute;inset:0;width:100%;height:100%}
+.cover svg circle{fill:var(--dot)}
 
 .card-body{min-width:0;flex:1;padding-right:34px}
 .card-title{
