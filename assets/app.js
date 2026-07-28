@@ -229,7 +229,7 @@ function renderHome() {
              '2 maps · 11 places' 가 박힌다. 개수는 카드마다 이미 나오고
              (거기서는 맵끼리 비교하는 실용 정보다), 첫 화면에서는 개수가
              적어도 무너지지 않는 문장이어야 한다. -->
-        <p class="eyebrow">Made by locals</p>
+        <p class="eyebrow">Made by local humans</p>
         <h1 class="lede">Not just where. Why.</h1>
         <p class="lede-sub">Every place comes with a line on why it's worth your time.</p>
       </div>

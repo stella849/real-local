@@ -50,13 +50,18 @@
 }
 
 /* ---------- 활자 ----------
-   A 는 세리프로, B 는 굵기로 민다. C 는 반대로 힘을 뺀다 —
-   여백이 주인공인 그림 위에 굵은 활자가 앉으면 그림을 이긴다. */
+   처음에는 '여백이 주인공이니 활자는 힘을 뺀다'로 500/600 을 썼다. 그런데
+   카피가 "Not just where. Why." 로 짧아지면서 전제가 바뀌었다 — 긴 문장이
+   가늘게 깔릴 때는 그림을 방해하지 않지만, 짧은 한 줄이 가늘면 그림에 묻혀
+   버린다. 굵기를 B안과 같은 700 으로 올린다.
+
+   대신 자간은 C 의 것을 지킨다(.22em 눈썹줄). 굵기는 B 와 같아도 판형이
+   달라 두 안이 섞이지 않는다. */
 :root[data-theme="hanok"] .lede{
-  font-size:24px;line-height:1.38;font-weight:500;letter-spacing:-.005em;
+  font-size:24px;line-height:1.3;font-weight:700;letter-spacing:-.015em;
 }
-:root[data-theme="hanok"] .card-title{font-size:16px;font-weight:600}
-:root[data-theme="hanok"] .detail-title{font-size:21px;font-weight:600}
+:root[data-theme="hanok"] .card-title{font-size:16px;font-weight:700}
+:root[data-theme="hanok"] .detail-title{font-size:21px;font-weight:700}
 
 :root[data-theme="hanok"] .eyebrow,
 :root[data-theme="hanok"] .wordmark{
@@ -79,15 +84,23 @@
    .hero-art(배너 자리)는 쓰지 않는다. 이 안에서 그림은 아래 붙는
    것이 아니라 글자가 얹히는 바닥이다.
 
-   min-height 는 그림의 '조용한 가운데 띠'에 카피 세 줄이 들어갈 만큼
-   확보한 값이다. 더 낮추면 카피가 처마나 능선에 걸린다. */
+   min-height 는 그림의 '조용한 가운데 띠'에 카피가 들어갈 만큼 확보한 값이다.
+   카피가 짧아지면서 296px 에서는 글자 위아래로 빈 띠가 남아 그림과 글자가
+   따로 놀았다. 글자 덩어리에 맞춰 조인다 — 처마와 마을이 글자를 가깝게
+   감쌀수록 '액자'로 읽힌다.
+
+   더 줄이면 카피가 처마나 마을에 걸린다. 값을 바꿀 때는 카피 길이도 같이
+   봐야 한다. */
 :root[data-theme="hanok"] .hero{
-  min-height:296px;
+  min-height:236px;
   background-image:url('img/hero-hanok.webp');
   background-size:cover;
   background-position:center;
   display:flex;align-items:center;
 }
+/* 그림 안에서 글자가 차지하는 띠를 좁힌다. 바깥 여백(sp-md)은 그대로 두고
+   위아래만 줄여야 좌우 정렬이 다른 화면과 어긋나지 않는다. */
+:root[data-theme="hanok"] .hero-copy{padding-top:var(--sp-xs);padding-bottom:var(--sp-xs)}
 :root[data-theme="hanok"] .hero-art{display:none}
 :root[data-theme="hanok"] .hero .lede-sub{color:var(--text-2)}
 
