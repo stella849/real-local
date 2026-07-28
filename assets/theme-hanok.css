@@ -29,17 +29,24 @@
   --text-2:#63594C;
   --text-3:#968A79;
 
-  /* 붉은색은 낙관처럼 작게만 쓴다 — 버튼·필 같은 큰 면적은 먹이 맡는다.
-     아래 '컴포넌트'의 주석 참고. 큰 면적에서 빠지므로 대비를 위해
-     채도를 억지로 올릴 필요가 없고, 그만큼 화면이 베이지로 남는다. */
-  --accent:#A2705A;      /* 옅은 흙빛 붉은색 */
+  /* 단청 적색. 큰 면적(버튼·필)은 먹이 맡고 이 색은 낙관처럼 작은 곳에만
+     찍힌다 — 지도 핀, 커버의 점, 탭 밑줄, 큐레이터 한 줄의 세로선.
+     아래 '컴포넌트'의 주석 참고.
+
+     한때 이 값을 흙빛(#A2705A)까지 낮췄던 것은 버튼·필까지 붉게 칠하던
+     때의 이야기다. 큰 면적이 먹으로 넘어간 지금은 채도를 낮출 이유가
+     없고, 오히려 낮추면 핀이 바탕에 묻혀 포인트가 사라진다. */
+  --accent:#AA4649;
   --accent-soft:#EDE2D6;
 
   /* 커버 미니맵의 점 — 팔레트의 색을 그대로 쓴다.
      먹을 투명도로 흐려 쓰면 팔레트에 없는 녹회색(#958B7D)이 나온다. */
   --dot:var(--accent);
 
-  --r-sm:3px; --r-md:5px; --r-lg:7px;   /* 각지지도 둥글지도 않게 */
+  /* 처음에는 '각지지도 둥글지도 않게'로 3/5/7 을 썼으나, 같은 베이지 바탕에서
+     A안(각짐)과 너무 가까워 두 안이 구분되지 않았다. 12 부터 시작해 카드가
+     확실히 둥근 쪽으로 간다. */
+  --r-sm:12px; --r-md:16px; --r-lg:22px;
 }
 
 /* ---------- 활자 ----------
@@ -135,5 +142,8 @@
 :root[data-theme="hanok"] .cover{background:var(--surface);border-color:var(--line)}
 :root[data-theme="hanok"] .act[aria-pressed="true"]{color:var(--accent)}
 :root[data-theme="hanok"] .badge{border-color:var(--line-strong)}
-:root[data-theme="hanok"] .pin-marker{background:var(--text);border-color:var(--canvas)}
+/* 지도 핀은 '큰 면적'이 아니다 — 23개가 찍혀도 각각 10px 남짓이라
+   화면을 붉게 만들지 않으면서 어디를 보라는 표시가 된다.
+   먹으로 두면 지도의 도로·글자와 같은 색이라 핀이 지형에 묻힌다. */
+:root[data-theme="hanok"] .pin-marker{background:var(--accent);border-color:var(--canvas)}
 :root[data-theme="hanok"] .tab[aria-current="page"]{color:var(--text)}

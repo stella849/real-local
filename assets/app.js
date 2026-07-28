@@ -221,9 +221,17 @@ function renderHome() {
   view.innerHTML = `
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Picked by verified locals</p>
-        <h1 class="lede">Korea, from the people who live there.</h1>
-        <p class="lede-sub">${DATA.mapCount} maps · ${DATA.placeCount} places — the ones a local would actually take you to.</p>
+        <!-- 세 줄이 각각 다른 일을 한다: 누가 / 무엇을 파는가 / 무엇을 받는가.
+             셋 다 '로컬이 골랐다'를 말하면 설명문이 된다.
+
+             맵·장소 개수는 넣지 않는다. 데이터에서 계산되므로 늘어나긴 하지만
+             줄어들 때가 문제다 — 오픈 초기에 큐레이터가 둘이면 첫 화면에
+             '2 maps · 11 places' 가 박힌다. 개수는 카드마다 이미 나오고
+             (거기서는 맵끼리 비교하는 실용 정보다), 첫 화면에서는 개수가
+             적어도 무너지지 않는 문장이어야 한다. -->
+        <p class="eyebrow">Made by locals</p>
+        <h1 class="lede">Not just where. Why.</h1>
+        <p class="lede-sub">Every place comes with a line on why it's worth your time.</p>
       </div>
       <!-- 시안이 선택되기 전까지는 비어 있고, :empty 규칙으로 접힌다 -->
       <div class="hero-art" id="hero-art"></div>
