@@ -879,7 +879,7 @@ footer{border-top:1px solid var(--ink);padding:var(--s3) 0;margin-top:var(--s5);
         <ol class="callouts">
           <li><span class="mk">1</span><span>role 뱃지로 큐레이터/일반 유저 구분 <span class="co-fr">FR-02</span></span></li>
           <li><span class="mk">2</span><span>&lsquo;Create a map&rsquo; 진입점은 큐레이터에게만 렌더 <span class="co-fr">FR-02</span></span></li>
-          <li><span class="mk">3</span><span>role 부여는 DB 수동 처리. 승인 플로우 UI 없음 <span class="co-fr">FR-03 제외</span></span></li>
+          <li><span class="mk">3</span><span>role 부여는 DB 수동 처리. 선발은 서비스 밖에서 이뤄지고, 글 검수 절차는 없다 <span class="co-fr">FR-03 제외</span></span></li>
           <li><span class="mk">4</span><span>프로필 이미지 데이터 없음 — 이니셜 원형으로 대체 가능</span></li>
         </ol>
       </figure>
@@ -1063,16 +1063,20 @@ footer{border-top:1px solid var(--ink);padding:var(--s3) 0;margin-top:var(--s5);
             <td><strong>큐레이터 제작 UI(S-06·S-07) 화면 설계</strong></td>
             <td>Q2에서 MVP 포함으로 확정됐으나 <strong>화면이 아직 없다.</strong> 목요일 백엔드와 함께 만들려면
                 오늘 세 가지가 필요하다 — ① 큐레이터가 <strong>장소를 어떻게 찾는가</strong>(구글맵 검색 / 링크 붙여넣기 / 좌표),
-                ② <strong>tip 은 필수인가</strong>(현행 데이터는 132/133 작성됨), ③ 만든 지도가 <strong>바로 공개되는가, 승인을 거치는가</strong></td>
+                ② <strong>tip 은 필수인가</strong>(현행 데이터는 132/133 작성됨),
+                ③ 만든 지도를 <strong>비공개로 두었다가 올릴 수 있어야 하는가</strong>(작성 중 저장)</td>
             <td>도면 없음 — 오늘 방향을 잡아야 목요일에 만든다</td>
           </tr>
           <tr>
             <td class="id">A4</td>
-            <td><strong>큐레이터 승인 방식</strong></td>
-            <td>PRD의 ‘승인된 로컬’이 이 서비스의 유일한 차별점인데, <strong>승인을 누가 어떻게 하는지</strong>가 정해져 있지 않다.
-                MVP에서는 <strong>운영자가 DB에서 직접 role 을 부여</strong>하는 방식을 제안한다 —
-                신청·심사 화면을 만들면 목요일 범위를 넘는다</td>
-            <td>승인 플로우 UI 는 의도적으로 제외한 상태</td>
+            <td><strong>큐레이터 선발 기준</strong></td>
+            <td>‘승인된 로컬’은 <strong>사람을 뽑을 때 한 번 거르는 것</strong>이고, 이후 글을 검수하거나
+                허가받는 절차는 없다(2026-07-28 확인). 그러면 <strong>무엇을 만족해야 큐레이터가 되는지</strong>가
+                이 서비스의 신뢰를 통째로 떠받친다 — 거주 기간인지, 초대인지, 심사인지.
+                <strong>화면에 그 기준을 밝힐 것인지</strong>도 정해야 한다.
+                지금은 어디에도 적혀 있지 않아 방문자에게는 ‘승인’이 빈 말로 보인다</td>
+            <td>role 부여는 운영자가 DB에서 직접 — 신청·심사 UI 는 의도적으로 제외.
+                기준만 정해지면 화면에는 한 줄이면 된다</td>
           </tr>
           <tr>
             <td class="id">A5</td>
@@ -1125,7 +1129,7 @@ footer{border-top:1px solid var(--ink);padding:var(--s3) 0;margin-top:var(--s5);
           <li>장소별 개별 후기</li>
           <li>맵 내 순서 · 순위 편집</li>
           <li>큐레이터 소개 페이지</li>
-          <li>큐레이터 승인 플로우 UI</li>
+          <li>큐레이터 신청·심사 UI (선발은 서비스 밖에서)</li>
           <li>실시간 위치 · 결제 · 네이티브 앱</li>
         </ul>
       </div>
