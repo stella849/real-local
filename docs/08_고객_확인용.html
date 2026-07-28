@@ -296,10 +296,8 @@ footer{
   <div class="ask-item">
     <div class="ask-no">01</div>
     <div>
-      <p class="ask-q">A / B / C 중 어느 쪽으로 갈까요<span class="when now">오늘</span></p>
-      <p class="ask-why"><b>섞지 않는 것이 중요합니다.</b> “A의 색에 B의 서체” 같은 조합은
-         세 안을 지탱하는 규칙을 동시에 무너뜨립니다. 각 안은 색·활자·모서리·이미지가
-         하나의 논리로 묶여 있습니다.</p>
+      <p class="ask-q">3가지 디자인 중에 Best Pick이 있나요?</p>
+      <p class="ask-why">아니면 더 디벨롭 하거나 예상하던 것과 유사한 것은 어느것인가요?</p>
       <ul class="ask-opt"><li>A · Paper</li><li>B · Sketch</li><li>C · Hanok</li></ul>
     </div>
   </div>
@@ -307,56 +305,79 @@ footer{
   <div class="ask-item">
     <div class="ask-no">02</div>
     <div>
-      <p class="ask-q">이 팔레트로 확정해도 될까요<span class="when now">오늘</span></p>
-      <p class="ask-why">지난 미팅에서 주시기로 한 <b>레퍼런스 가이드북이 전달되지 않아</b>,
-         PRD의 “베이지 → 화이트, handmade” 범위 안에서 저희가 세 벌을 제안했습니다.
-         별도 브랜드 컬러표가 있다면 지금 반영하는 편이 좋습니다.</p>
+      <p class="ask-q">맛집이 아닌 장소가 25% 정도 포함되어 있습니다. 세 방향 중 어디로 갈까요?</p>
+      <p class="ask-why"><b>세 방향 제안:</b></p>
+      <ul style="margin:6px 0 12px;padding-left:20px;color:var(--text2);">
+        <li><b>(a) 음식 중심 유지</b> — 비음식은 "주변에 들를 곳" 정도의 부가 정보</li>
+        <li><b>(b) 동네 가이드로 확장</b> — 먹는 곳과 가는 곳을 동등하게</li>
+        <li><b>(c) 맵마다 성격이 다름을 인정</b> — 큐레이터 재량, 서비스는 중립적 그릇</li>
+      </ul>
+      <p class="ask-why">저희 권고는 <b>(c)</b>입니다. 데이터가 이미 그렇게 생겼고, 'Real Local'이라는 이름도 음식으로 한정하지 않습니다. 다만 홈 카피와 카테고리 목록이 여기서 갈리므로 확정이 필요합니다.</p>
     </div>
   </div>
 
   <div class="ask-item">
     <div class="ask-no">03</div>
     <div>
-      <p class="ask-q">큐레이터가 지도를 만드는 화면, 어떻게 동작해야 할까요<span class="when soon">이번 주</span></p>
-      <p class="ask-why">MVP에 포함하기로 확정됐는데 아직 화면 설계가 없습니다.
-         <b>다음 목요일 작업의 대부분이 여기</b>라 방향이 먼저 필요합니다. 세 가지만 정해주시면 됩니다.</p>
-      <ul class="ask-opt">
-        <li>장소를 어떻게 찾나 — 구글맵 검색 / 링크 붙여넣기 / 좌표 입력</li>
-        <li>한 줄 코멘트는 필수인가 — 현재 데이터는 133곳 중 132곳 작성됨</li>
-        <li>작성 중인 지도를 비공개로 저장할 수 있어야 하나</li>
-      </ul>
+      <p class="ask-q">여러 도시에 걸친 맵 생성 계획 및 카테고리 기준 설정</p>
+      <p class="ask-why">앞으로 큐레이터가 여러 도시에 걸친 맵을 만들 계획이 있으신가요? 예를 들어 '전국 떡볶이 맵'처럼 서울 5곳, 부산 2곳, 대구·광주 1~2곳을 한 맵에 담는 경우입니다.</p>
+      <p class="ask-why" style="margin-top:8px">계획이 있으시다면 지역을 맵에 저장하지 않고 장소 좌표에서 자동 계산하는 구조로 잡겠습니다. 나중에 확장할 때 구조를 다시 만들지 않아도 됩니다.</p>
+      <p class="ask-why" style="margin-top:8px">또한 지금 제공된 DB는 도시(city)로 묶어놨지만 성수는 한 지역명이므로 카테고리에는 지역을 기준으로 나타나도록 준비해도 될까요?</p>
     </div>
   </div>
 
   <div class="ask-item">
     <div class="ask-no">04</div>
     <div>
-      <p class="ask-q">큐레이터는 어떤 기준으로 선발하시나요<span class="when soon">이번 주</span></p>
-      <p class="ask-why">“승인된 로컬”이 이 서비스의 유일한 차별점인데, <b>기준이 어디에도
-         적혀 있지 않아</b> 방문자에게는 근거 없는 말로 보입니다. 거주 기간인지, 초대인지,
-         심사인지에 따라 <b>화면에 한 줄로 밝힐 수 있습니다.</b></p>
-      <p class="ask-why" style="margin-top:8px">권한 부여 자체는 운영자가 직접 처리하는 것으로
-         준비돼 있습니다 — 신청·심사 화면은 만들지 않습니다.</p>
+      <p class="ask-q">city 값의 행정구역 위계 정리 (Seoul, Busan, Seongsu)</p>
+      <p class="ask-why">현재 city 값에 Seoul, Busan과 함께 Seongsu가 들어가 있는데 성수는 서울 성동구의 동 단위라 위계가 맞지 않습니다. 주소에서 도시/구/동을 자동으로 추출해 라벨로 표시하는 방식으로 정리하겠습니다.</p>
     </div>
   </div>
 
   <div class="ask-item">
     <div class="ask-no">05</div>
     <div>
-      <p class="ask-q">서비스 주소와 계정은 어디로 할까요<span class="when later">오픈 전</span></p>
-      <p class="ask-why">별도 구축 장비는 필요 없습니다. 다만 <b>도메인을 사실 것인지,
-         산다면 누가 소유·결제할 것인지</b>를 정해야 합니다. 데이터베이스와 지도 API 계정도
-         고객사 명의로 옮겨두면 인수인계가 깔끔합니다. <b>늦어질수록 옮기는 비용이 커집니다.</b></p>
+      <p class="ask-q">가게명 한글 병기 제안 및 데이터 수집 방식</p>
+      <p class="ask-why">가게명 한글 병기를 제안드립니다. 길에서 도움을 청하거나 택시에서 보여줄 때 필요하고, 한국어에 관심 있는 이용자에게도 유용합니다.</p>
+      <p class="ask-why" style="margin-top:8px"><b>시각적 복잡도 분리:</b></p>
+      <ul style="margin:6px 0 12px;padding-left:20px;color:var(--text2);">
+        <li><b>목록/카드</b> → 영문만 (통일감 유지)</li>
+        <li><b>장소 상세</b> → 한글 간판명을 크게 배치 (보여주기용)</li>
+      </ul>
+      <p class="ask-why">이렇게 진행해도 될까요?</p>
+      <p class="ask-why" style="margin-top:8px"><b>확인이 필요한 부분:</b> 제공된 DB에는 한글 상호가 없고 로마자 자동변환만 있습니다(Ssereupa은reukeu(SERRPARC), Cobbler Yeonhee Kobeulreo Yeonhui). 이 상태로는 현장에서 쓸 수 없는데, 133곳의 한글 상호를 어느 쪽에서 채울까요?</p>
     </div>
   </div>
 
   <div class="ask-item">
     <div class="ask-no">06</div>
     <div>
-      <p class="ask-q">시연용으로 넣어둔 후기 16건은 어떻게 할까요<span class="when later">오픈 전</span></p>
-      <p class="ask-why">빈 화면만으로는 후기 기능을 보여드릴 수 없어 저희가 작성해 넣은 것입니다.
-         특정 가게가 아니라 지도·큐레이션에 대한 내용만 담았습니다.
-         <b>오픈 시 지울지 남길지</b> 정해주세요 — 남기면 실제 이용자 글로 오해될 수 있습니다.</p>
+      <p class="ask-q">큐레이터 직접 맵 추가 관리 화면 포함 여부</p>
+      <p class="ask-why">큐레이터가 직접 맵을 추가하는 관리 화면은 포함 되는게 맞는지 확인바랍니다.</p>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">07</div>
+    <div>
+      <p class="ask-q">큐레이터 정보 제공 필요</p>
+      <p class="ask-why">9개의 맵을 만든 큐레이터 정보가 필요합니다.</p>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">08</div>
+    <div>
+      <p class="ask-q">데이터 누락 항목 정리 (tip 미비 및 지도 링크 누락)</p>
+      <p class="ask-why">tip이 비어 있는 1건(Inspiration Seongsu의 index)과 구글 지도 링크가 없는 18건이 있습니다. 링크는 좌표가 있어 렌더링에 지장 없지만, tip은 채워주시거나 해당 항목을 빼는 편이 좋겠습니다.</p>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">09</div>
+    <div>
+      <p class="ask-q">로그인 방식 (구글 로그인 전용)</p>
+      <p class="ask-why">로그인은 구글 로그인만 추가 하겠습니다.</p>
     </div>
   </div>
 
