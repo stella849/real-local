@@ -1010,8 +1010,8 @@ footer{border-top:1px solid var(--ink);padding:var(--s3) 0;margin-top:var(--s5);
           <tr>
             <td class="id">Q4</td>
             <td>컬러 팔레트 · 가이드북</td>
-            <td><strong>가이드북 불발.</strong> 팔레트를 우리가 제안 — 베이지→화이트 handmade 안에서 A/B 2안</td>
-            <td><span class="tag ok">시안 제출</span> 별도 문서</td>
+            <td><strong>가이드북 불발.</strong> 팔레트를 우리가 제안 — 베이지→화이트 handmade 안에서 A/B/C 3안</td>
+            <td><span class="tag ok">시안 제출</span> <a href="07_시안_비교.html">07_시안_비교.html</a></td>
           </tr>
           <tr>
             <td class="id">Q6</td>
@@ -1042,24 +1042,64 @@ footer{border-top:1px solid var(--ink);padding:var(--s3) 0;margin-top:var(--s5);
         <tbody>
           <tr>
             <td class="id">A1</td>
-            <td><strong>디자인 시안 선택 — A · Paper / B · Sketch</strong></td>
-            <td>둘 다 PRD 6장의 ‘베이지 → 화이트, handmade’ 안에 있음. 갈라지는 축은 색이 아니라 <strong>무엇이 손맛을 만드느냐</strong> — A는 활자와 판형, B는 손으로 그은 선. <strong>섞지 말 것</strong></td>
-            <td>실제 앱에 얹혀 있음. <code>?theme=paper</code> / <code>?theme=sketch</code> 로 자기 폰에서 133곳을 넘겨보며 선택</td>
+            <td><strong>디자인 시안 선택 — A · Paper / B · Sketch / C · Hanok</strong></td>
+            <td>셋 다 PRD 6장의 ‘베이지 → 화이트, handmade’ 안에 있음. 갈라지는 축은 색이 아니라
+                <strong>무엇이 손맛을 만드느냐</strong> — A는 활자와 판형, B는 손으로 그은 선, C는 여백.
+                <strong>섞지 말 것</strong> — “A의 색에 B의 서체” 는 세 안을 다 무너뜨린다</td>
+            <td>실제 앱에 얹혀 있음. <code>?theme=paper</code> / <code>?theme=sketch</code> /
+                <code>?theme=hanok</code> 로 자기 폰에서 133곳을 넘겨보며 선택.
+                세 안 비교: <a href="07_시안_비교.html">07_시안_비교.html</a><br>
+                <strong>세 안 모두 그림까지 완성 상태</strong>이므로 추가 작화 요청 없이 고르면 됩니다.
+                빈 화면 4곳도 세 안 모두 채워져 있습니다</td>
           </tr>
           <tr>
             <td class="id">A2</td>
-            <td><strong>메인 이미지</strong></td>
-            <td>A는 133곳 실제 좌표로 그린 편집 지도(제작비 0, 장소가 늘면 그림도 자람). B는 손그림 1컷. <strong>B를 고르면 빈 화면 4컷을 더 그릴 수 있는지</strong>가 관건</td>
-            <td>두 안 모두 적용 완료</td>
-          </tr>
-          <tr>
-            <td class="id">A3</td>
             <td><strong>사용자 동작 확인</strong></td>
             <td>지도 탐색 → 저장 → 후기까지 실제로 눌러보며 확인. 특히 <strong>장소/후기 탭</strong>과 <strong>핀 ↔ 목록 연동</strong></td>
             <td>전 구간 동작. 후기는 시연용 데이터 16건이 들어 있고, 맨 위 지도만 0건으로 비워 둠(빈 상태 확인용)</td>
           </tr>
+          <tr>
+            <td class="id">A3</td>
+            <td><strong>큐레이터 제작 UI(S-06·S-07) 화면 설계</strong></td>
+            <td>Q2에서 MVP 포함으로 확정됐으나 <strong>화면이 아직 없다.</strong> 목요일 백엔드와 함께 만들려면
+                오늘 세 가지가 필요하다 — ① 큐레이터가 <strong>장소를 어떻게 찾는가</strong>(구글맵 검색 / 링크 붙여넣기 / 좌표),
+                ② <strong>tip 은 필수인가</strong>(현행 데이터는 132/133 작성됨), ③ 만든 지도가 <strong>바로 공개되는가, 승인을 거치는가</strong></td>
+            <td>도면 없음 — 오늘 방향을 잡아야 목요일에 만든다</td>
+          </tr>
+          <tr>
+            <td class="id">A4</td>
+            <td><strong>큐레이터 승인 방식</strong></td>
+            <td>PRD의 ‘승인된 로컬’이 이 서비스의 유일한 차별점인데, <strong>승인을 누가 어떻게 하는지</strong>가 정해져 있지 않다.
+                MVP에서는 <strong>운영자가 DB에서 직접 role 을 부여</strong>하는 방식을 제안한다 —
+                신청·심사 화면을 만들면 목요일 범위를 넘는다</td>
+            <td>승인 플로우 UI 는 의도적으로 제외한 상태</td>
+          </tr>
+          <tr>
+            <td class="id">A5</td>
+            <td><strong>배포처와 도메인</strong></td>
+            <td>현재 GitHub Pages 에 올라가 있다. <strong>실제 서비스 주소를 어디로 할 것인지</strong> —
+                별도 도메인을 살 것인지, 산다면 <strong>누가 소유·결제할 것인지</strong>.
+                Supabase(무료 구간)와 구글맵 키도 <strong>클라이언트 계정으로 옮길 것인지</strong> 정해야 인수인계가 된다</td>
+            <td>구축 장비는 필요 없음 — 전부 관리형 서비스</td>
+          </tr>
+          <tr>
+            <td class="id">A6</td>
+            <td><strong>후기 시연 데이터 처리</strong></td>
+            <td>지금 들어 있는 후기 16건은 <strong>우리가 만든 시연용</strong>이다.
+                오픈 때 <strong>지울 것인지 남길 것인지</strong>. 남긴다면 실제 사용자 글로 오해될 수 있다</td>
+            <td>5개 계정 · 8개 지도에 분산. 특정 가게가 아니라 지도·큐레이션에 대한 내용만 씀</td>
+          </tr>
         </tbody>
       </table>
+      <div class="note info">
+        <span class="note-k">우선순위</span>
+        <p><strong>A1·A2 는 오늘 실물을 놓고 확답만 받으면 됩니다.</strong>
+           추가로 만들어 주셔야 할 것은 없습니다 — 그림은 세 안 모두 완성 상태입니다.</p>
+        <p><strong>A3·A4 는 목요일 작업량에 직접 영향</strong>을 주므로 오늘 방향이 나와야 합니다.
+           큐레이터 제작 UI가 Q2에서 MVP 포함으로 확정됐는데 아직 도면이 없고,
+           이 화면들이 목요일 백엔드 작업의 대부분을 차지합니다.</p>
+        <p>A5·A6 은 오픈 직전까지 미룰 수 있으나, 늦어질수록 옮기는 비용이 커집니다.</p>
+      </div>
     </div>
 
     <h3>범위 요약</h3>

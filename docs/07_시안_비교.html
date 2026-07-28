@@ -216,8 +216,8 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
     <tr><th style="width:78px">대상</th><th>내용</th></tr>
     <tr><td>세 안 공통</td><td>UI 문구를 <b>전부 영어</b>로 교체 · 홈 첫 화면을 9장에서 <b>3장 + “Show N more maps”</b>로 줄임
       (전체 길이 1,588px → 870px) · 지도 상세를 <b>Places / Reviews 탭</b>으로 나눔 · 주소 표기 정규화(Q5)</td></tr>
-    <tr><td>B · Sketch</td><td>빈 화면 <b>3컷 적용 완료</b>(손그림 수령 · 3094px 원본에서 추출).
-      남은 1컷은 “Sign in to save places”</td></tr>
+    <tr><td>B · Sketch</td><td>빈 화면 <b>4곳 적용 완료</b> — 받은 손그림 3컷(3094px 원본에서 추출)에
+      네 번째 “Sign in to save places” 는 <b>우리가 그려 채웠다</b></td></tr>
     <tr><td>C · Hanok</td><td>메인 이미지 <b>교체 + 색 보정</b>(주홍 → 베이지) · accent를 단청 적색에서
       <b>옅은 흙빛</b>으로 낮추고 큰 면적은 먹으로 넘김 · 빈 화면 4곳 <b>적용 완료</b></td></tr>
     <tr><td>토큰</td><td>커버 미니맵의 점에 <code>--dot</code> 토큰 신설 — 글자색을 투명도로 흐려 쓰다가
@@ -262,7 +262,7 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
   <tr><td>Accent</td><td><code>#33566B</code> 잉크블루</td><td><code>#8C5A44</code> 흙색</td><td><code>#A2705A</code> 옅은 흙빛 붉은색</td></tr>
   <tr><td>Accent 쓰는 법</td><td>표제·필·핀 전부</td><td>표제·필·핀 전부</td><td><b>낙관처럼 작게만.</b> 버튼·필 같은 큰 면적은 먹</td></tr>
   <tr><td>메인 이미지</td><td>카피 아래 배너</td><td>카피 아래 배너</td><td><b>카피가 얹히는 배경</b></td></tr>
-  <tr><td>빈 화면 4곳</td><td>글자만 (추가 작화 0)</td><td>손그림 <b>3/4 적용</b></td><td>처마 띠 재활용 <b>4/4 적용</b></td></tr>
+  <tr><td>빈 화면 4곳</td><td>글자만 (추가 작화 0)</td><td>손그림 3컷 + 그린 것 1컷 <b>4/4</b></td><td>처마 띠 재활용 <b>4/4</b></td></tr>
   <tr><td>인상</td><td>정제된 안내서</td><td>친구가 그려준 쪽지</td><td>한지에 먹으로 앉힌 안내서</td></tr>
 </table>
 <p class="lead">accent 세 개는 <b>온도가 서로 다르다</b> — 차가운 잉크블루, 따뜻한 흙색, 낮춘 흙빛 붉은색.
@@ -346,8 +346,8 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
             대신 <b>같은 손떨림 필터를 걸어 같은 사람이 그린 것처럼</b> 맞췄다.
             카드 구조는 건드리지 않았다</li>
         <li><b>본문 활자에는 필터를 걸지 않는다</b> — 읽는 글자가 흔들리면 손맛이 아니라 불량으로 보인다</li>
-        <li>빈 화면 <b>3컷 적용 완료</b>(07-28 수령) — 책 / 압정 보드 / 노트.
-            남은 한 컷은 “Sign in to save places”</li>
+        <li>빈 화면 <b>4곳 적용 완료</b> — 받은 3컷(책 / 압정 보드 / 노트)에
+            네 번째(열쇠)를 같은 손떨림 필터로 그려 채웠다</li>
       </ul>
 
       <h4>실물 화면</h4>
@@ -472,7 +472,7 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
   <tr><td><b>No reviews yet</b></td><td>지도 상세 · Reviews 탭</td>
       <td>글자만</td><td>노트 그림 ✓</td><td>처마 띠 ✓</td></tr>
   <tr><td><b>Sign in to save places</b></td><td>비로그인 상태로 저장 탭</td>
-      <td>글자만</td><td style="color:#9A4A2E"><b>미정</b></td><td>처마 띠 ✓</td></tr>
+      <td>글자만</td><td>열쇠 (그림) ✓</td><td>처마 띠 ✓</td></tr>
 </table>
 
 <div class="duo" style="margin-top:22px">
@@ -482,8 +482,16 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
       <img src="../assets/img/empty-maps.webp" alt="거미줄 낀 책" style="height:78px">
       <img src="../assets/img/empty-places.webp" alt="빈 압정 보드" style="height:78px">
       <img src="../assets/img/empty-reviews.webp" alt="MY REVIEWS 노트" style="height:78px">
+      <span style="width:1px;height:70px;background:var(--sk-line)"></span>
+      <!-- 네 번째는 파일이 아니라 앱 안에서 그리는 SVG다. 같은 도형을 여기 옮겨 둔다 -->
+      <svg viewBox="0 0 120 60" style="height:62px" fill="none" stroke="#8C5A44"
+           stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+           role="img" aria-label="열쇠">
+        <circle cx="30" cy="30" r="15"/><circle cx="30" cy="30" r="5.5"/>
+        <path d="M45 30h48"/><path d="M78 30v10"/><path d="M90 30v13"/>
+      </svg>
     </div>
-    <p class="cap">B · 07-28 수령한 손그림 3컷 (3094px 원본에서 추출)</p>
+    <p class="cap">B · 받은 손그림 3컷 (3094px 원본에서 추출) + 네 번째는 그린 것</p>
     <p style="font-size:14px;color:var(--text2)">
       목업 안에서 <b>일러스트만 잘라냈다</b> — 캡션·탭 구분선·폰 프레임은 앱이 이미 그리는 것이라 뺐다.
       자르는 좌표는 손으로 박지 않고 <b>이어진 획 중 가장 큰 덩어리</b>를 찾게 했다.
@@ -495,15 +503,17 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
       노트=후기로 뜻이 정해져 있어 다른 자리에 붙이면 다른 의미로 읽힌다.</p>
   </div>
   <div>
-    <div class="note" style="border-left-color:#9A4A2E;background:#FDF6F2">
-      <h4>B안이면 아직 필요한 것</h4>
-      <p><b>네 번째 컷</b> — “Sign in to save places”. 이것 하나만 남았다.</p>
-      <p>이 화면의 뜻은 <i>로그인하면 저장할 수 있고, 계정을 따라다녀 다른 기기에서도 보인다</i>이다.
-         자물쇠 걸린 노트, 잠긴 여행가방, 빈 배낭 같은 것이 어울린다.
-         받은 3컷과 <b>같은 목업 형식으로 주면</b> 같은 스크립트가 그대로 잘라낸다.</p>
-      <p style="margin-bottom:0">해상도는 해결됐다 — 처음 받은 610px 파일로는 195×99px밖에
-         나오지 않아 폰에서 뭉갰는데, <b>3094px 원본이 남아 있어 거기서 다시 뽑았다.</b>
-         3배 화면까지 선명하다.</p>
+    <div class="note">
+      <h4>네 번째 컷은 받지 않고 그렸다</h4>
+      <p>“Sign in to save places” 에는 받은 그림이 없고, <b>더 받을 계획도 없다.</b>
+         남는 그림을 돌려 쓰면 뜻이 겹치므로(책=저장한 지도, 보드=저장한 장소, 노트=후기)
+         <b>그리는 쪽을 택했다.</b></p>
+      <p>커버 미니맵의 동그라미를 손떨림 필터로 처리한 것과 같은 방법이다.
+         이 안의 전제가 <b>‘선이 손맛을 만든다’</b>이므로 획만으로 그린 그림이 낯설지 않다.
+         그린 것은 <b>열쇠</b> — 이 화면의 뜻이 ‘로그인하면 열린다’이고,
+         96px 높이에서 형태만으로 읽히는 몇 안 되는 물건이다.</p>
+      <p style="margin-bottom:0">SVG 한 줄이라 <b>내려받을 파일이 늘지 않고</b>,
+         accent를 바꾸면 같이 따라온다. 결과적으로 <b>B안도 추가 작화 0</b>이다.</p>
     </div>
   </div>
   <div>
@@ -523,34 +533,38 @@ footer{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
 <h2>권장</h2>
 <div class="pick">
   <h3>세 안 모두 채택 가능. 판단 기준은 취향이 아니라 아래 둘이다.</h3>
+  <h3>세 안 모두 완성 상태다. 추가로 그려 주셔야 할 것은 없다.</h3>
+  <p style="color:#DEDEDA;margin-bottom:14px">빈 화면 4곳까지 세 안 모두 채워져 있다.
+     그래서 <b>“어느 쪽이 손이 덜 가는가”는 더 이상 판단 기준이 아니다.</b>
+     남는 기준은 하나뿐이다.</p>
   <ol>
-    <li><b>남은 작화가 얼마나 되는가</b> —
-        <b>A</b>는 그림이 데이터에서 나와 처음부터 0.
-        <b>B</b>는 3컷 받아 적용했고 <b>1컷</b>이 남았다.
-        <b>C</b>는 처마 띠 재활용으로 <b>0</b>이다</li>
     <li><b>무엇을 파는 서비스로 보이고 싶은가</b> —
         <b>A</b>는 정제된 안내서, <b>B</b>는 친구가 그려준 쪽지, <b>C</b>는 전통의 격</li>
   </ol>
-  <p class="caveat"><b>C안에 대한 유보 하나</b> — 그림은 한옥 처마와 옛 마을인데
+  <p class="caveat"><b>C안을 고를 때 알고 고를 것 하나</b> — 그림은 한옥 처마와 옛 마을인데
      실제 데이터 133곳은 <b>전부 도시</b>다(을지로·성수·망원·연희·부산). 한옥마을도 산도 없다.
-     클라이언트가 첫 미팅에서 말한 차별점이 “기존 관광 정보에 없는 찐 로컬”이었는데,
-     전통 이미지는 정확히 그 기존 관광 정보의 얼굴이기도 하다.
-     <b>C의 강점은 소재가 아니라 구도</b>(위 처마 / 가운데 여백 / 아래 지형)이므로,
-     아래쪽을 골목·도심 배치로 다시 그리면 구도를 지키면서 내용을 맞출 수 있다.
-     그림을 갈아끼워도 빈 화면 4곳은 따라오므로, 이 교체의 비용은 그림 한 장뿐이다.</p>
+     첫 미팅에서 말씀하신 차별점이 “기존 관광 정보에 없는 찐 로컬”이었는데,
+     전통 이미지는 정확히 그 <b>기존 관광 정보의 얼굴</b>이기도 하다.
+     그림을 다시 그릴 계획은 없으므로 <b>고르는 시점에 이 점을 감안하면 된다</b> —
+     ‘한국다움’을 앞세울지, ‘도시의 지금’을 앞세울지의 문제다.</p>
 </div>
 
 <h2>미팅에서 물을 것</h2>
 <table>
   <tr><th style="width:34px">#</th><th>안건</th></tr>
-  <tr><td>1</td><td>A / B / C 중 어느 쪽인가 — <b>섞지 말 것</b></td></tr>
-  <tr><td>2</td><td>B안이면 <b>“Sign in to save places” 한 컷</b>을 더 그릴 수 있는가 —
-      나머지 3컷은 적용 완료</td></tr>
-  <tr><td>3</td><td>C안이면 <b>아래쪽을 도심 배치로 다시 그릴 것인가</b> — 데이터 133곳이 전부 도시다</td></tr>
-  <tr><td>4</td><td>미팅록 8장에서 클라이언트가 주기로 한 <b>레퍼런스 가이드북은 불발</b>됐다.
+  <tr><td>1</td><td>A / B / C 중 어느 쪽인가 — <b>섞지 말 것</b>.
+      “A의 색에 B의 서체” 는 세 안을 다 무너뜨린다</td></tr>
+  <tr><td>2</td><td>미팅록 8장에서 주기로 한 <b>레퍼런스 가이드북은 불발</b>됐다.
       컬러표 없이 우리가 제안한 세 팔레트로 확정할지</td></tr>
-  <tr><td>5</td><td>확정되면 <code>theme.js</code>와 스위처를 지우고 고른 토큰을 <code>style.css</code>에 병합한다</td></tr>
+  <tr><td>3</td><td>확정되면 <code>theme.js</code>와 스위처를 지우고 고른 토큰을 <code>style.css</code>에 병합한다.
+      <b>고르지 않으면 여기서 더 나아갈 수 없다</b> — 목요일 화면들이 전부 이 위에 얹힌다</td></tr>
 </table>
+<div class="note" style="margin-top:4px">
+  <h4>이 페이지에서 물을 것은 이것뿐이다</h4>
+  <p style="margin-bottom:0">그림을 더 그려 달라는 요청은 없다. 세 안 모두 완성 상태이고,
+     B안의 네 번째 빈 화면과 C안의 이미지도 지금 것으로 확정이다.
+     <b>남은 결정은 “셋 중 하나”뿐</b>이다.</p>
+</div>
 
 <footer>
   Real Local · 디자인 시안 A/B/C · 2026-07-28 ·

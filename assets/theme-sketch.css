@@ -95,15 +95,16 @@
 
 /* ---------- 빈 화면 ----------
 
-   손그림 3컷을 각 자리에 넣는다. 그림이 없는 '로그인 필요' 화면에는
-   아무 것도 깔지 않는다 — 남는 그림을 아무 데나 돌려 쓰면 다른 뜻으로
-   읽히기 때문이다(책=저장한 지도, 압정 보드=저장한 장소, 노트=후기).
+   받은 손그림 3컷을 각 자리에 넣는다. 남는 그림을 아무 데나 돌려 쓰지
+   않는다 — 뜻이 정해져 있기 때문이다(책=저장한 지도, 압정 보드=저장한
+   장소, 노트=후기).
 
    높이만 고정하고 contain 으로 두면 세 컷의 가로세로가 달라도
    같은 크기로 앉는다. */
 :root[data-theme="sketch"] .empty-maps::before,
 :root[data-theme="sketch"] .empty-places::before,
-:root[data-theme="sketch"] .empty-reviews::before{
+:root[data-theme="sketch"] .empty-reviews::before,
+:root[data-theme="sketch"] .empty-signin::before{
   content:'';
   display:block;
   height:96px;
@@ -114,6 +115,23 @@
 :root[data-theme="sketch"] .empty-maps::before   {background-image:url('img/empty-maps.webp')}
 :root[data-theme="sketch"] .empty-places::before {background-image:url('img/empty-places.webp')}
 :root[data-theme="sketch"] .empty-reviews::before{background-image:url('img/empty-reviews.webp')}
+
+/* 네 번째 자리('로그인 필요')는 그림이 없고 더 받을 계획도 없다.
+   그래서 받지 않고 그린다 — 커버 미니맵의 동그라미를 손떨림 필터로
+   처리한 것과 같은 방법이다. 이 안의 전제가 '선이 손맛을 만든다'이므로
+   획만으로 그린 그림이 낯설지 않다.
+
+   그릴 대상은 열쇠다. 이 화면의 뜻이 '로그인하면 열린다'이고, 96px
+   높이에서 형태만으로 읽히는 몇 안 되는 물건이다. 지도·책·노트 계열을
+   또 쓰면 앞의 세 컷과 뜻이 겹친다.
+
+   currentColor 를 못 쓰는 자리라 stroke 를 accent 값으로 박아 둔다 —
+   accent 를 바꾸면 이 한 줄도 같이 봐야 한다. */
+:root[data-theme="sketch"] .empty-signin::before{
+  height:84px;
+  filter:url(#rl-hand);       /* 커버 동그라미와 같은 손떨림 */
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60' fill='none' stroke='%238C5A44' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='30' cy='30' r='15'/%3E%3Ccircle cx='30' cy='30' r='5.5'/%3E%3Cpath d='M45 30h48'/%3E%3Cpath d='M78 30v10'/%3E%3Cpath d='M90 30v13'/%3E%3C/svg%3E");
+}
 
 /* ---------- 메인 이미지 ---------- */
 :root[data-theme="sketch"] .hero-art{
