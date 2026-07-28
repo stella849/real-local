@@ -16,6 +16,7 @@ docs/*
 # 특히 이메일 주소와 금액. 나머지 docs 는 그대로 비공개다.
 !docs/04_wireframe_userflow.html
 !docs/07_시안_비교.html
+!docs/08_고객_확인용.html
 
 # 폰트 원본(ttf/otf + 라이선스 PDF). 배포본에는 assets/font/ 의 woff2 만 실린다.
 # scripts/build-font.mjs 가 이 폴더를 읽어 서브셋을 만든다.

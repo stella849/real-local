@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Local — 디자인 시안 확인</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 33 33'><rect width='11' height='33' fill='%23FBF7EF'/><rect x='11' width='11' height='33' fill='%23FDFAF3'/><rect x='22' width='11' height='33' fill='%23FAF5EA'/><circle cx='5.5' cy='16' r='3' fill='%2333566B'/><circle cx='16.5' cy='16' r='3' fill='%238C5A44'/><circle cx='27.5' cy='16' r='3' fill='%23AA4649'/></svg>">
+<style>
+/* B안 활자 견본에 쓰는 폰트. 앱이 쓰는 것과 같은 파일이다. */
+@font-face{
+  font-family:"Shadows Into Light";
+  src:url('../assets/font/ShadowsIntoLight-Latin.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+
+:root{
+  --paper-bg:#FBF7EF; --paper-ink:#23201B; --paper-accent:#33566B; --paper-mid:#5D5548;
+  --sk-bg:#FDFAF3;    --sk-ink:#2E2823;    --sk-accent:#8C5A44;    --sk-mid:#6A5F51;
+  --hk-bg:#FAF5EA;    --hk-ink:#2A2622;    --hk-accent:#AA4649;    --hk-mid:#63594C;
+
+  --page:#F7F7F6; --card:#fff; --line:#E4E4E2; --line2:#C9C9C6;
+  --text:#1A1A19; --text2:#57574F; --text3:#8A8A83;
+  --sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"Cascadia Mono","Consolas",monospace;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--page);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.7;
+  word-break:keep-all;overflow-wrap:break-word;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 100px}
+
+/* ---------- 머리말 ---------- */
+.masthead{padding:56px 0 22px;border-bottom:2px solid var(--text);margin-bottom:36px}
+.kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--text3);margin:0 0 12px;
+}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.2;margin:0 0 14px;letter-spacing:-.02em}
+.dek{font-size:17px;color:var(--text2);margin:0;max-width:62ch}
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:20px;
+  font-family:var(--mono);font-size:11.5px;color:var(--text3);letter-spacing:.04em;
+}
+
+h2{
+  font-size:12px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--text3);margin:60px 0 18px;padding-bottom:9px;border-bottom:1px solid var(--line);
+}
+.lead{font-size:16px;color:var(--text2);max-width:70ch;margin:0 0 4px}
+
+/* ---------- 세 안 ---------- */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:start}
+@media (max-width:1040px){.trio{grid-template-columns:1fr 1fr}}
+@media (max-width:720px){.trio{grid-template-columns:1fr}}
+
+.opt{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.opt-head{padding:22px 24px 18px;border-bottom:1px solid var(--line)}
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  padding:4px 10px;margin-bottom:12px;color:#fff;border-radius:3px;
+}
+.opt-a .tag{background:var(--paper-accent)}
+.opt-b .tag{background:var(--sk-accent);border-radius:10px}
+.opt-c .tag{background:var(--hk-ink);letter-spacing:.2em;box-shadow:inset 0 -2px 0 var(--hk-accent)}
+.opt h3{font-size:21px;margin:0 0 5px;letter-spacing:-.01em}
+.pos{font-size:15px;color:var(--text2);margin:0}
+.opt-body{padding:22px 24px 26px}
+.opt-body h4{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text3);margin:24px 0 9px;
+}
+.opt-body h4:first-child{margin-top:0}
+
+/* ---------- 팔레트 ---------- */
+.swatches{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.opt-b .swatches{border-radius:11px}
+.opt-c .swatches{border-radius:12px}
+.sw{flex:1;height:66px;position:relative}
+.sw span{
+  position:absolute;left:0;right:0;bottom:5px;text-align:center;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.02em;
+}
+
+/* ---------- 활자 견본 ---------- */
+.spec{padding:19px 21px;border:1px solid var(--line)}
+.spec .eb{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 7px}
+.spec .hd{font-size:23px;line-height:1.24;margin:0 0 9px}
+.spec .bd{font-size:13.5px;margin:0;line-height:1.55}
+.spec-a{background:var(--paper-bg);color:var(--paper-ink);border-radius:3px}
+.spec-a .eb{color:#8E8474}
+.spec-a .hd{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:400}
+.spec-a .bd{color:var(--paper-mid)}
+.spec-b{background:var(--sk-bg);color:var(--sk-ink);border-radius:14px}
+.spec-b .eb{color:var(--sk-accent)}
+.spec-b .hd{font-family:"Shadows Into Light",cursive;font-weight:400;font-size:29px;line-height:1.2}
+.spec-b .bd{color:var(--sk-mid)}
+.spec-c{background:var(--hk-bg);color:var(--hk-ink);border-radius:14px}
+.spec-c .eb{color:var(--hk-mid);letter-spacing:.22em}
+.spec-c .hd{font-weight:700;letter-spacing:-.015em}
+.spec-c .bd{color:var(--hk-mid)}
+
+/* ---------- 실물 화면 ---------- */
+.live{
+  display:flex;align-items:center;gap:7px;justify-content:center;
+  font-family:var(--mono);font-size:11px;color:var(--text3);
+  margin:0 0 12px;letter-spacing:.06em;
+}
+.live b{width:6px;height:6px;border-radius:50%;background:#2E9E5B;display:inline-block}
+.phone{
+  width:100%;max-width:330px;margin:0 auto;
+  border:1px solid var(--line2);border-radius:16px;overflow:hidden;
+  background:#fff;box-shadow:0 3px 16px rgba(0,0,0,.08);
+}
+.phone-inner{position:relative;width:100%;padding-top:216.4%} /* 844/390 */
+.phone iframe{position:absolute;top:0;left:0;width:390px;height:844px;border:0;transform-origin:0 0}
+.offline{
+  display:none;padding:22px;text-align:center;font-size:13.5px;color:var(--text2);
+  background:#FFF6E8;border:1px solid #E8D3A8;border-radius:5px;margin-top:10px;
+}
+.is-offline .offline{display:block}
+.is-offline .phone{display:none}
+
+.open{
+  display:block;margin-top:16px;text-align:center;
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-decoration:none;
+  border:1px solid currentColor;border-radius:4px;padding:11px 8px;
+}
+.opt-a .open{color:var(--paper-accent)}
+.opt-b .open{color:var(--sk-accent);border-radius:12px}
+.opt-c .open{color:var(--hk-accent);border-radius:10px}
+.open:hover{background:var(--page)}
+
+/* ---------- 확인이 필요한 사항 ---------- */
+.ask{border-top:2px solid var(--text);margin-top:8px;padding-top:0}
+.ask-item{
+  display:grid;grid-template-columns:44px 1fr;gap:0 18px;
+  padding:24px 0;border-bottom:1px solid var(--line);
+}
+@media (max-width:600px){.ask-item{grid-template-columns:1fr;gap:8px}}
+.ask-no{
+  font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:.06em;
+  padding-top:4px;
+}
+.ask-q{font-size:18px;font-weight:600;margin:0 0 8px;letter-spacing:-.01em}
+.ask-why{margin:0;color:var(--text2);max-width:72ch}
+.ask-opt{
+  margin:12px 0 0;padding:0;list-style:none;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.ask-opt li{
+  font-size:13.5px;border:1px solid var(--line2);border-radius:99px;
+  padding:5px 13px;color:var(--text2);background:var(--card);
+}
+.when{
+  display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-left:8px;vertical-align:2px;
+}
+.when.now{background:#EAF3EC;color:#2C6B3F}
+.when.soon{background:#FDF1E4;color:#8A5320}
+.when.later{background:#EFEFED;color:#6A6A64}
+
+footer{
+  margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.05em;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">Real Local · 중간 점검</p>
+  <h1>디자인 시안 A / B / C</h1>
+  <p class="dek">세 안 모두 <b>실제 앱에 얹혀 동작합니다.</b> 아래 화면은 그림이 아니라
+     진짜 데이터 133곳이 들어간 앱이며, 고르신 쪽이 그대로 배포본이 됩니다.
+     폰으로 열어 직접 넘겨보신 뒤 <b>하나만</b> 골라주세요.</p>
+  <div class="meta">
+    <span>2026-07-28</span><span>지도 9 · 장소 133</span><span>시안 3안</span>
+  </div>
+</header>
+
+<h2>세 안</h2>
+<p class="lead">색이 아니라 <b>무엇이 손맛을 만드느냐</b>가 갈립니다 —
+   A는 활자와 판형이, B는 손으로 그은 선이, C는 여백이 만듭니다.</p>
+
+<div class="trio">
+
+  <!-- ============ A ============ -->
+  <section class="opt opt-a">
+    <div class="opt-head">
+      <span class="tag">A · PAPER</span>
+      <h3>종이 / 가이드북</h3>
+      <p class="pos">사람이 손으로 적어 건네준 안내서.</p>
+    </div>
+    <div class="opt-body">
+      <h4>팔레트</h4>
+      <div class="swatches">
+        <div class="sw" style="background:#FBF7EF"><span style="color:#8E8474">#FBF7EF</span></div>
+        <div class="sw" style="background:#E7E1D2"><span style="color:#7A7263">#E7E1D2</span></div>
+        <div class="sw" style="background:#33566B"><span style="color:#fff">#33566B</span></div>
+        <div class="sw" style="background:#23201B"><span style="color:#B7AE9E">#23201B</span></div>
+      </div>
+
+      <h4>활자</h4>
+      <div class="spec spec-a">
+        <p class="eb">Made by local humans</p>
+        <p class="hd">Not just where. Why.</p>
+        <p class="bd">Every place comes with a line on why it's worth your time.</p>
+      </div>
+
+      <h4>실물 화면</h4>
+      <p class="live"><b></b>LIVE · 실제 앱</p>
+      <div class="phone"><div class="phone-inner">
+        <iframe data-src="../index.html?theme=paper#/" title="A안 홈 화면" loading="lazy"></iframe>
+      </div></div>
+      <div class="offline">로컬 서버로 열어야 실물 화면이 보입니다.</div>
+      <a class="open" href="../index.html?theme=paper#/" target="_blank">A안 전체 화면으로 열기 →</a>
+    </div>
+  </section>
+
+  <!-- ============ B ============ -->
+  <section class="opt opt-b">
+    <div class="opt-head">
+      <span class="tag">B · SKETCH</span>
+      <h3>손그림 / 여행 노트</h3>
+      <p class="pos">친구가 노트에 그려준 동네 지도.</p>
+    </div>
+    <div class="opt-body">
+      <h4>팔레트</h4>
+      <div class="swatches">
+        <div class="sw" style="background:#FDFAF3"><span style="color:#9A8C78">#FDFAF3</span></div>
+        <div class="sw" style="background:#EFE4D3"><span style="color:#8A7A63">#EFE4D3</span></div>
+        <div class="sw" style="background:#8C5A44"><span style="color:#fff">#8C5A44</span></div>
+        <div class="sw" style="background:#2E2823"><span style="color:#B5A995">#2E2823</span></div>
+      </div>
+
+      <h4>활자</h4>
+      <div class="spec spec-b">
+        <p class="eb">Made by local humans</p>
+        <p class="hd">Not just where. Why.</p>
+        <p class="bd">Every place comes with a line on why it's worth your time.</p>
+      </div>
+
+      <h4>실물 화면</h4>
+      <p class="live"><b></b>LIVE · 실제 앱</p>
+      <div class="phone"><div class="phone-inner">
+        <iframe data-src="../index.html?theme=sketch#/" title="B안 홈 화면" loading="lazy"></iframe>
+      </div></div>
+      <div class="offline">로컬 서버로 열어야 실물 화면이 보입니다.</div>
+      <a class="open" href="../index.html?theme=sketch#/" target="_blank">B안 전체 화면으로 열기 →</a>
+    </div>
+  </section>
+
+  <!-- ============ C ============ -->
+  <section class="opt opt-c">
+    <div class="opt-head">
+      <span class="tag">C · HANOK</span>
+      <h3>한지 / 여백</h3>
+      <p class="pos">한지에 먹으로 앉힌 안내서.</p>
+    </div>
+    <div class="opt-body">
+      <h4>팔레트</h4>
+      <div class="swatches">
+        <div class="sw" style="background:#FAF5EA"><span style="color:#968A79">#FAF5EA</span></div>
+        <div class="sw" style="background:#EDE2D6"><span style="color:#8A7A6C">#EDE2D6</span></div>
+        <div class="sw" style="background:#AA4649"><span style="color:#FAF5EA">#AA4649</span></div>
+        <div class="sw" style="background:#2A2622"><span style="color:#B3A899">#2A2622</span></div>
+      </div>
+
+      <h4>활자</h4>
+      <div class="spec spec-c">
+        <p class="eb">Made by local humans</p>
+        <p class="hd">Not just where. Why.</p>
+        <p class="bd">Every place comes with a line on why it's worth your time.</p>
+      </div>
+
+      <h4>실물 화면</h4>
+      <p class="live"><b></b>LIVE · 실제 앱</p>
+      <div class="phone"><div class="phone-inner">
+        <iframe data-src="../index.html?theme=hanok#/" title="C안 홈 화면" loading="lazy"></iframe>
+      </div></div>
+      <div class="offline">로컬 서버로 열어야 실물 화면이 보입니다.</div>
+      <a class="open" href="../index.html?theme=hanok#/" target="_blank">C안 전체 화면으로 열기 →</a>
+    </div>
+  </section>
+</div>
+
+<h2>확인이 필요한 사항</h2>
+<p class="lead">그림을 더 그려 주셔야 할 것은 없습니다. <b>세 안 모두 완성 상태</b>이며,
+   비어 있던 화면 네 곳도 전부 채워져 있습니다.</p>
+
+<div class="ask">
+
+  <div class="ask-item">
+    <div class="ask-no">01</div>
+    <div>
+      <p class="ask-q">A / B / C 중 어느 쪽으로 갈까요<span class="when now">오늘</span></p>
+      <p class="ask-why"><b>섞지 않는 것이 중요합니다.</b> “A의 색에 B의 서체” 같은 조합은
+         세 안을 지탱하는 규칙을 동시에 무너뜨립니다. 각 안은 색·활자·모서리·이미지가
+         하나의 논리로 묶여 있습니다.</p>
+      <ul class="ask-opt"><li>A · Paper</li><li>B · Sketch</li><li>C · Hanok</li></ul>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">02</div>
+    <div>
+      <p class="ask-q">이 팔레트로 확정해도 될까요<span class="when now">오늘</span></p>
+      <p class="ask-why">지난 미팅에서 주시기로 한 <b>레퍼런스 가이드북이 전달되지 않아</b>,
+         PRD의 “베이지 → 화이트, handmade” 범위 안에서 저희가 세 벌을 제안했습니다.
+         별도 브랜드 컬러표가 있다면 지금 반영하는 편이 좋습니다.</p>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">03</div>
+    <div>
+      <p class="ask-q">큐레이터가 지도를 만드는 화면, 어떻게 동작해야 할까요<span class="when soon">이번 주</span></p>
+      <p class="ask-why">MVP에 포함하기로 확정됐는데 아직 화면 설계가 없습니다.
+         <b>다음 목요일 작업의 대부분이 여기</b>라 방향이 먼저 필요합니다. 세 가지만 정해주시면 됩니다.</p>
+      <ul class="ask-opt">
+        <li>장소를 어떻게 찾나 — 구글맵 검색 / 링크 붙여넣기 / 좌표 입력</li>
+        <li>한 줄 코멘트는 필수인가 — 현재 데이터는 133곳 중 132곳 작성됨</li>
+        <li>작성 중인 지도를 비공개로 저장할 수 있어야 하나</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">04</div>
+    <div>
+      <p class="ask-q">큐레이터는 어떤 기준으로 선발하시나요<span class="when soon">이번 주</span></p>
+      <p class="ask-why">“승인된 로컬”이 이 서비스의 유일한 차별점인데, <b>기준이 어디에도
+         적혀 있지 않아</b> 방문자에게는 근거 없는 말로 보입니다. 거주 기간인지, 초대인지,
+         심사인지에 따라 <b>화면에 한 줄로 밝힐 수 있습니다.</b></p>
+      <p class="ask-why" style="margin-top:8px">권한 부여 자체는 운영자가 직접 처리하는 것으로
+         준비돼 있습니다 — 신청·심사 화면은 만들지 않습니다.</p>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">05</div>
+    <div>
+      <p class="ask-q">서비스 주소와 계정은 어디로 할까요<span class="when later">오픈 전</span></p>
+      <p class="ask-why">별도 구축 장비는 필요 없습니다. 다만 <b>도메인을 사실 것인지,
+         산다면 누가 소유·결제할 것인지</b>를 정해야 합니다. 데이터베이스와 지도 API 계정도
+         고객사 명의로 옮겨두면 인수인계가 깔끔합니다. <b>늦어질수록 옮기는 비용이 커집니다.</b></p>
+    </div>
+  </div>
+
+  <div class="ask-item">
+    <div class="ask-no">06</div>
+    <div>
+      <p class="ask-q">시연용으로 넣어둔 후기 16건은 어떻게 할까요<span class="when later">오픈 전</span></p>
+      <p class="ask-why">빈 화면만으로는 후기 기능을 보여드릴 수 없어 저희가 작성해 넣은 것입니다.
+         특정 가게가 아니라 지도·큐레이션에 대한 내용만 담았습니다.
+         <b>오픈 시 지울지 남길지</b> 정해주세요 — 남기면 실제 이용자 글로 오해될 수 있습니다.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Real Local · 디자인 시안 확인 · 2026-07-28
+</footer>
+
+</div>
+
+<script>
+/* 폰 프레임 안의 실물 앱.
+   file:// 로 열면 iframe이 상대경로를 못 읽으므로 안내로 바꾼다. */
+(function () {
+  if (location.protocol === 'file:') {
+    document.body.classList.add('is-offline');
+    return;
+  }
+  // 프레임 폭에 맞춰 390px 화면을 축소한다
+  const fit = () => document.querySelectorAll('.phone-inner').forEach((box) => {
+    const f = box.querySelector('iframe');
+    if (f) f.style.transform = `scale(${box.clientWidth / 390})`;
+  });
+  document.querySelectorAll('iframe[data-src]').forEach((f) => { f.src = f.dataset.src; });
+  fit();
+  addEventListener('resize', fit);
+})();
+</script>
+</body>
+</html>
