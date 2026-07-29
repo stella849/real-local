@@ -1,0 +1,605 @@
+/* ============================================================
+   Real Local — 스타일시트
+
+   assets/style.css + assets/theme-hanok.css 이식본.
+   시안 C(Hanok)가 확정되어 토큰을 :root 로 승격했다. data-theme 스위칭,
+   A/B 시안, .ab-switch 는 들어냈다.
+
+   PRD v1.3 에서 달라진 것 (구조에 영향):
+     · sticky 레이어는 최대 1개 — .topbar 만. #map 과 .detail-tabs 의
+       sticky 를 뗐다 (§10.2). 2026-07-27 에 넣었던 '지도 상단 고정'을
+       되돌리는 것이다.
+     · 맵 카드가 가로형(썸네일 왼쪽) → 세로형(콜라주 위)으로 (§5 S1)
+     · 커버가 핀 분포 미니맵 → 사진 2×2 콜라주 (§6.4)
+     · 도시 칩 필터 제거 (§2.2 · §4.3)
+     · Leaflet 폐기 — 지도는 Google 하나다 (§5 S2)
+   ============================================================ */
+
+:root{
+  /* 시안 C · Hanok — 한지에 먹 */
+  --bg:#E6DECB;          /* 셸 바깥 */
+  --canvas:#FAF5EA;      /* 한지 */
+  --surface:#F1E9D8;
+
+  --line:#DED3BD;
+  --line-strong:#B6A88C;
+
+  --text:#2A2622;        /* 먹 */
+  --text-2:#63594C;
+  --text-3:#968A79;
+
+  /* 단청 적색. 큰 면적(버튼·필)은 먹이 맡고 이 색은 낙관처럼 작은 곳에만
+     찍힌다 — 지도 핀, 탭 밑줄, 큐레이터 한 줄의 세로선, 저장 표시. */
+  --accent:#AA4649;
+  --accent-soft:#EDE2D6;
+
+  --r-sm:12px; --r-md:16px; --r-lg:22px; --r-full:9999px;
+
+  --sp-xxs:4px; --sp-xs:8px; --sp-sm:12px; --sp-md:16px;
+  --sp-lg:20px; --sp-xl:24px; --sp-xxl:32px;
+
+  --font:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;
+
+  --shell:480px;
+  --topbar-h:56px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  font-size:16px;
+  line-height:1.55;
+  overflow-x:hidden;
+  /* UI는 영어지만 데이터에 한글 상호·주소가 섞여 들어온다. keep-all 은 그
+     한글을 어절 단위로 끊고 영어에는 영향이 없다. */
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+
+/* ============================================================
+   Shell
+   ============================================================ */
+.shell{
+  max-width:var(--shell);
+  margin:0 auto;
+  min-height:100dvh;
+  background:var(--canvas);
+  display:flex;
+  flex-direction:column;
+}
+@media (min-width:520px){ .shell{border-inline:1px solid var(--line)} }
+
+/* ============================================================
+   Top bar — 이 화면에서 유일한 sticky 레이어다 (§10.2)
+   ============================================================ */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:var(--canvas);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:var(--sp-sm);
+  padding:0 var(--sp-md);
+  height:var(--topbar-h);flex:none;
+}
+.wordmark{
+  text-transform:uppercase;letter-spacing:.22em;font-size:10.5px;
+  color:var(--text-2);text-decoration:none;font-weight:600;
+}
+.topbar-spacer{margin-left:auto}
+.iconbtn{
+  width:36px;height:36px;flex:none;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-2);
+}
+.iconbtn:hover{background:var(--surface)}
+.iconbtn svg{width:19px;height:19px}
+.topbar-title{
+  font-size:14px;font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ============================================================
+   View
+   ============================================================ */
+.view{flex:1;padding-bottom:var(--sp-xxl)}
+.pad{padding:var(--sp-md)}
+
+.eyebrow{
+  text-transform:uppercase;letter-spacing:.22em;font-size:10.5px;
+  color:var(--text-2);margin:0 0 var(--sp-xxs);
+}
+.lede{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:-.015em;margin:0 0 var(--sp-xxs)}
+.lede-sub{font-size:14px;line-height:1.5;color:var(--text-2);margin:0 0 var(--sp-md)}
+
+/* ---------- 히어로 = 배경 ----------
+   그림이 카피 아래 붙는 배너가 아니라, 카피가 얹히는 바닥이다.
+   그림 가운데가 비어 있어 글자가 그 여백에 앉고 위 처마와 아래 지형이
+   글자를 액자처럼 감싼다. min-height 를 줄이면 카피가 처마에 걸린다. */
+.hero{
+  min-height:236px;
+  background-image:url('/hero-hanok.webp');
+  background-size:cover;
+  background-position:center;
+  display:flex;align-items:center;
+}
+.hero-copy{padding:var(--sp-xs) var(--sp-md)}
+.hero .lede-sub{color:var(--text-2);margin-bottom:0}
+
+.cut{height:0;margin:0;border:0;border-top:1px solid var(--line)}
+
+/* ============================================================
+   Map card — 콜라주가 위에 얹히는 세로형 (§5 S1)
+   ============================================================ */
+.feed{
+  display:flex;flex-direction:column;gap:var(--sp-md);
+  padding:var(--sp-md);margin:0;list-style:none;
+}
+.feed-item{position:relative}
+.card{
+  display:block;
+  background:var(--canvas);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  text-decoration:none;
+}
+.card:has(.card-link:hover){border-color:var(--line-strong)}
+
+/* ---------- stretched link ----------
+   카드 안에 목적지가 셋이다 — 카드 전체(맵), 큐레이터 이름(S10),
+   저장 버튼(아무 데도 안 감). <a> 를 중첩하면 유효하지 않은 마크업이라
+   제목 링크를 ::after 로 넓혀 카드를 덮고, 나머지를 그 위에 올린다. */
+.card-link{text-decoration:none;color:inherit}
+.card-link::after{
+  content:'';
+  position:absolute;inset:0;
+  z-index:0;
+}
+.card-meta a,
+.feed-item .card-save{position:relative;z-index:1}
+
+/* ---------- 2×2 콜라주 (§6.4) ----------
+   프로필 사진을 쓰면 같은 큐레이터의 맵이 홈에서 전부 똑같아 보이고,
+   한 장만 쓰면 23곳짜리 맵이 식당 한 곳처럼 읽힌다. 4장이 붙으면
+   '모음집'이 설명 없이 전달되고, 구글 사진의 제각각인 톤이 오히려
+   스크랩북처럼 읽혀 handmade 컨셉과 맞는다. 필터·톤 보정은 금지다.
+
+   폴백은 장수에 따라 배치를 바꾼다. 빈 칸을 남기면 격자가 무너져 보인다. */
+.collage{
+  display:grid;gap:2px;
+  aspect-ratio:16/10;
+  background:var(--line);
+  border-bottom:1px solid var(--line);
+}
+.collage img{width:100%;height:100%;object-fit:cover}
+
+.collage[data-n="4"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+/* 3장 — 왼쪽 큰 1장 + 오른쪽 작은 2장 */
+.collage[data-n="3"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.collage[data-n="3"] img:first-child{grid-row:span 2}
+/* 2장 — 좌우 반반 */
+.collage[data-n="2"]{grid-template-columns:1fr 1fr}
+/* 1장 — 꽉 채움 */
+.collage[data-n="1"]{grid-template-columns:1fr}
+
+/* 0장 — 베이지 + 맵 제목 이니셜. 깨진 이미지 아이콘은 금지다 (§6.3) */
+.collage[data-n="0"]{
+  background:var(--surface);
+  place-items:center;
+  font-size:34px;font-weight:700;color:var(--line-strong);
+  letter-spacing:.06em;
+}
+
+.card-body{padding:var(--sp-sm) var(--sp-md) var(--sp-md);min-width:0}
+.concept-tag{
+  display:inline-block;
+  text-transform:uppercase;letter-spacing:.16em;font-size:10px;font-weight:600;
+  color:var(--accent);
+  margin:0 0 var(--sp-xxs);
+}
+.card-title{
+  font-size:16px;font-weight:700;line-height:1.3;margin:0 0 3px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.card-summary{
+  font-size:13px;line-height:1.45;color:var(--text-2);margin:0 0 var(--sp-xs);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+/* ---------- 큐레이터 줄 ----------
+   이름과 아바타가 모든 맵 카드에 붙는다. 이게 없으면 이 제품은
+   구글맵의 열화판이다 (§1). 은퇴·강등 큐레이터는 링크 없는 텍스트라
+   .curator-name 은 a 와 span 양쪽으로 쓰인다 (§3.4). */
+.card-meta{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--text-3);margin:0;
+  font-variant-numeric:tabular-nums;
+}
+.avatar{
+  width:20px;height:20px;flex:none;border-radius:var(--r-full);
+  object-fit:cover;background:var(--surface);
+}
+.avatar-initial{
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:var(--text-2);
+  border:1px solid var(--line);
+}
+.curator-name{color:var(--text-2);font-weight:600;text-decoration:none}
+a.curator-name:hover{text-decoration:underline}
+
+/* 콜라주 위에 얹히므로 배경을 깔아 사진과 겹쳐도 읽히게 한다.
+   <a> 바깥의 형제라 카드 클릭이 저장보다 먼저 일어나지 않는다. */
+.feed-item .card-save{
+  position:absolute;top:var(--sp-sm);right:var(--sp-sm);
+  z-index:1;
+}
+.feed-item .card-save .act{
+  background:var(--canvas);
+  border-color:var(--line-strong);
+}
+
+/* ============================================================
+   Map detail
+   ============================================================ */
+.detail-head{padding:var(--sp-md);border-bottom:1px solid var(--line)}
+.detail-title{font-size:21px;font-weight:700;line-height:1.3;margin:0 0 3px}
+.detail-summary{font-size:14px;line-height:1.5;color:var(--text-2);margin:0 0 var(--sp-sm)}
+.detail-meta{display:flex;align-items:center;gap:var(--sp-xs);flex-wrap:wrap}
+.badge{
+  font-size:12px;color:var(--text-2);
+  border:1px solid var(--line-strong);border-radius:var(--r-full);
+  padding:3px 9px;font-variant-numeric:tabular-nums;
+}
+.badge.quiet{color:var(--text-3)}
+
+/* 지도는 sticky 가 아니다 (§10.2). 한 스크롤 컨테이너에 sticky 레이어가
+   여럿이면 중간에 떠 있는 바가 생긴다 — 390×844 검수 항목이다.
+   API 키가 실패해도 이 영역만 숨기고 리스트는 정상 표시한다 (§5 S2). */
+#map{
+  height:40vh;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+}
+.pin-marker{
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent);color:var(--canvas);
+  border:2px solid var(--canvas);
+  border-radius:var(--r-full);
+  font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;
+}
+.pin-marker.is-active{background:var(--text);color:var(--canvas);border-color:var(--canvas)}
+
+/* ============================================================
+   Place list — curator_note 가 핵심 콘텐츠
+   ============================================================ */
+.section-head{
+  display:flex;align-items:baseline;gap:var(--sp-xs);
+  padding:var(--sp-md) var(--sp-md) 2px;
+  background:var(--canvas);
+}
+.section-head h2{
+  text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:600;
+  color:var(--text-2);margin:0;
+}
+.section-head .count{font-size:13px;color:var(--text-3);font-variant-numeric:tabular-nums}
+.section-head .more{margin-left:auto;font-size:13px;color:var(--text-2);text-decoration:none}
+
+.places{list-style:none;margin:0;padding:0 var(--sp-md);background:var(--canvas)}
+.place{
+  display:flex;gap:var(--sp-sm);
+  padding:var(--sp-sm) 0;
+  border-bottom:1px solid var(--line);
+  scroll-margin-top:calc(var(--topbar-h) + var(--sp-md));
+}
+.place:last-child{border-bottom:0}
+.place.is-active{background:var(--surface)}
+.place-n{
+  flex:none;width:24px;height:24px;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-strong);border-radius:var(--r-full);
+  font-size:12px;font-weight:600;color:var(--text-2);
+  font-variant-numeric:tabular-nums;
+}
+.place.is-active .place-n{background:var(--accent);border-color:var(--accent);color:var(--canvas)}
+.place-thumb{
+  flex:none;width:64px;height:64px;border-radius:var(--r-sm);
+  object-fit:cover;background:var(--surface);border:1px solid var(--line);
+}
+.place-main{flex:1;min-width:0}
+.place-name{font-size:15px;font-weight:700;line-height:1.4;margin:0 0 1px}
+/* name_ko 가 없으면 이 행 자체를 렌더하지 않는다 (§5 S3) */
+.place-name-ko{font-size:13px;color:var(--text-2);margin:0 0 2px}
+.place-cat{
+  text-transform:uppercase;letter-spacing:.14em;font-size:9.5px;font-weight:600;
+  color:var(--text-3);margin:0 0 3px;
+}
+.place-addr{
+  font-size:12.5px;line-height:1.35;color:var(--text-3);margin:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* 큐레이터가 직접 쓴 한 줄. 부가정보가 아니라 본문이다 (§1).
+   인용 부호 + 이탤릭으로 '사람이 쓴 문장'임을 표시한다 (§10.1).
+   curator_note 가 없으면 블록 전체를 숨긴다. */
+.place-tip{
+  color:var(--text);
+  font-size:14px;line-height:1.45;
+  border-left:1px solid var(--accent);
+  padding-left:11px;
+  margin:7px 0 0;
+}
+.quote{
+  font-style:italic;
+  font-size:16px;line-height:1.5;
+  color:var(--text);
+  margin:0;
+}
+.quote-by{
+  font-style:normal;font-size:13px;color:var(--text-2);
+  margin:var(--sp-xs) 0 0;
+}
+
+.place-actions{display:flex;gap:6px;flex:none;align-items:flex-start}
+.place-actions .act{width:32px;height:32px}
+.place-actions .act svg{width:15px;height:15px}
+
+/* 사진 출처 표기는 의무다 (§6.1) */
+.photo-credit{
+  font-size:11px;color:var(--text-3);
+  padding:var(--sp-xxs) var(--sp-md);margin:0;
+}
+
+/* ============================================================
+   Controls
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-xs);
+  font-size:14px;font-weight:500;line-height:1.3;
+  border-radius:var(--r-md);
+  padding:10px var(--sp-lg);
+  min-height:44px;
+  text-decoration:none;
+}
+.btn svg{width:18px;height:18px;flex:none}
+/* 큰 면적은 먹이다. 붉은색을 여기 쓰면 화면이 붉어지고, 흰 글씨를
+   얹으려 채도를 올리면 더 붉어진다. 대비도 먹 쪽이 넉넉하다(13:1). */
+.btn-dark{background:var(--text);border-color:var(--text);color:var(--canvas)}
+.btn-secondary{border:1px solid var(--line-strong);color:var(--text)}
+.btn-secondary:hover{background:var(--surface)}
+.btn-block{width:100%}
+.btn.sm{min-height:36px;padding:6px var(--sp-md);font-size:13px}
+
+.act{
+  width:36px;height:36px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line);border-radius:var(--r-full);
+  color:var(--text-2);background:var(--canvas);
+}
+.act:hover{background:var(--surface)}
+.act svg{width:17px;height:17px}
+.act[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+
+.pill{
+  flex:none;
+  border:1px solid var(--line-strong);
+  border-radius:var(--r-full);
+  padding:6px var(--sp-sm);
+  font-size:14px;color:var(--text-2);
+  white-space:nowrap;
+}
+.pill[aria-pressed="true"]{background:var(--text);color:var(--canvas);border-color:var(--text)}
+
+/* ============================================================
+   Segmented tabs / empty / notice
+   ============================================================ */
+.segmented{display:flex;gap:var(--sp-md);padding:0 var(--sp-md);border-bottom:1px solid var(--line)}
+.seg{
+  padding:var(--sp-sm) 0;font-size:14px;font-weight:500;color:var(--text-2);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+a.seg{text-decoration:none}
+.seg[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent)}
+.seg .n{opacity:.6;margin-left:4px;font-variant-numeric:tabular-nums}
+
+.saved-place{
+  display:flex;gap:var(--sp-sm);align-items:flex-start;
+  padding:var(--sp-md) 0;border-bottom:1px solid var(--line);
+}
+.saved-place:last-child{border-bottom:0}
+.saved-from{font-size:12px;color:var(--text-3);margin:4px 0 0}
+
+/* 빈 화면 — 히어로 이미지의 처마 부분만 잘라 머리말로 쓴다.
+   같은 파일이라 내려받을 것이 늘지 않고, 그림을 교체해도 따라온다. */
+.empty{
+  margin:var(--sp-md);
+  padding:0 var(--sp-lg) var(--sp-xxl);
+  background:var(--canvas);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  text-align:center;
+  overflow:hidden;
+}
+.empty::before{
+  content:'';display:block;height:84px;
+  margin:0 calc(-1 * var(--sp-lg)) var(--sp-lg);
+  background:url('/hero-hanok.webp') top center / cover;
+  -webkit-mask-image:linear-gradient(to bottom,#000 58%,transparent);
+  mask-image:linear-gradient(to bottom,#000 58%,transparent);
+}
+.empty h3{font-size:16px;font-weight:700;margin:0 0 var(--sp-xxs)}
+.empty p{font-size:14px;line-height:1.5;color:var(--text-2);margin:0 auto;max-width:34ch}
+.empty .btn{margin-top:var(--sp-md)}
+
+.notice{
+  margin:var(--sp-md);
+  padding:var(--sp-sm) var(--sp-md);
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  font-size:13px;line-height:1.5;color:var(--text-2);
+}
+.notice b{color:var(--text)}
+
+/* ============================================================
+   Footer / tab bar
+   ============================================================ */
+.footer{
+  background:var(--surface);
+  border-top:1px solid var(--line);
+  padding:var(--sp-lg) var(--sp-md) calc(var(--sp-lg) + 64px);
+  font-size:13px;line-height:1.5;color:var(--text-2);
+}
+.footer p{margin:0 0 var(--sp-xxs)}
+.footer .muted{color:var(--text-3)}
+
+.tabbar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:var(--shell);
+  display:flex;
+  background:var(--canvas);
+  border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:50;
+}
+.tab{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:9px 0 10px;color:var(--text-3);text-decoration:none;
+}
+.tab svg{width:21px;height:21px}
+.tab span{font-size:11px}
+.tab[aria-current="page"]{color:var(--text)}
+.tab[aria-current="page"] span{font-weight:600}
+
+/* ============================================================
+   Toast / forms / reviews
+   ============================================================ */
+.toast{
+  position:fixed;left:50%;bottom:84px;
+  transform:translate(-50%,8px);
+  background:var(--text);color:var(--canvas);
+  font-size:14px;padding:10px 18px;border-radius:var(--r-md);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+  z-index:60;max-width:calc(var(--shell) - 32px);
+}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+.field{
+  display:block;width:100%;
+  font:inherit;font-size:16px;   /* 16px 미만이면 iOS 가 확대한다 */
+  color:var(--text);
+  background:var(--canvas);
+  border:1px solid var(--line-strong);
+  border-radius:var(--r-md);
+  padding:11px var(--sp-sm);
+  margin-bottom:var(--sp-xs);
+}
+.field:focus{outline:2px solid var(--text);outline-offset:-1px}
+textarea.field{resize:vertical;min-height:76px;line-height:1.5}
+
+.form-error{
+  min-height:18px;margin:0 0 var(--sp-xs);
+  font-size:13px;line-height:1.4;color:#b3261e;
+}
+.row-end{display:flex;justify-content:flex-end;gap:var(--sp-xs)}
+
+.reviews{list-style:none;margin:0;padding:0 var(--sp-md)}
+.review{padding:var(--sp-sm) 0;border-bottom:1px solid var(--line)}
+.review:last-child{border-bottom:0}
+.review-head{
+  display:flex;align-items:baseline;gap:var(--sp-xs);
+  font-size:13px;color:var(--text-3);margin-bottom:3px;
+}
+.review-head b{font-size:14px;font-weight:700;color:var(--text)}
+.review p{margin:0;font-size:14px;line-height:1.5;color:var(--text-2)}
+
+/* ============================================================
+   Admin (S8) — 운영자용이라 데스크톱 폭을 허용한다. 밀도 우선.
+   셸의 480px 를 여기서만 푼다.
+   ============================================================ */
+.shell:has(.admin){max-width:1100px}
+
+.admin-list{padding:var(--sp-md);display:flex;flex-direction:column;gap:var(--sp-xs)}
+.admin-row{
+  border:1px solid var(--line);border-radius:var(--r-md);
+  padding:var(--sp-sm) var(--sp-md);background:var(--canvas);
+}
+.admin-row-main{
+  display:flex;align-items:center;gap:var(--sp-sm);flex-wrap:wrap;
+  padding:2px 0;
+}
+.admin-email{font-size:13px;color:var(--text-2);min-width:20ch}
+.admin-name{font-size:14px;font-weight:600;min-width:12ch}
+.admin-select{width:auto;min-width:16ch;margin:0;padding:6px var(--sp-xs);font-size:14px}
+.admin-hint{font-size:12px;color:var(--text-3);margin:2px 0 0}
+.admin-empty{padding:var(--sp-xxl);text-align:center}
+.badge.is-google{color:var(--text-2);border-color:var(--line-strong)}
+
+.admin-edit{
+  margin-top:var(--sp-sm);padding-top:var(--sp-sm);
+  border-top:1px solid var(--line);
+  display:grid;gap:var(--sp-xs);
+}
+.admin-edit label{font-size:12px;color:var(--text-3);display:grid;gap:3px}
+.admin-edit .field{margin-bottom:0}
+.admin-toggle{display:flex;align-items:center;gap:var(--sp-xs);font-size:13px;color:var(--text-2)}
+.admin-toggle input{width:16px;height:16px}
+.admin-row-main .field{margin-bottom:0;flex:1;min-width:24ch}
+
+/* 사진 후보 — 가로로 훑는다. 최대 10장이라 줄바꿈보다 스크롤이 낫다. */
+.photo-strip{
+  display:flex;gap:6px;overflow-x:auto;
+  padding:var(--sp-xs) 0 2px;scrollbar-width:thin;
+}
+.photo-option{
+  flex:none;width:84px;height:64px;
+  border:2px solid transparent;border-radius:var(--r-sm);
+  overflow:hidden;background:var(--surface);
+}
+.photo-option img{width:100%;height:100%;object-fit:cover}
+.photo-option[aria-pressed="true"]{border-color:var(--accent)}
+.photo-option:disabled{opacity:.5}
+
+/* ============================================================
+   Curator profile (S10) — 등급 배지는 없다 (§3.2)
+   ============================================================ */
+.curator-head{padding:var(--sp-xl) var(--sp-md);text-align:center}
+.curator-avatar{
+  width:88px;height:88px;border-radius:var(--r-full);
+  object-fit:cover;margin:0 auto var(--sp-sm);
+  background:var(--surface);border:1px solid var(--line);
+}
+.curator-avatar.avatar-initial{font-size:32px}
+.curator-title{font-size:21px;font-weight:700;margin:0 0 var(--sp-xxs)}
+.curator-byline{
+  font-size:14px;line-height:1.5;color:var(--text-2);
+  margin:0 auto;max-width:30ch;
+}
+/* about 이 없으면 블록 자체를 렌더하지 않는다 (§5 S10) */
+.curator-about{
+  padding:var(--sp-md);border-top:1px solid var(--line);
+  font-size:14px;line-height:1.6;color:var(--text-2);margin:0;
+}
+.curator-stats{
+  padding:var(--sp-sm) var(--sp-md);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  font-size:13px;color:var(--text-3);font-variant-numeric:tabular-nums;
+  text-align:center;
+}

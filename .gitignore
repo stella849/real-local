@@ -3,6 +3,11 @@ node_modules/
 Thumbs.db
 *.log
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # Internal planning docs — meeting notes, PRD, design sources.
 # Held back because this repository is public and these contain the
 # client's budget and internal scope discussion.
@@ -29,3 +34,6 @@ docs/*
 # agent runtime scratch
 .bkit/
 .omc/
+
+# 편집기 개인 설정
+.vscode/
