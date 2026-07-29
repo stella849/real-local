@@ -7,7 +7,7 @@ import { MapCanvas, type Pin } from '@/components/MapCanvas';
 import { SaveButton } from '@/components/SaveButton';
 import { MapCard } from '@/components/MapCard';
 import { CuratorAvatar, CuratorName } from '@/components/CuratorLine';
-import { IconBack, IconHome } from '@/components/Icons';
+import { IconBack, IconHome, IconStar } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
 import { photoUrl, categoryLabel, type MapCard as Card, type Place } from '@/lib/types';
 
@@ -103,7 +103,11 @@ export default async function MapDetail({ params }: Params) {
             />
             <span>·</span>
             {m.review_count > 0
-              ? <span>★ {m.avg_rating} ({m.review_count} reviews)</span>
+              ? (
+                <span className="meta-count">
+                  <IconStar /> {m.avg_rating} ({m.review_count} reviews)
+                </span>
+              )
               : <span>New</span>}
           </p>
         </section>
@@ -145,22 +149,32 @@ export default async function MapDetail({ params }: Params) {
             후기가 0건이면 'See all' 을 걸지 않는다 — 볼 것이 없는데 보러
             가라는 빈 약속이 되고, 첫 후기를 남길 수 있다는 것도 알리지
             못한다. 카피는 구체적인 행동을 지칭한다 (§10.1). */}
-        <div className="section-head">
+        {/* 줄 전체가 링크다. 제목만 글자로 두면 눌러도 반응이 없고,
+            모바일에서는 그 탭이 텍스트 선택으로 넘어가 사전 팝업이 뜬다.
+            'See all' 이 저 멀리 오른쪽에만 있는 것도 어색하다. */}
+        <Link className="section-head section-head-link" href={`/maps/${m.slug}/reviews`}>
           <h2>Reviews</h2>
           {m.review_count > 0 && <span className="count">{m.review_count}</span>}
-          <Link className="more" href={`/maps/${m.slug}/reviews`}>
+          <span className="more">
             {m.review_count > 0 ? 'See all →' : 'Write the first one →'}
-          </Link>
-        </div>
+          </span>
+        </Link>
 
         {(more?.length ?? 0) > 0 && (
           <>
-            <div className="section-head">
-              <h2>More from {m.curator_name}</h2>
-              {m.curator_listed && m.curator_handle && (
-                <Link className="more" href={`/curators/${m.curator_handle}`}>See all →</Link>
-              )}
-            </div>
+            {/* 은퇴·강등된 큐레이터는 소개 페이지가 404 라 링크를 걸지
+                않는다 (§3.4). 그때는 제목만 남는다. */}
+            {m.curator_listed && m.curator_handle ? (
+              <Link className="section-head section-head-link"
+                href={`/curators/${m.curator_handle}`}>
+                <h2>More from {m.curator_name}</h2>
+                <span className="more">See all →</span>
+              </Link>
+            ) : (
+              <div className="section-head">
+                <h2>More from {m.curator_name}</h2>
+              </div>
+            )}
             <ul className="feed">
               {(more as Card[]).map((x) => (
                 <MapCard key={x.id} m={x} saved={saved.maps.has(x.id)} />

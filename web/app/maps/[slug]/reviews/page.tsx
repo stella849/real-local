@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { ReviewForm } from '@/components/ReviewForm';
-import { IconBack, IconHome } from '@/components/Icons';
+import { IconBack, IconHome, IconStar } from '@/components/Icons';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +41,11 @@ export default async function Reviews({ params }: Params) {
           <h1 className="detail-title">{m.title}</h1>
           <p className="card-meta">
             {m.review_count > 0
-              ? <span>★ {m.avg_rating} · {m.review_count} reviews</span>
+              ? (
+                <span className="meta-count">
+                  <IconStar /> {m.avg_rating} · {m.review_count} reviews
+                </span>
+              )
               : <span>No reviews yet</span>}
           </p>
         </section>
@@ -66,7 +70,7 @@ export default async function Reviews({ params }: Params) {
               <li className="review" key={r.id}>
                 <p className="review-head">
                   <b>{r.author_name}</b>
-                  <span>★ {r.rating}</span>
+                  <span className="meta-count"><IconStar /> {r.rating}</span>
                   <span>{when(r.created_at)}</span>
                 </p>
                 <p>{r.body}</p>

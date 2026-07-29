@@ -317,6 +317,12 @@ a.curator-name:hover{text-decoration:underline}
 .section-head .count{font-size:13px;color:var(--text-3);font-variant-numeric:tabular-nums}
 .section-head .more{margin-left:auto;font-size:13px;color:var(--text-2);text-decoration:none}
 
+/* 줄 전체가 링크인 섹션 헤더. 제목만 글자로 두면 눌러도 반응이 없고,
+   모바일에서는 그 탭이 텍스트 선택으로 넘어가 사전 팝업이 뜬다. */
+a.section-head-link{text-decoration:none;padding-bottom:var(--sp-xs)}
+a.section-head-link:hover .more{color:var(--text)}
+a.section-head-link h2{cursor:pointer}
+
 .places{list-style:none;margin:0;padding:0 var(--sp-md);background:var(--canvas)}
 .place{
   display:flex;gap:var(--sp-sm);

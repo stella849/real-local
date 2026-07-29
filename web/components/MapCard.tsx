@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Collage } from './Collage';
 import { CuratorAvatar, CuratorName } from './CuratorLine';
 import { SaveButton } from './SaveButton';
-import { IconSaveCount } from './Icons';
+import { IconSaveCount, IconStar } from './Icons';
 import type { MapCard as Card } from '@/lib/types';
 
 const plural = (n: number, one: string) => `${n} ${n === 1 ? one : `${one}s`}`;
@@ -55,7 +55,9 @@ export function MapCard({ m, saved = false }: { m: Card; saved?: boolean }) {
           </span>
           <span>·</span>
           {/* 후기 0건이면 별점 대신 New 배지 (§5 S1) */}
-          {m.review_count > 0 ? <span>★ {m.avg_rating}</span> : <span>New</span>}
+          {m.review_count > 0
+            ? <span className="meta-count"><IconStar /> {m.avg_rating}</span>
+            : <span>New</span>}
         </p>
       </div>
 
