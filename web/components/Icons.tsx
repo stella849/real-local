@@ -48,11 +48,55 @@ export const IconExplore = (p: P) => (
 
 export const IconSaved = (p: P) => <IconBookmark {...p} />;
 
+/**
+ * 낙관(도장) 마크. app/icon.svg 와 같은 도형이다.
+ *
+ * 인라인으로 두는 이유: 파일을 참조하면 요청이 하나 늘고, Next 가
+ * icon.svg 를 해시 붙은 주소로 서빙해서 경로를 직접 쓰기도 어렵다.
+ * 인라인이면 currentColor 로 색을 물려받을 수도 있으나, 이 마크는
+ * 단청 적색이 곧 정체성이라 색을 고정한다.
+ */
+export const Logo = (p: P) => (
+  <svg viewBox="0 0 32 32" aria-hidden {...p}>
+    <rect width="32" height="32" rx="7" fill="#AA4649" />
+    <path fill="#FAF5EA" fillRule="evenodd" d="M16 6.5c-4.14 0-7.5 3.36-7.5 7.5 0 5.6 7.5 11.5 7.5 11.5S23.5 19.6 23.5 14c0-4.14-3.36-7.5-7.5-7.5z M16 11.2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6z" />
+  </svg>
+);
+
+export const IconHome = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1v-8.5Z" />
+  </g></svg>
+);
+
+/** 큐레이터 탭 — 사람이 여럿이라는 것이 한눈에 보여야 한다 */
+export const IconCurators = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <circle cx="9" cy="8.5" r="3" />
+    <path d="M3.5 19a5.5 5.5 0 0 1 11 0" />
+    <path d="M15.5 6.2a3 3 0 0 1 0 4.6M17.5 19a5.5 5.5 0 0 0-2-4.2" />
+  </g></svg>
+);
+
 export const IconProfile = (p: P) => (
   <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
     <circle cx="12" cy="8.5" r="3.5" />
     <path d="M5 20a7 7 0 0 1 14 0" />
   </g></svg>
+);
+
+/**
+ * 저장 개수 옆에 붙는 작은 표식.
+ *
+ * 저장 버튼과 같은 북마크 모양이어야 한다 — 버튼은 북마크인데 개수는
+ * 하트로 두면 같은 개념에 기호가 둘이 된다. `♡` 글리프를 쓰지 않는
+ * 이유이기도 하다: 이모지를 UI 요소로 쓰는 것은 반려 항목이다 (§10.1).
+ */
+export const IconSaveCount = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}>
+    <path d="M7 4h10a1 1 0 0 1 1 1v15l-6-4-6 4V5a1 1 0 0 1 1-1Z"
+      fill="currentColor" stroke="none" />
+  </svg>
 );
 
 export const IconStar = (p: P) => (

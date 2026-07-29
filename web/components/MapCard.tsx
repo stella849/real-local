@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Collage } from './Collage';
 import { CuratorAvatar, CuratorName } from './CuratorLine';
 import { SaveButton } from './SaveButton';
+import { IconSaveCount } from './Icons';
 import type { MapCard as Card } from '@/lib/types';
 
 const plural = (n: number, one: string) => `${n} ${n === 1 ? one : `${one}s`}`;
@@ -45,10 +46,16 @@ export function MapCard({ m, saved = false }: { m: Card; saved?: boolean }) {
           <span>·</span>
           <span>{plural(m.place_count, 'place')}</span>
           <span>·</span>
+          {/* 저장수를 별점보다 왼쪽에 둔다 — §8 정렬이 저장수 → 후기수
+              순이므로 읽는 순서가 정렬 순서와 같아야 목록의 차례가 이해된다.
+              저장 버튼과 같은 북마크 모양을 쓴다. 버튼은 북마크인데 개수만
+              하트로 두면 같은 개념에 기호가 둘이 된다. */}
+          <span className="meta-count">
+            <IconSaveCount /> {m.save_count}
+          </span>
+          <span>·</span>
           {/* 후기 0건이면 별점 대신 New 배지 (§5 S1) */}
           {m.review_count > 0 ? <span>★ {m.avg_rating}</span> : <span>New</span>}
-          <span>·</span>
-          <span>♡ {m.save_count}</span>
         </p>
       </div>
 

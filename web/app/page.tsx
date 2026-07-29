@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getSaved } from '@/lib/saved';
 import { MapCard } from '@/components/MapCard';
 import { TabBar } from '@/components/TabBar';
+import { Logo } from '@/components/Icons';
 import type { MapCard as Card } from '@/lib/types';
 
 /** 맵 20개 미만 전제라 페이지네이션이 없다 (§5 S1 · D10).
@@ -27,7 +28,10 @@ export default async function Explore() {
   return (
     <>
       <header className="topbar">
-        <span className="wordmark">Real Local</span>
+        <span className="brand">
+          <Logo className="brand-mark" />
+          <span className="wordmark">Real Local</span>
+        </span>
       </header>
 
       <main className="view">

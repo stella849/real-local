@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getSaved } from '@/lib/saved';
 import { Directions } from '@/components/Directions';
 import { SaveButton } from '@/components/SaveButton';
-import { IconBack } from '@/components/Icons';
+import { IconBack, IconHome } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
 import { photoUrl, categoryLabel, type Place } from '@/lib/types';
 
@@ -57,6 +57,7 @@ export default async function PlaceDetail({ params }: Params) {
           <IconBack />
         </Link>
         <span className="topbar-spacer" />
+        <Link className="iconbtn" href="/" aria-label="Home"><IconHome /></Link>
         <ShareButton title={p.name_en} text={p.curator_note ?? undefined} />
       </header>
 
@@ -107,12 +108,9 @@ export default async function PlaceDetail({ params }: Params) {
           </a>
         </section>
 
-        {m && (
-          <div className="section-head">
-            <h2>From the map</h2>
-            <Link className="more" href={`/maps/${m.slug}`}>{m.title} →</Link>
-          </div>
-        )}
+        {/* 'From the map' 라벨을 두지 않는다. 링크가 아닌 글자라 눌러도
+            아무 일이 없었고, 모바일에서는 그 탭이 텍스트 선택으로 넘어가
+            사전 팝업이 떴다. 맵으로 돌아가는 길은 상단 뒤로가기가 맡는다. */}
       </main>
     </>
   );

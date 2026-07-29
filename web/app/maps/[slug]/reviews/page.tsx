@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { ReviewForm } from '@/components/ReviewForm';
-import { IconBack } from '@/components/Icons';
+import { IconBack, IconHome } from '@/components/Icons';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +32,8 @@ export default async function Reviews({ params }: Params) {
       <header className="topbar">
         <Link className="iconbtn" href={`/maps/${slug}`} aria-label="Back"><IconBack /></Link>
         <span className="topbar-title">Reviews</span>
+        <span className="topbar-spacer" />
+        <Link className="iconbtn" href="/" aria-label="Home"><IconHome /></Link>
       </header>
 
       <main className="view">

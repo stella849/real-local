@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getSaved } from '@/lib/saved';
 import { MapCard } from '@/components/MapCard';
 import { CuratorAvatar } from '@/components/CuratorLine';
-import { IconBack } from '@/components/Icons';
+import { IconBack, IconHome, IconSaveCount } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
 import type { CuratorProfile, MapCard as Card } from '@/lib/types';
 
@@ -59,8 +59,9 @@ export default async function CuratorPage({ params }: Params) {
   return (
     <>
       <header className="topbar">
-        <Link className="iconbtn" href="/" aria-label="Back"><IconBack /></Link>
+        <Link className="iconbtn" href="/curators" aria-label="Back"><IconBack /></Link>
         <span className="topbar-spacer" />
+        <Link className="iconbtn" href="/" aria-label="Home"><IconHome /></Link>
         <ShareButton title={`${name} on Real Local`} text={c.byline ?? undefined} />
       </header>
 
@@ -75,7 +76,8 @@ export default async function CuratorPage({ params }: Params) {
         {c.about && <p className="curator-about">{c.about}</p>}
 
         <p className="curator-stats">
-          {c.map_count} maps · {c.place_count} places · ♡ {c.save_count}
+          {c.map_count} maps · {c.place_count} places ·{' '}
+          <span className="meta-count"><IconSaveCount /> {c.save_count}</span>
         </p>
 
         {maps.length === 0 ? (

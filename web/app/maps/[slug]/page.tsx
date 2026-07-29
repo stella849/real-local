@@ -7,7 +7,7 @@ import { MapCanvas, type Pin } from '@/components/MapCanvas';
 import { SaveButton } from '@/components/SaveButton';
 import { MapCard } from '@/components/MapCard';
 import { CuratorAvatar, CuratorName } from '@/components/CuratorLine';
-import { IconBack } from '@/components/Icons';
+import { IconBack, IconHome } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
 import { photoUrl, categoryLabel, type MapCard as Card, type Place } from '@/lib/types';
 
@@ -72,6 +72,8 @@ export default async function MapDetail({ params }: Params) {
         <Link className="iconbtn" href="/" aria-label="Back"><IconBack /></Link>
         <span className="topbar-title">{m.title}</span>
         <span className="topbar-spacer" />
+        {/* 상세 화면에는 하단 탭바가 없다. 홈으로 한 번에 갈 길을 둔다 */}
+        <Link className="iconbtn" href="/" aria-label="Home"><IconHome /></Link>
         <ShareButton title={m.title} text={m.one_liner} />
       </header>
 
@@ -138,11 +140,17 @@ export default async function MapDetail({ params }: Params) {
           ))}
         </ul>
 
-        {/* 일반 섹션 헤더다. sticky 가 아니다 (§10.2) */}
+        {/* 일반 섹션 헤더다. sticky 가 아니다 (§10.2)
+
+            후기가 0건이면 'See all' 을 걸지 않는다 — 볼 것이 없는데 보러
+            가라는 빈 약속이 되고, 첫 후기를 남길 수 있다는 것도 알리지
+            못한다. 카피는 구체적인 행동을 지칭한다 (§10.1). */}
         <div className="section-head">
           <h2>Reviews</h2>
-          <span className="count">{m.review_count}</span>
-          <Link className="more" href={`/maps/${m.slug}/reviews`}>See all →</Link>
+          {m.review_count > 0 && <span className="count">{m.review_count}</span>}
+          <Link className="more" href={`/maps/${m.slug}/reviews`}>
+            {m.review_count > 0 ? 'See all →' : 'Write the first one →'}
+          </Link>
         </div>
 
         {(more?.length ?? 0) > 0 && (

@@ -91,6 +91,10 @@ a{color:inherit}
   text-transform:uppercase;letter-spacing:.22em;font-size:10.5px;
   color:var(--text-2);text-decoration:none;font-weight:600;
 }
+/* 낙관 마크 + 워드마크 묶음. 마크가 글자보다 조금 커야 도장이 찍힌
+   것처럼 읽히고, 같은 높이면 글자에 딸린 장식으로 보인다. */
+.brand{display:inline-flex;align-items:center;gap:7px}
+.brand-mark{width:18px;height:18px;flex:none;border-radius:4px}
 .topbar-spacer{margin-left:auto}
 .iconbtn{
   width:36px;height:36px;flex:none;border-radius:var(--r-sm);
@@ -249,6 +253,11 @@ a{color:inherit}
 }
 .curator-name{color:var(--text-2);font-weight:600;text-decoration:none}
 a.curator-name:hover{text-decoration:underline}
+
+/* 저장 개수 — 저장 버튼과 같은 북마크 모양을 쓴다.
+   크기를 주지 않으면 SVG 가 기본값(300×150)으로 그려져 줄이 무너진다. */
+.meta-count{display:inline-flex;align-items:center;gap:3px}
+.meta-count svg{width:11px;height:11px;flex:none}
 
 /* 콜라주 위에 얹히므로 배경을 깔아 사진과 겹쳐도 읽히게 한다.
    <a> 바깥의 형제라 카드 클릭이 저장보다 먼저 일어나지 않는다. */
@@ -593,6 +602,35 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 .photo-option img{width:100%;height:100%;object-fit:cover}
 .photo-option[aria-pressed="true"]{border-color:var(--accent)}
 .photo-option:disabled{opacity:.5}
+
+/* ============================================================
+   Curator list (/curators)
+   ============================================================ */
+.curator-list{list-style:none;margin:0;padding:var(--sp-md);display:grid;gap:var(--sp-xs)}
+.curator-row{
+  display:flex;align-items:center;gap:var(--sp-sm);
+  padding:var(--sp-sm);
+  background:var(--canvas);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  text-decoration:none;
+}
+.curator-row:hover{border-color:var(--line-strong)}
+.curator-thumb{
+  width:52px;height:52px;flex:none;border-radius:var(--r-full);
+  object-fit:cover;background:var(--surface);border:1px solid var(--line);
+}
+.curator-thumb.avatar-initial{font-size:20px}
+.curator-row-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.curator-row-name{font-size:16px;font-weight:700;line-height:1.3}
+.curator-row-byline{
+  font-size:13px;line-height:1.4;color:var(--text-2);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.curator-row-meta{
+  display:flex;align-items:center;gap:3px;
+  font-size:12px;color:var(--text-3);font-variant-numeric:tabular-nums;
+}
 
 /* ============================================================
    Curator profile (S10) — 등급 배지는 없다 (§3.2)
