@@ -6,6 +6,18 @@ import { NextResponse, type NextRequest } from 'next/server';
  * 하지 않으면 토큰이 만료된 뒤 로그인 상태가 조용히 풀린다.
  */
 export async function proxy(req: NextRequest) {
+  /* Supabase 가 Redirect URLs 패턴에 걸려 redirect_to 를 버리면 code 를
+     Site URL(홈)에 붙여 보낸다. 그대로 두면 사용자는 로그인은 됐는데
+     엉뚱한 화면에 서 있게 된다. 콜백으로 넘겨 원래 가려던 곳으로 보낸다. */
+  const code = req.nextUrl.searchParams.get('code');
+  if (code && req.nextUrl.pathname === '/') {
+    const to = new URL('/auth/callback', req.url);
+    to.searchParams.set('code', code);
+    const next = req.nextUrl.searchParams.get('next');
+    if (next) to.searchParams.set('next', next);
+    return NextResponse.redirect(to);
+  }
+
   let res = NextResponse.next({ request: req });
 
   const supabase = createServerClient(

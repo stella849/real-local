@@ -177,16 +177,33 @@ a{color:inherit}
   background:var(--line);
   border-bottom:1px solid var(--line);
 }
-.collage img{width:100%;height:100%;object-fit:cover}
+/* min-width/height 0 이 없으면 이미지의 고유 크기가 트랙의 최소값이 되어
+   커버가 aspect-ratio 를 넘어 늘어난다 — 세로로 긴 사진이 섞인 맵만
+   카드가 높아져서 목록이 들쭉날쭉해졌다. */
+.collage img{width:100%;height:100%;min-width:0;min-height:0;object-fit:cover}
 
-.collage[data-n="4"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+/* 1fr 은 minmax(auto,1fr) 이고 auto 최소값이 콘텐츠 크기다. 사진이
+   트랙을 밀어 올리지 못하도록 최소값을 0 으로 못박는다. */
+.collage[data-n="4"]{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+}
 /* 3장 — 왼쪽 큰 1장 + 오른쪽 작은 2장 */
-.collage[data-n="3"]{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.collage[data-n="3"]{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr);
+}
 .collage[data-n="3"] img:first-child{grid-row:span 2}
 /* 2장 — 좌우 반반 */
-.collage[data-n="2"]{grid-template-columns:1fr 1fr}
+.collage[data-n="2"]{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);
+}
 /* 1장 — 꽉 채움 */
-.collage[data-n="1"]{grid-template-columns:1fr}
+.collage[data-n="1"]{
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);
+}
 
 /* 0장 — 베이지 + 맵 제목 이니셜. 깨진 이미지 아이콘은 금지다 (§6.3) */
 .collage[data-n="0"]{

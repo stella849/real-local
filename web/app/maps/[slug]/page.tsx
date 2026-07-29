@@ -122,8 +122,10 @@ export default async function MapDetail({ params }: Params) {
               <div className="place-main">
                 <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
                   <h3 className="place-name">{p.name_en}</h3>
-                  {/* name_ko 가 없으면 그 행 자체를 렌더하지 않는다 (§5 S3) */}
-                  {p.name_ko && <p className="place-name-ko">{p.name_ko}</p>}
+                  {/* 한글 상호는 여기 넣지 않는다. 목록에서는 큐레이터의 한 줄이
+                      주인공이어야 하는데, 상호가 두 줄을 차지하면 그것이 밀린다.
+                      현장에서 쓸 한글명은 장소 상세에서 보여준다.
+                      §5 S2 와이어프레임은 목록에도 그렸으나 뒤집은 결정이다. */}
                   <p className="place-cat">{categoryLabel(p.category)}</p>
                 </Link>
                 {/* curator_note 가 없으면 블록 전체를 숨긴다 */}

@@ -1,108 +1,36 @@
-'use client';
-
-import { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { SignInForm } from '@/components/SignInForm';
 import { IconBack } from '@/components/Icons';
+
+type Params = { searchParams: Promise<{ next?: string; error?: string }> };
 
 /**
  * 로그인 · 가입 (F1).
  *
- * 일반 회원은 이메일과 구글 둘 다 쓸 수 있다. 계정이 갈려도 저장 목록이
- * 비어 보이는 정도라 감당 가능한 사고다.
+ * next 를 서버에서 searchParams 로 받아 폼에 내려준다. 클라이언트에서
+ * useSearchParams() 로 읽으면 그 서브트리가 정적 셸에서 통째로 빠져
+ * (BAILOUT_TO_CLIENT_SIDE_RENDERING) 로그인 화면이 빈 채로 왔다가
+ * JS 가 붙어야 그려진다.
  *
- * 큐레이터·어드민은 구글 전용이지만(§3.1) 그 강제는 여기가 아니라
- * 어드민 화면에서 한다 — 여기서 막으면 아직 큐레이터가 아닌 사람이
- * 이메일로 가입하는 정상 경로까지 막힌다.
+ * 일반 회원은 이메일과 구글 둘 다 쓸 수 있다. 큐레이터·어드민은 구글
+ * 전용이지만(§3.1) 그 강제는 여기가 아니라 어드민 화면에서 한다 —
+ * 여기서 막으면 아직 큐레이터가 아닌 사람의 정상 가입까지 막힌다.
  */
-function SignInForm() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const next = params.get('next') ?? '/';
+export default async function SignIn({ searchParams }: Params) {
+  const sp = await searchParams;
 
-  const [mode, setMode] = useState<'in' | 'up'>('in');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [err, setErr] = useState<string | null>(
-    params.get('error') ? 'Sign-in did not complete. Please try again.' : null,
-  );
-  const [busy, setBusy] = useState(false);
-
-  async function withEmail(e: React.FormEvent) {
-    e.preventDefault();
-    setBusy(true); setErr(null);
-    const db = createClient();
-
-    const { error } = mode === 'in'
-      ? await db.auth.signInWithPassword({ email, password })
-      : await db.auth.signUp({ email, password });
-
-    setBusy(false);
-    if (error) { setErr(error.message); return; }
-    router.push(next);
-    router.refresh();
-  }
-
-  async function withGoogle() {
-    setBusy(true); setErr(null);
-    const db = createClient();
-    const { error } = await db.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
-      },
-    });
-    if (error) { setErr(error.message); setBusy(false); }
-  }
+  // 열린 리디렉션 방지 — 내부 경로만 허용한다
+  const raw = sp.next ?? '/';
+  const next = raw.startsWith('/') && !raw.startsWith('//') ? raw : '/';
 
   return (
     <>
       <header className="topbar">
         <Link className="iconbtn" href="/" aria-label="Back"><IconBack /></Link>
-        <span className="topbar-title">{mode === 'in' ? 'Sign in' : 'Create account'}</span>
+        <span className="topbar-title">Sign in</span>
       </header>
 
-      <main className="view pad">
-        <p className="lede" style={{ fontSize: 20 }}>
-          {mode === 'in' ? 'Welcome back.' : 'Save the places you want to come back to.'}
-        </p>
-        <p className="lede-sub">
-          Your saved maps follow your account, not this device.
-        </p>
-
-        <button className="btn btn-secondary btn-block" onClick={withGoogle} disabled={busy}>
-          Continue with Google
-        </button>
-
-        <p style={{
-          textAlign: 'center', color: 'var(--text-3)', fontSize: 13,
-          margin: 'var(--sp-md) 0',
-        }}>or</p>
-
-        <form onSubmit={withEmail}>
-          <input className="field" type="email" required autoComplete="email"
-            placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input className="field" type="password" required minLength={6}
-            autoComplete={mode === 'in' ? 'current-password' : 'new-password'}
-            placeholder="Password" value={password}
-            onChange={(e) => setPassword(e.target.value)} />
-          <p className="form-error">{err}</p>
-          <button className="btn btn-dark btn-block" type="submit" disabled={busy}>
-            {mode === 'in' ? 'Sign in' : 'Create account'}
-          </button>
-        </form>
-
-        <p style={{ textAlign: 'center', marginTop: 'var(--sp-md)', fontSize: 14 }}>
-          <button className="curator-name" onClick={() => { setMode(mode === 'in' ? 'up' : 'in'); setErr(null); }}>
-            {mode === 'in' ? 'Create an account' : 'I already have an account'}
-          </button>
-        </p>
-      </main>
+      <SignInForm next={next} hadError={Boolean(sp.error)} />
     </>
   );
-}
-
-export default function SignIn() {
-  return <Suspense><SignInForm /></Suspense>;
 }

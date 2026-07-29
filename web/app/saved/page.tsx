@@ -92,8 +92,8 @@ export default async function Saved({ searchParams }: Params) {
                     : <span className="place-thumb" aria-hidden />}
                   <div className="place-main">
                     <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
+                      {/* 목록이므로 한글 상호를 넣지 않는다 — 상세에서만 (R3) */}
                       <h3 className="place-name">{p.name_en}</h3>
-                      {p.name_ko && <p className="place-name-ko">{p.name_ko}</p>}
                     </Link>
                     {row.maps && (
                       <p className="saved-from">From {row.maps.title}</p>
