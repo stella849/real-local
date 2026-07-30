@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { SignOutButton } from '@/components/SignOutButton';
+import { DeleteAccountButton } from '@/components/DeleteAccountButton';
 import { CuratorAvatar } from '@/components/CuratorLine';
 import { TabBar } from '@/components/TabBar';
 
@@ -47,6 +48,7 @@ export default async function Profile() {
           )}
 
           <SignOutButton />
+          <DeleteAccountButton />
         </div>
       </main>
 

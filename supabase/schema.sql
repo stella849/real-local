@@ -252,7 +252,11 @@ create table public.saved_places (
 -- 걸려 있어(§9) 다른 사람의 표시 이름을 조인으로 가져올 수 없다.
 create table public.map_reviews (
   id          uuid primary key default gen_random_uuid(),
-  user_id     uuid not null references auth.users on delete cascade,
+  -- nullable + set null (회원 탈퇴 후에도 후기는 남는다. RLS 의
+  -- auth.uid() = user_id 는 null 과 절대 안 맞으므로 그 순간부터
+  -- 아무도 못 고친다 — 정책은 그대로 둬도 된다). supabase/migrations/
+  -- 004_reviews_survive_deletion.sql 참조.
+  user_id     uuid references auth.users on delete set null,
   map_id      uuid not null references public.maps(id) on delete cascade,
   author_name text not null,
   rating      int  not null check (rating between 1 and 5),   -- §8 정렬이 avg 를 쓴다
