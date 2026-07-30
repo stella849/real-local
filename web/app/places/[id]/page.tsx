@@ -7,7 +7,7 @@ import { Directions } from '@/components/Directions';
 import { SaveButton } from '@/components/SaveButton';
 import { IconBack, IconHome } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
-import { photoUrl, categoryLabel, type Place } from '@/lib/types';
+import { photoUrl, resolvePhotoUrl, categoryLabel, type Place } from '@/lib/types';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -75,6 +75,22 @@ export default async function PlaceDetail({ params }: Params) {
         ) : (
           <div className="collage" data-n="0" style={{ aspectRatio: '4 / 3' }} aria-hidden>
             {p.name_en.trim()[0]?.toUpperCase() ?? '?'}
+          </div>
+        )}
+
+        {/* 갤러리(PRD v1.4 §4.1) — 대표 사진과 별개다. 구글 후보 여러
+            장을 어드민/큐레이터가 고르거나, 큐레이터가 직접 올린
+            사진이 섞여 들어올 수 있다(resolvePhotoUrl 이 구분). */}
+        {p.photo_refs.length > 0 && (
+          <div className="photo-strip pad" style={{ paddingTop: 'var(--sp-xs)' }}>
+            {p.photo_refs.map((ref, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={i} src={resolvePhotoUrl(ref, 300)} alt=""
+                style={{
+                  width: 96, height: 72, objectFit: 'cover',
+                  borderRadius: 'var(--r-sm)', flex: 'none',
+                }} />
+            ))}
           </div>
         )}
 

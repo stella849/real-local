@@ -243,7 +243,7 @@ a{color:inherit}
   font-variant-numeric:tabular-nums;
 }
 .avatar{
-  width:20px;height:20px;flex:none;border-radius:var(--r-full);
+  width:24px;height:24px;flex:none;border-radius:var(--r-full);
   object-fit:cover;background:var(--surface);
 }
 .avatar-initial{
@@ -283,6 +283,12 @@ a.curator-name:hover{text-decoration:underline}
   padding:3px 9px;font-variant-numeric:tabular-nums;
 }
 .badge.quiet{color:var(--text-3)}
+/* 어드민 Maps 탭 — published/pending/rejected 를 한눈에 구분한다.
+   새 색을 늘리지 않는다 — published 는 이미 있는 먹색(--text) 을
+   채워 "확정"으로, pending·rejected 는 단청 적색(--accent) 으로
+   "처리 필요"를 표시한다. draft·hidden 은 기존 quiet 그대로. */
+.badge.live{color:var(--canvas);background:var(--text);border-color:var(--text)}
+.badge.attn{color:var(--accent);border-color:var(--accent)}
 
 /* 지도는 sticky 가 아니다 (§10.2). 한 스크롤 컨테이너에 sticky 레이어가
    여럿이면 중간에 떠 있는 바가 생긴다 — 390×844 검수 항목이다.
@@ -666,10 +672,10 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 }
 .curator-row:hover{border-color:var(--line-strong)}
 .curator-thumb{
-  width:52px;height:52px;flex:none;border-radius:var(--r-full);
+  width:64px;height:64px;flex:none;border-radius:var(--r-full);
   object-fit:cover;background:var(--surface);border:1px solid var(--line);
 }
-.curator-thumb.avatar-initial{font-size:20px}
+.curator-thumb.avatar-initial{font-size:24px}
 .curator-row-main{display:flex;flex-direction:column;gap:2px;min-width:0}
 .curator-row-name{font-size:16px;font-weight:700;line-height:1.3}
 .curator-row-byline{
@@ -686,11 +692,11 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
    ============================================================ */
 .curator-head{padding:var(--sp-xl) var(--sp-md);text-align:center}
 .curator-avatar{
-  width:88px;height:88px;border-radius:var(--r-full);
+  width:108px;height:108px;border-radius:var(--r-full);
   object-fit:cover;margin:0 auto var(--sp-sm);
   background:var(--surface);border:1px solid var(--line);
 }
-.curator-avatar.avatar-initial{font-size:32px}
+.curator-avatar.avatar-initial{font-size:40px}
 .curator-title{font-size:21px;font-weight:700;margin:0 0 var(--sp-xxs)}
 .curator-byline{
   font-size:14px;line-height:1.5;color:var(--text-2);

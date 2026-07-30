@@ -130,6 +130,8 @@ export function MyMapRow({ id, title, slug, status, note }: {
             {s === 'published' ? 'Hide' : 'Publish'}
           </button>
         )}
+        {/* 사진 갤러리·직접 업로드 (PRD v1.4 §4.2) */}
+        <a className="btn btn-secondary sm" href={`/admin/photos/${slug}`}>Photos</a>
         {/* 삭제 버튼은 없다 (§3.3) */}
       </div>
       {/* 반려된 맵은 사유를 표시한다 — 없으면 무엇을 고칠지 모른다 */}

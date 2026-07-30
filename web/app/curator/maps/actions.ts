@@ -208,3 +208,37 @@ export async function updateMap(input: {
     return { ok: false, error: (e as Error).message };
   }
 }
+
+type SimpleResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * 장소 사진 갤러리 설정 (F20.1, PRD v1.4 §4). admin/actions.ts 의
+ * 어드민 전용 액션들과 달리 그 맵의 큐레이터 본인도 쓸 수 있어야 해서
+ * 여기 둔다 — 소유자 확인이 필요하다. places_update RLS 정책이 이미
+ * "본인 맵의 장소 또는 어드민"을 허용하므로 여기서는 같은 조건을
+ * 앱에서도 확인해 더 친절한 에러 메시지를 준다.
+ */
+export async function setPlacePhotos(placeId: string, refs: string[]): Promise<SimpleResult> {
+  try {
+    const db = await createClient();
+    const user = await getUser(db);
+    if (!user) return { ok: false, error: 'Sign in first.' };
+
+    const { data: place } = await db.from('places').select('map_id').eq('id', placeId).maybeSingle();
+    if (!place) return { ok: false, error: 'Place not found.' };
+
+    const { data: map } = await db.from('maps').select('curator_id').eq('id', place.map_id).maybeSingle();
+    const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();
+    const isAdmin = me?.role === 'admin';
+    if (!isAdmin && map?.curator_id !== user.id) return { ok: false, error: 'Not your place.' };
+
+    const { error } = await db.from('places').update({ photo_refs: refs }).eq('id', placeId);
+    if (error) return { ok: false, error: error.message };
+
+    revalidatePath('/admin');
+    revalidatePath('/');
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}

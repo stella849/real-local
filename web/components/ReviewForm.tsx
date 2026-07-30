@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { containsProfanity } from '@/lib/moderation';
 import { IconStar } from './Icons';
 
 /**
@@ -25,6 +26,10 @@ export function ReviewForm({ mapId, mine }: {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (rating < 1) { setErr('Pick a rating first.'); return; }
+    if (containsProfanity(body)) {
+      setErr('Please remove inappropriate language before posting.');
+      return;
+    }
     setBusy(true); setErr(null);
 
     const db = createClient();

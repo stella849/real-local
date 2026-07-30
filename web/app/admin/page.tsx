@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient, getUser } from '@/lib/supabase/server';
-import { MembersTab, PendingTab, MapsTab, type Member, type AdminMap } from '@/components/admin/AdminTabs';
+import {
+  MembersTab, PendingTab, MapsTab, ReviewsTab,
+  type Member, type AdminMap, type AdminReview,
+} from '@/components/admin/AdminTabs';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,15 +74,19 @@ export default async function Admin({ searchParams }: Params) {
      maps.cover_place_id). PostgREST 가 embed 대상을 못 정해 PGRST201
      로 쿼리 전체를 거부했고, 그 결과 Pending·Maps 탭이 항상 0으로
      보였다(이 select 가 실패하면 rawMaps 가 null → maps·pending 모두
-     빈 배열). 어느 쪽 FK 인지 명시하면 해결된다. */
+     빈 배열). 어느 쪽 FK 인지 명시하면 해결된다.
+
+     정렬은 상태 그룹핑 대신 작성일 내림차순 — 최근 것부터 보는 게
+     운영 동선에 맞다. 상태는 이제 배지 색으로 구분되니 그룹핑 없이도
+     한눈에 들어온다. */
   const { data: rawMaps } = await db.from('maps')
-    .select('id,slug,title,status,review_note,curator_id,places!places_map_id_fkey(count)')
-    .order('status').order('created_at', { ascending: false });
+    .select('id,slug,title,region,status,review_note,curator_id,places!places_map_id_fkey(count)')
+    .order('created_at', { ascending: false });
 
   const nameOf = new Map(members.map((m) => [m.id, m.display_name ?? m.email ?? '?']));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const maps: AdminMap[] = ((rawMaps ?? []) as any[]).map((m) => ({
-    id: m.id, slug: m.slug, title: m.title, status: m.status,
+    id: m.id, slug: m.slug, title: m.title, region: m.region, status: m.status,
     review_note: m.review_note, curator_id: m.curator_id,
     curator_name: nameOf.get(m.curator_id) ?? '?',
     place_count: m.places?.[0]?.count ?? 0,
@@ -87,10 +94,22 @@ export default async function Admin({ searchParams }: Params) {
 
   const pending = maps.filter((m) => m.status === 'pending');
 
+  /* 후기 관리 (F19, PRD v1.4 §3). map_reviews → maps 로 가는 FK 는
+     하나뿐이라(map_id) maps/places 때와 달리 embed 가 안 갈린다. */
+  const { data: rawReviews } = await db.from('map_reviews')
+    .select('id,body,rating,author_name,created_at,maps(title,slug)')
+    .order('created_at', { ascending: false });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const reviews: AdminReview[] = ((rawReviews ?? []) as any[]).map((r) => ({
+    id: r.id, body: r.body, rating: r.rating, author_name: r.author_name,
+    map_title: r.maps?.title ?? '?', map_slug: r.maps?.slug ?? '',
+  }));
+
   const TABS = [
     { id: 'members', label: `Members (${members.length})` },
     { id: 'pending', label: `Pending (${pending.length})` },
     { id: 'maps', label: `Maps (${maps.length})` },
+    { id: 'reviews', label: `Reviews (${reviews.length})` },
   ];
 
   return (
@@ -117,6 +136,7 @@ export default async function Admin({ searchParams }: Params) {
         )}
         {tab === 'pending' && <PendingTab maps={pending} />}
         {tab === 'maps' && <MapsTab maps={maps} meId={user.id} />}
+        {tab === 'reviews' && <ReviewsTab reviews={reviews} />}
       </main>
     </div>
   );

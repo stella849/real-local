@@ -25,6 +25,20 @@ export default async function Explore() {
 
   const maps = (data ?? []) as Card[];
 
+  /* 지역 그루핑 (PRD v1.4 §1) — 필터가 아니라 브라우즈 보조다. region 이
+     지정된 맵이 하나도 없으면(운영 초기) 아무것도 안 그리고 기존 전체
+     피드만 보인다 — 빈 섹션을 억지로 채우지 않는다. */
+  const regionGroups = new Map<string, Card[]>();
+  for (const m of maps) {
+    const region = m.region?.trim();
+    if (!region) continue;
+    if (!regionGroups.has(region)) regionGroups.set(region, []);
+    regionGroups.get(region)!.push(m);
+  }
+  const regionEntries = [...regionGroups.entries()]
+    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+  const nationwide = maps.filter((m) => !m.region?.trim());
+
   return (
     <>
       <header className="topbar">
@@ -54,6 +68,29 @@ export default async function Explore() {
             <h3>No maps yet</h3>
             <p>Curators are still putting their first maps together.</p>
           </div>
+        )}
+
+        {regionEntries.length > 0 && (
+          <>
+            {regionEntries.map(([region, list]) => (
+              <div key={region}>
+                <div className="section-head"><h2>{region}</h2></div>
+                <ul className="feed">
+                  {list.map((m) => <MapCard key={m.id} m={m} saved={saved.maps.has(m.id)} />)}
+                </ul>
+              </div>
+            ))}
+            {nationwide.length > 0 && (
+              <div>
+                <div className="section-head"><h2>Nationwide</h2></div>
+                <ul className="feed">
+                  {nationwide.map((m) => <MapCard key={m.id} m={m} saved={saved.maps.has(m.id)} />)}
+                </ul>
+              </div>
+            )}
+            {/* 그루핑은 진입점이지 전체 목록을 대체하지 않는다 (PRD v1.4 §1) */}
+            <div className="section-head"><h2>All maps</h2></div>
+          </>
         )}
 
         <ul className="feed">

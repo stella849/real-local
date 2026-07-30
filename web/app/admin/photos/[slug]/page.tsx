@@ -8,7 +8,14 @@ export const dynamic = 'force-dynamic';
 
 type Params = { params: Promise<{ slug: string }> };
 
-/** 맵 하나의 장소 사진을 한 화면에서 훑고 교체한다 (F11 · §5 S8 Maps 탭). */
+/**
+ * 맵 하나의 장소 사진을 한 화면에서 훑고 교체한다 (F11 · §5 S8 Maps 탭).
+ *
+ * 어드민 전용이었으나 PRD v1.4 §4.2 로 큐레이터 본인 맵도 열 수 있게
+ * 넓혔다 — 대표 사진(단일, photo_ref) 교체는 여전히 어드민만 하고,
+ * 갤러리·직접 업로드(photo_refs)는 큐레이터도 할 수 있다(PhotoPicker
+ * 의 canPickCover 로 구분).
+ */
 export default async function Photos({ params }: Params) {
   const { slug } = await params;
   const db = await createClient();
@@ -16,13 +23,15 @@ export default async function Photos({ params }: Params) {
   const user = await getUser(db);
   if (!user) notFound();
   const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();
-  if (me?.role !== 'admin') notFound();
+  const isAdmin = me?.role === 'admin';
 
-  const { data: m } = await db.from('maps').select('id,title,slug').eq('slug', slug).maybeSingle();
+  const { data: m } = await db.from('maps')
+    .select('id,title,slug,curator_id').eq('slug', slug).maybeSingle();
   if (!m) notFound();
+  if (!isAdmin && m.curator_id !== user.id) notFound();
 
   const { data: places } = await db.from('places')
-    .select('id,order,name_en,name_ko,photo_ref,photo_candidates,google_place_id')
+    .select('id,order,name_en,name_ko,photo_ref,photo_candidates,photo_refs,google_place_id')
     .eq('map_id', m.id).order('order');
 
   const missing = (places ?? []).filter((p) => !p.photo_ref).length;
@@ -30,7 +39,9 @@ export default async function Photos({ params }: Params) {
   return (
     <div className="admin">
       <header className="topbar">
-        <Link className="wordmark" href="/admin?tab=maps">← Admin</Link>
+        <Link className="wordmark" href={isAdmin ? '/admin?tab=maps' : '/curator'}>
+          {isAdmin ? '← Admin' : '← Your maps'}
+        </Link>
         <span className="topbar-title">{m.title}</span>
       </header>
 
@@ -60,6 +71,8 @@ export default async function Photos({ params }: Params) {
                 placeId={p.id}
                 current={p.photo_ref}
                 candidates={(p.photo_candidates ?? []) as Candidate[]}
+                gallery={(p.photo_refs ?? []) as string[]}
+                canPickCover={isAdmin}
               />
             </div>
           ))}

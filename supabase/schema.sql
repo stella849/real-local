@@ -170,14 +170,19 @@ create table if not exists public.maps (
   title        text not null,
   one_liner    text not null,
   concept_tag  text,                          -- 맵당 1개 (§1)
+  region       text,                          -- PRD v1.4 §1. 아래 주석 참조
   status       public.map_status not null default 'draft',
   review_note  text,                          -- 반려 사유. Reject 시 필수 (§5 S8)
   published_at timestamptz,
   created_at   timestamptz not null default now()
 );
 
--- 지역 속성을 갖지 않는다 (§2.2). city 컬럼을 두지 않는 것이 결정 사항이며
--- 지역명이 필요하면 title 에 이미 들어 있는 문자열을 쓴다.
+-- v1.3 은 "지역 속성을 갖지 않는다"(§2.2, city 컬럼 없음)가 결정이었다.
+-- PRD v1.4 §1 에서 뒤집었다 — 단, §4.3 의 검색/필터 금지는 그대로다.
+-- region 은 필터가 아니라 홈 상단 그루핑(브라우즈 보조) 전용이고,
+-- 어드민만 지정한다(자유 텍스트, 큐레이터가 오탈자·중복 표기를 만들지
+-- 않도록). null 이면 홈에서 "Nationwide" 묶음으로 간다 — 전국 떡볶이
+-- 맛집처럼 지역이 없는 맵도 있어야 하기 때문이다.
 
 create table if not exists public.places (
   id                uuid primary key default gen_random_uuid(),
@@ -199,6 +204,11 @@ create table if not exists public.places (
   photo_ref         text,
   photo_candidates  jsonb,                    -- 최대 10장. 어드민 사진 교체용
   photo_attribution text,                     -- 출처 표기 의무
+
+  -- 상세 갤러리 (PRD v1.4 §4.1). 구글 photo name 또는(큐레이터 직접
+  -- 업로드) place-photos 버킷의 완전한 URL 이 섞여 들어갈 수 있다 —
+  -- web/lib/types.ts 의 resolvePhotoUrl 이 구분해서 렌더한다.
+  photo_refs        jsonb not null default '[]'::jsonb,
 
   created_at        timestamptz not null default now(),
 
@@ -312,7 +322,7 @@ where u.role in ('curator', 'admin')
 -- ------------------------------------------------------------
 create or replace view public.map_cards as
 select
-  m.id, m.slug, m.title, m.one_liner, m.concept_tag, m.status, m.created_at,
+  m.id, m.slug, m.title, m.one_liner, m.concept_tag, m.region, m.status, m.created_at,
   u.id as curator_id, u.display_name as curator_name,
   u.avatar_url as curator_avatar, u.handle as curator_handle,
   u.curator_listed as curator_listed,        -- false 면 이름을 링크 없는 텍스트로 (§3.4)
@@ -455,6 +465,9 @@ create policy "update own review" on public.map_reviews
   for update to authenticated
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
+-- 본인 또는 어드민 — 신설(PRD v1.4 §3). admin 도 관리자 화면에서
+-- 지울 수 있어야 한다(F19). 지금까지 이 정책이 없어서 어드민이 후기를
+-- 아예 지울 방법이 없었다.
 drop policy if exists "delete own review" on public.map_reviews;
 create policy "delete own review" on public.map_reviews
-  for delete to authenticated using (auth.uid() = user_id);
+  for delete to authenticated using (auth.uid() = user_id or public.is_admin());

@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from 'react';
 import {
-  setRole, saveCuratorProfile, approveMap, rejectMap, setMapVisibility,
+  setRole, saveCuratorProfile, approveMap, rejectMap, setMapVisibility, setMapRegion,
+  deleteReview,
 } from '@/app/admin/actions';
-import { IconGoogle, IconMail } from '@/components/Icons';
+import { IconGoogle, IconMail, IconStar } from '@/components/Icons';
 
 export type Member = {
   id: string; email: string | null; display_name: string | null;
@@ -15,8 +16,13 @@ export type Member = {
 };
 
 export type AdminMap = {
-  id: string; slug: string; title: string; status: string;
+  id: string; slug: string; title: string; region: string | null; status: string;
   review_note: string | null; curator_id: string; curator_name: string; place_count: number;
+};
+
+export type AdminReview = {
+  id: string; body: string; rating: number; author_name: string;
+  map_title: string; map_slug: string;
 };
 
 /* 역할 콤보박스는 4지선다다. 큐레이터 등급은 어드민 화면에서만
@@ -221,6 +227,7 @@ export function MapsTab({ maps, meId }: { maps: AdminMap[]; meId: string }) {
 
 function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
   const [err, setErr] = useState<string | null>(null);
+  const [region, setRegion] = useState(m.region ?? '');
   const [pending, start] = useTransition();
   const hidden = m.status === 'hidden';
   const isMine = m.curator_id === meId;
@@ -228,13 +235,17 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
   // map_cards(published 전용) 에 없어 실제 페이지가 없다 — 어드민
   // 전용 미리보기로 보낸다. published 만 진짜 페이지를 연다.
   const openHref = m.status === 'published' ? `/maps/${m.slug}` : `/admin/preview/${m.slug}`;
+  // published 는 채운 badge 로 "확정", pending·rejected 는 accent 로
+  // "처리 필요"를 표시한다. draft·hidden 은 기존 quiet 그대로.
+  const badgeTone = m.status === 'published' ? 'live'
+    : (m.status === 'pending' || m.status === 'rejected') ? 'attn' : 'quiet';
 
   return (
     <div className="admin-row">
       {/* 1줄 — 무엇인지: 제목 + 상태만 */}
       <div className="admin-row-main">
         <b>{m.title}</b>
-        <span className="badge quiet">{m.status.toUpperCase()}</span>
+        <span className={`badge ${badgeTone}`}>{m.status.toUpperCase()}</span>
       </div>
 
       {/* 2줄 — 누구·얼마나 + 동작 */}
@@ -263,7 +274,60 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
         <a className="btn btn-secondary sm" href={`/admin/photos/${m.slug}`}>Photos</a>
         {/* 삭제 버튼은 어디에도 없다 (§3.3) */}
       </div>
+
+      {/* 3줄 — 지역(PRD v1.4 §1). 필터 아님, 홈 상단 그루핑 전용.
+          비우면 Nationwide 로 간다. */}
+      <div className="admin-row-main">
+        <input className="field" placeholder="Region (optional) — e.g. Seongsu. Blank = Nationwide"
+          value={region} onChange={(e) => setRegion(e.target.value)} />
+        <button className="btn btn-secondary sm" disabled={pending}
+          onClick={() => start(async () => {
+            const r = await setMapRegion(m.id, region);
+            setErr(r.ok ? null : r.error);
+          })}>
+          Save
+        </button>
+      </div>
       {m.review_note && <p className="admin-hint">Rejected: {m.review_note}</p>}
+      <Err msg={err} />
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------- Reviews */
+export function ReviewsTab({ reviews }: { reviews: AdminReview[] }) {
+  if (!reviews.length) return <p className="admin-hint admin-empty">No reviews yet.</p>;
+  return <div className="admin-list">{reviews.map((r) => <ReviewRow key={r.id} r={r} />)}</div>;
+}
+
+function ReviewRow({ r }: { r: AdminReview }) {
+  const [gone, setGone] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [pending, start] = useTransition();
+
+  if (gone) return null;
+
+  return (
+    <div className="admin-row">
+      <div className="admin-row-main">
+        <span className="meta-count"><IconStar /> {r.rating}</span>
+        <b>{r.author_name}</b>
+        <a className="admin-hint" href={`/maps/${r.map_slug}`} target="_blank" rel="noreferrer">
+          {r.map_title}
+        </a>
+        <button className="btn btn-secondary sm" disabled={pending}
+          onClick={() => {
+            if (!confirm('Delete this review? This cannot be undone.')) return;
+            start(async () => {
+              const res = await deleteReview(r.id);
+              if (res.ok) setGone(true);
+              else setErr(res.error);
+            });
+          }}>
+          Delete
+        </button>
+      </div>
+      <p className="admin-hint">{r.body}</p>
       <Err msg={err} />
     </div>
   );

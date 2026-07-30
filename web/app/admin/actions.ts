@@ -160,6 +160,48 @@ export async function setMapVisibility(mapId: string, hide: boolean): Promise<Re
   }
 }
 
+/**
+ * 지역 지정 (F17, PRD v1.4 §1). 어드민만 — 큐레이터가 오탈자·중복
+ * 표기("성수"/"성수동")를 만들지 않도록. 빈 문자열은 null 로 저장해
+ * 홈의 "Nationwide" 묶음으로 보낸다.
+ */
+export async function setMapRegion(mapId: string, region: string): Promise<Result> {
+  try {
+    const { db } = await requireAdmin();
+    const { error } = await db.from('maps')
+      .update({ region: region.trim() || null }).eq('id', mapId);
+    if (error) return { ok: false, error: error.message };
+
+    revalidatePath('/admin');
+    revalidatePath('/');
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
+/**
+ * 후기 삭제 (F19, PRD v1.4 §3).
+ *
+ * 등록 시점 키워드 필터(lib/moderation.ts)를 통과했더라도 문제가
+ * 있으면 여기서 지운다 — 진짜 안전망은 이거다. "write own review" 등
+ * 기존 정책은 본인만 지울 수 있게 했지 어드민에게는 권한을 준 적이
+ * 없었다(신규 정책 필요, supabase/migrations 참조).
+ */
+export async function deleteReview(reviewId: string): Promise<Result> {
+  try {
+    const { db } = await requireAdmin();
+    const { error } = await db.from('map_reviews').delete().eq('id', reviewId);
+    if (error) return { ok: false, error: error.message };
+
+    revalidatePath('/admin');
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
 /** 사진 교체 (F11) — photo_candidates 중에서 고른다 */
 export async function setPlacePhoto(placeId: string, ref: string): Promise<Result> {
   try {

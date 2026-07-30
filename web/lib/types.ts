@@ -5,6 +5,8 @@ export type MapCard = {
   title: string;
   one_liner: string;
   concept_tag: string | null;
+  /** null 이면 홈에서 "Nationwide" 로 묶인다 (PRD v1.4 §1) */
+  region: string | null;
   status: string;
   created_at: string;
   curator_id: string;
@@ -38,6 +40,8 @@ export type Place = {
   curator_note: string | null;
   photo_ref: string | null;
   photo_attribution: string | null;
+  /** 상세 갤러리(PRD v1.4 §4.1). 구글 ref·큐레이터 업로드 URL 혼재 가능 */
+  photo_refs: string[];
 };
 
 /** curator_profiles 뷰 (§9). email 도 curator_tier 도 없다. */
@@ -55,6 +59,13 @@ export type CuratorProfile = {
 
 /** 사진 프록시 URL. photo_ref 는 슬래시를 포함한다 (§6.3) */
 export const photoUrl = (ref: string, w = 800) => `/api/photo/${ref}?w=${w}`;
+
+/**
+ * 갤러리 항목용. 큐레이터가 직접 올린 사진은 이미 완전한 URL(Storage
+ * 공개 주소)이라 그대로 쓰고, 구글 ref 는 프록시를 거친다 (PRD v1.4 §4.1).
+ */
+export const resolvePhotoUrl = (ref: string, w = 800) =>
+  ref.startsWith('http') ? ref : photoUrl(ref, w);
 
 export const initial = (s: string) => (s.trim()[0] ?? '?').toUpperCase();
 
