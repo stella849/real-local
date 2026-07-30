@@ -27,7 +27,7 @@ export default async function Profile() {
     <>
       <header className="topbar"><span className="wordmark">Profile</span></header>
 
-      <main className="view">
+      <main className="view" style={{ display: 'flex', flexDirection: 'column' }}>
         <section className="curator-head">
           <CuratorAvatar name={name} url={me?.avatar_url} className="curator-avatar" />
           <h1 className="curator-title">{name}</h1>
@@ -50,9 +50,13 @@ export default async function Profile() {
           <SignOutButton />
         </div>
 
-        {/* 계정 삭제는 눌러서 되돌릴 수 없다 — 위 버튼들과 붙여 두면
-            실수로 누르기 쉽다. 멀찍이 떼어 놓는다. */}
-        <div className="pad" style={{ marginTop: 'var(--sp-xxl)' }}>
+        {/* 계정 삭제는 눌러서 되돌릴 수 없다 — Sign out 과 붙여 두면
+            실수로 누르기 쉽다. Sign out 과 하단 탭바 사이 남는 공간의
+            정중앙에 오도록 flex 로 띄운다 — 화면 높이가 달라져도
+            항상 정중앙이다. */}
+        <div className="pad" style={{
+          flex: 1, display: 'flex', alignItems: 'center', paddingBottom: 64,
+        }}>
           <DeleteAccountButton />
         </div>
       </main>
