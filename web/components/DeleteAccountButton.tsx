@@ -31,7 +31,7 @@ export function DeleteAccountButton() {
 
   if (!open) {
     return (
-      <button className="btn btn-secondary btn-block" onClick={() => setOpen(true)}>
+      <button className="btn btn-dark btn-block" onClick={() => setOpen(true)}>
         Delete account
       </button>
     );

@@ -48,6 +48,11 @@ export default async function Profile() {
           )}
 
           <SignOutButton />
+        </div>
+
+        {/* 계정 삭제는 눌러서 되돌릴 수 없다 — 위 버튼들과 붙여 두면
+            실수로 누르기 쉽다. 멀찍이 떼어 놓는다. */}
+        <div className="pad" style={{ marginTop: 'var(--sp-xxl)' }}>
           <DeleteAccountButton />
         </div>
       </main>
