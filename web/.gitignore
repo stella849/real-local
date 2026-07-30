@@ -37,6 +37,7 @@ yarn-error.log*
 
 # 시드 진단 산출물. 돌릴 때마다 바뀌고 장소 매칭 실패 목록이라 레포에 둘 이유가 없다.
 scripts/seed-report.json
+scripts/seed-extra-report.json
 
 # vercel
 .vercel
