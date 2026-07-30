@@ -14,11 +14,12 @@ const MIN_TO_PUBLISH = 4;
 
 type Initial = { title: string; one_liner: string; concept_tag: string; places: DraftPlace[] };
 
-/** mapId 가 있으면 draft 재편집(F13 후속) — 없으면 신규 작성(S9). */
-export function MapEditor({ tier, mapId, initial }: {
+/** mapId 가 있으면 draft·rejected 재편집(F13 후속) — 없으면 신규 작성(S9). */
+export function MapEditor({ tier, mapId, initial, rejectionNote }: {
   tier: 'resident' | 'guest' | null;
   mapId?: string;
   initial?: Initial;
+  rejectionNote?: string | null;
 }) {
   const router = useRouter();
   const [q, setQ] = useState('');
@@ -99,6 +100,10 @@ export function MapEditor({ tier, mapId, initial }: {
 
   return (
     <div style={{ display: 'grid', gap: 'var(--sp-lg)' }}>
+      {rejectionNote && (
+        <p className="notice"><b>Rejected:</b> {rejectionNote}</p>
+      )}
+
       {/* 1 — 장소 추가 */}
       <section>
         <p className="eyebrow">1 · Add places</p>

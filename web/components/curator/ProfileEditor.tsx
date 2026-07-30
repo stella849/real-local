@@ -109,13 +109,15 @@ export function MyMapRow({ id, title, slug, status, note }: {
   return (
     <div className="admin-row">
       <div className="admin-row-main">
-        {/* published 는 상세 페이지로, draft 는 재편집 화면으로 연결한다.
-            map_cards 뷰가 published 전용이라 그 외 슬러그로 /maps/{slug}
-            에 들어가면 404 난다 (원래 버그였던 지점). pending/hidden/
-            rejected 는 아직 편집 경로가 없어 일반 텍스트로 둔다. */}
+        {/* published 는 상세 페이지로, draft·rejected 는 재편집 화면으로
+            연결한다. map_cards 뷰가 published 전용이라 그 외 슬러그로
+            /maps/{slug} 에 들어가면 404 난다 (원래 버그였던 지점).
+            pending/hidden 은 아직 편집 경로가 없어 일반 텍스트로 둔다. */}
         {s === 'published' && <a href={`/maps/${slug}`} style={{ fontWeight: 600 }}>{title}</a>}
-        {s === 'draft' && <a href={`/curator/maps/${id}/edit`} style={{ fontWeight: 600 }}>{title}</a>}
-        {s !== 'published' && s !== 'draft' && <span style={{ fontWeight: 600 }}>{title}</span>}
+        {(s === 'draft' || s === 'rejected') &&
+          <a href={`/curator/maps/${id}/edit`} style={{ fontWeight: 600 }}>{title}</a>}
+        {s !== 'published' && s !== 'draft' && s !== 'rejected' &&
+          <span style={{ fontWeight: 600 }}>{title}</span>}
         <span className="badge quiet">{s.toUpperCase()}</span>
         {canToggle && (
           <button className="btn btn-secondary sm" disabled={pending}

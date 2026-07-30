@@ -10,10 +10,10 @@ export const dynamic = 'force-dynamic';
 type Params = { params: Promise<{ id: string }> };
 
 /**
- * Draft 재편집 (F13 후속).
+ * Draft·rejected 재편집 (F13 후속).
  *
- * status='draft' 인 본인 맵만 연다. published·pending·hidden·rejected 로
- * 들어오면 404 — 그 상태들은 편집 경로가 아직 없다(§5 S9 스코프 밖).
+ * status 가 draft 또는 rejected 인 본인 맵만 연다. published·pending·
+ * hidden 으로 들어오면 404 — 그 상태들은 편집 경로가 아직 없다(§5 S9 스코프 밖).
  */
 export default async function EditMap({ params }: Params) {
   const { id } = await params;
@@ -27,9 +27,10 @@ export default async function EditMap({ params }: Params) {
   if (!me || (me.role !== 'curator' && me.role !== 'admin')) notFound();
 
   const { data: map } = await db.from('maps')
-    .select('id,title,one_liner,concept_tag,status,curator_id')
+    .select('id,title,one_liner,concept_tag,status,curator_id,review_note')
     .eq('id', id).maybeSingle();
-  if (!map || map.curator_id !== user.id || map.status !== 'draft') notFound();
+  if (!map || map.curator_id !== user.id
+    || (map.status !== 'draft' && map.status !== 'rejected')) notFound();
 
   const { data: places } = await db.from('places')
     .select('google_place_id,name_en,address,lat,lng,curator_note,photo_ref,photo_attribution,photo_candidates')
@@ -39,13 +40,14 @@ export default async function EditMap({ params }: Params) {
     <>
       <header className="topbar">
         <Link className="iconbtn" href="/curator" aria-label="Back"><IconBack /></Link>
-        <span className="topbar-title">Edit draft</span>
+        <span className="topbar-title">{map.status === 'rejected' ? 'Fix rejected map' : 'Edit draft'}</span>
       </header>
 
       <main className="view pad">
         <MapEditor
           tier={me.curator_tier as 'resident' | 'guest' | null}
           mapId={map.id}
+          rejectionNote={map.status === 'rejected' ? map.review_note : null}
           initial={{
             title: map.title,
             one_liner: map.one_liner,

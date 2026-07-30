@@ -411,14 +411,16 @@ create policy places_update on public.places for update using (
 );
 
 -- published·pending·hidden 장소는 여전히 삭제 불가 (maps 와 동일 원칙).
--- draft 재편집(F13 후속)만 예외 — curator 본인 소유 + 맵이 draft 상태일
--- 때만 삭제할 수 있다. 맵이 발행되는 순간 이 정책은 더 이상 적용되지 않는다.
+-- draft·rejected 재편집(F13 후속)만 예외 — curator 본인 소유 + 맵이 그
+-- 두 상태 중 하나일 때만 삭제할 수 있다. rejected 는 어드민이 반려한
+-- 맵을 고쳐 다시 낼 수 있어야 하므로 포함했다. published 되는 순간
+-- 이 정책은 더 이상 적용되지 않는다.
 drop policy if exists places_delete_draft on public.places;
 create policy places_delete_draft on public.places for delete using (
   exists (select 1 from public.maps m
           where m.id = places.map_id
             and m.curator_id = auth.uid()
-            and m.status = 'draft')
+            and m.status in ('draft', 'rejected'))
 );
 
 -- ---------- 저장 목록 ----------

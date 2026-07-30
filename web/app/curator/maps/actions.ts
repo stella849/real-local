@@ -132,15 +132,17 @@ export async function createMap(input: {
 }
 
 /**
- * Draft 재편집 저장 (F13 후속).
+ * Draft·rejected 재편집 저장 (F13 후속).
  *
- * status='draft' 인 본인 맵만 대상이다 — pending·published·hidden·rejected
- * 는 이 경로로 건드리지 않는다(재승인·재공개 규칙이 달라 별도 스코프).
+ * status 가 draft 또는 rejected 인 본인 맵만 대상이다 — pending·published·
+ * hidden 은 이 경로로 건드리지 않는다(재승인·재공개 규칙이 달라 별도 스코프).
+ * rejected 를 고쳐 다시 내면 review_note(반려 사유)를 지운다 — 옛 사유가
+ * 새 내용에 대한 것처럼 남아있으면 안 된다.
  *
- * 장소는 통째로 지웠다 다시 넣는다. draft 상태에서만 걸리는 DELETE RLS
- * 정책(`places_delete_draft`, supabase/schema.sql)이 있어 가능하다 —
- * 발행된 장소는 여전히 삭제할 수 없다. id 단위로 diff 하는 것보다 훨씬
- * 단순하고, 어차피 순서는 매번 배열 인덱스로 다시 매긴다.
+ * 장소는 통째로 지웠다 다시 넣는다. draft·rejected 상태에서만 걸리는
+ * DELETE RLS 정책(`places_delete_draft`, supabase/schema.sql)이 있어
+ * 가능하다 — 발행된 장소는 여전히 삭제할 수 없다. id 단위로 diff 하는
+ * 것보다 훨씬 단순하고, 어차피 순서는 매번 배열 인덱스로 다시 매긴다.
  */
 export async function updateMap(input: {
   mapId: string;
@@ -166,8 +168,8 @@ export async function updateMap(input: {
     if (!existing || existing.curator_id !== user.id) {
       return { ok: false, error: 'Not your map.' };
     }
-    if (existing.status !== 'draft') {
-      return { ok: false, error: 'Only a draft can be edited here.' };
+    if (existing.status !== 'draft' && existing.status !== 'rejected') {
+      return { ok: false, error: 'This map can no longer be edited here.' };
     }
 
     const v = validateDraft(input);
@@ -193,6 +195,7 @@ export async function updateMap(input: {
       concept_tag: input.concept_tag.trim() || null,
       status,
       published_at: status === 'published' ? new Date().toISOString() : null,
+      review_note: null,   // 반려 사유는 옛 내용에 대한 것이라 재제출 시 지운다
     }).eq('id', input.mapId);
     if (e1) return { ok: false, error: e1.message };
 

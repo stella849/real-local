@@ -568,21 +568,28 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
    ============================================================ */
 .shell:has(.admin){max-width:1100px}
 
-.admin-list{padding:var(--sp-md);display:flex;flex-direction:column;gap:var(--sp-xs)}
+/* 회원이 늘어날 걸 감안해 밀도를 우선한다 — 상하 여백을 sp-sm 대신
+   sp-xxs 로 좁히고, 이메일·이름은 넓게 열어 select 는 좁혔다. */
+.admin-list{padding:var(--sp-md);display:flex;flex-direction:column;gap:var(--sp-xxs)}
 .admin-row{
   border:1px solid var(--line);border-radius:var(--r-md);
-  padding:var(--sp-sm) var(--sp-md);background:var(--canvas);
+  padding:var(--sp-xxs) var(--sp-md);background:var(--canvas);
 }
 .admin-row-main{
   display:flex;align-items:center;gap:var(--sp-sm);flex-wrap:wrap;
-  padding:2px 0;
+  padding:0;
 }
-.admin-email{font-size:13px;color:var(--text-2);min-width:20ch}
-.admin-name{font-size:14px;font-weight:600;min-width:12ch}
-.admin-select{width:auto;min-width:16ch;margin:0;padding:6px var(--sp-xs);font-size:14px}
+.admin-email{
+  font-size:13px;color:var(--text-2);
+  flex:1 1 26ch;min-width:26ch;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.admin-name{font-size:14px;font-weight:600;flex:1 1 14ch;min-width:14ch}
+.provider-mark{display:inline-flex;flex:none}
+.provider-mark svg{width:14px;height:14px}
+.admin-select{width:auto;min-width:9ch;margin:0;padding:6px var(--sp-xs);font-size:13px}
 .admin-hint{font-size:12px;color:var(--text-3);margin:2px 0 0}
 .admin-empty{padding:var(--sp-xxl);text-align:center}
-.badge.is-google{color:var(--text-2);border-color:var(--line-strong)}
 
 .admin-edit{
   margin-top:var(--sp-sm);padding-top:var(--sp-sm);

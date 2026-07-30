@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import {
   setRole, saveCuratorProfile, approveMap, rejectMap, setMapVisibility,
 } from '@/app/admin/actions';
+import { IconGoogle, IconMail } from '@/components/Icons';
 
 export type Member = {
   id: string; email: string | null; display_name: string | null;
@@ -20,10 +21,12 @@ export type AdminMap = {
 
 /* 역할 콤보박스는 4지선다다. 큐레이터 등급은 어드민 화면에서만
    전문으로 보인다 (§3.2) — 일반 사용자에게는 어디에도 노출하지 않는다. */
+/* 라벨을 짧게 둔 이유는 콤보박스 폭이다 — 행 안에 이메일·이름과 함께
+   한 줄로 들어가야 한다. 어느 등급인지는 이 select 자체가 말해 준다. */
 const ROLES = [
   { v: 'user', label: 'User' },
-  { v: 'curator:resident', label: 'Resident curator' },
-  { v: 'curator:guest', label: 'Guest curator' },
+  { v: 'curator:resident', label: 'Resident' },
+  { v: 'curator:guest', label: 'Guest' },
   { v: 'admin', label: 'Admin' },
 ] as const;
 
@@ -68,9 +71,13 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
   return (
     <div className="admin-row">
       <div className="admin-row-main">
-        <span className="admin-email">{m.email}</span>
+        <span className="admin-email">
+          {m.email}
+          <span className="provider-mark" title={emailOnly ? 'Email' : 'Google'}>
+            {emailOnly ? <IconMail /> : <IconGoogle />}
+          </span>
+        </span>
         <span className="admin-name">{m.display_name}</span>
-        <span className={`badge quiet${emailOnly ? '' : ' is-google'}`}>{m.auth_provider ?? '?'}</span>
 
         <select
           className="field admin-select"

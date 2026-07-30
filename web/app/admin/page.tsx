@@ -22,10 +22,12 @@ export default async function Admin({ searchParams }: Params) {
   const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();
   if (me?.role !== 'admin') notFound();
 
-  // users_read_self 정책이 어드민에게는 전체를 돌려준다
+  // users_read_self 정책이 어드민에게는 전체를 돌려준다.
+  // 이메일 알파벳순 — 회원이 늘면 role 로 먼저 묶는 것보다 이메일로
+  // 바로 찾는 편이 실무에서 더 빠르다.
   const { data: members } = await db.from('users')
     .select('id,email,display_name,role,curator_tier,handle,byline,about,curator_listed,auth_provider')
-    .order('role').order('email');
+    .order('email');
 
   /* maps 를 직접 조회한다. map_cards 뷰는 published 만 담기 때문이다 —
      어드민은 draft·pending·rejected·hidden 을 전부 봐야 한다.
