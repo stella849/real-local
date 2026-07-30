@@ -320,9 +320,12 @@ where u.role in ('curator', 'admin')
 --    S11 의 YOUR MAPS 와 S8 의 Maps 탭은 maps 를 직접 조회한다.
 --    그쪽은 RLS 가 이미 '본인 것 + 어드민은 전부'로 정확히 열어 준다.
 -- ------------------------------------------------------------
+-- region 은 select 목록 맨 끝에 둔다 — create or replace view 는 기존
+-- 컬럼 중간에 새 컬럼을 끼워 넣으면 뒤 컬럼들이 밀려 42P16 에러가 난다
+-- (재실행 시에만 문제되지만, 이 파일은 "여러 번 실행해도 안전"이 약속이다).
 create or replace view public.map_cards as
 select
-  m.id, m.slug, m.title, m.one_liner, m.concept_tag, m.region, m.status, m.created_at,
+  m.id, m.slug, m.title, m.one_liner, m.concept_tag, m.status, m.created_at,
   u.id as curator_id, u.display_name as curator_name,
   u.avatar_url as curator_avatar, u.handle as curator_handle,
   u.curator_listed as curator_listed,        -- false 면 이름을 링크 없는 텍스트로 (§3.4)
@@ -336,7 +339,8 @@ select
   (select count(*) from public.saved_maps s  where s.map_id = m.id) as save_count,
   (select count(*) from public.map_reviews r where r.map_id = m.id) as review_count,
   (select round(avg(r.rating)::numeric, 1) from public.map_reviews r
-     where r.map_id = m.id)                                        as avg_rating
+     where r.map_id = m.id)                                        as avg_rating,
+  m.region
 from public.maps m
 join public.users u on u.id = m.curator_id
 where m.status = 'published';

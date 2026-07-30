@@ -8,13 +8,17 @@
 --
 -- schema.sql 전체를 다시 돌리지 말 것 — 파괴적인 파일이다. 이 조각만
 -- Supabase 대시보드 > SQL Editor 에 붙여넣는다. 여러 번 실행해도 안전.
+--
+-- ⚠️ create or replace view 는 기존 컬럼 목록 중간에 새 컬럼을 끼워
+-- 넣을 수 없다(뒤 컬럼들이 한 칸씩 밀려 "컬럼 이름을 바꾸려 한다"는
+-- 42P16 에러가 난다) — region 을 반드시 select 목록 맨 끝에 둔다.
 -- ============================================================
 
 alter table public.maps add column if not exists region text;
 
 create or replace view public.map_cards as
 select
-  m.id, m.slug, m.title, m.one_liner, m.concept_tag, m.region, m.status, m.created_at,
+  m.id, m.slug, m.title, m.one_liner, m.concept_tag, m.status, m.created_at,
   u.id as curator_id, u.display_name as curator_name,
   u.avatar_url as curator_avatar, u.handle as curator_handle,
   u.curator_listed as curator_listed,
@@ -27,7 +31,8 @@ select
   (select count(*) from public.saved_maps s  where s.map_id = m.id) as save_count,
   (select count(*) from public.map_reviews r where r.map_id = m.id) as review_count,
   (select round(avg(r.rating)::numeric, 1) from public.map_reviews r
-     where r.map_id = m.id)                                        as avg_rating
+     where r.map_id = m.id)                                        as avg_rating,
+  m.region
 from public.maps m
 join public.users u on u.id = m.curator_id
 where m.status = 'published';
