@@ -1,13 +1,13 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 /** 큐레이터 본인용 동작 (F15). */
 
 async function requireCurator() {
   const db = await createClient();
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) throw new Error('not signed in');
 
   const { data: me } = await db.from('users')

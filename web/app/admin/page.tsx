@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { MembersTab, PendingTab, MapsTab, type Member, type AdminMap } from '@/components/admin/AdminTabs';
 
 export const dynamic = 'force-dynamic';
@@ -48,7 +48,7 @@ export default async function Admin({ searchParams }: Params) {
   const { tab = 'members' } = await searchParams;
   const db = await createClient();
 
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) notFound();
 
   const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { PhotoPicker, type Candidate } from '@/components/admin/PhotoPicker';
 import { photoUrl } from '@/lib/types';
 
@@ -13,7 +13,7 @@ export default async function Photos({ params }: Params) {
   const { slug } = await params;
   const db = await createClient();
 
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) notFound();
   const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();
   if (me?.role !== 'admin') notFound();

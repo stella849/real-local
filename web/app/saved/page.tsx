@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { MapCard } from '@/components/MapCard';
 import { SaveButton } from '@/components/SaveButton';
 import { TabBar } from '@/components/TabBar';
@@ -15,7 +15,7 @@ export default async function Saved({ searchParams }: Params) {
   const onPlaces = tab === 'places';
 
   const db = await createClient();
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) redirect('/signin?next=%2Fsaved');
 
   const { data: savedMaps } = await db.from('saved_maps')

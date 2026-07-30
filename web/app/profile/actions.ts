@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -16,14 +16,14 @@ type Result = { ok: true } | { ok: false; error: string };
  * 않는다.
  *
  * 위험을 좁히는 장치: 지울 대상 id 는 클라이언트에서 절대 받지 않고
- * 이 함수 안에서 db.auth.getUser() 로 직접 읽은 본인 uid 뿐이다 —
+ * 이 함수 안에서 세션으로 직접 읽은 본인 uid 뿐이다 —
  * 파라미터 자체가 없다. 즉 이 액션이 할 수 있는 유일한 일은
  * "지금 로그인한 사람이 자기 자신을 지우는 것"이다.
  */
 export async function deleteMyAccount(): Promise<Result> {
   try {
     const db = await createClient();
-    const { data: { user } } = await db.auth.getUser();
+    const user = await getUser(db);
     if (!user) return { ok: false, error: 'Not signed in.' };
 
     const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();

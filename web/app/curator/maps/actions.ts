@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 export type DraftPlace = {
   google_place_id: string;
@@ -81,7 +81,7 @@ export async function createMap(input: {
 }): Promise<Result> {
   try {
     const db = await createClient();
-    const { data: { user } } = await db.auth.getUser();
+    const user = await getUser(db);
     if (!user) return { ok: false, error: 'Sign in first.' };
 
     const { data: me } = await db.from('users')
@@ -156,7 +156,7 @@ export async function updateMap(input: {
 }): Promise<Result> {
   try {
     const db = await createClient();
-    const { data: { user } } = await db.auth.getUser();
+    const user = await getUser(db);
     if (!user) return { ok: false, error: 'Sign in first.' };
 
     const { data: me } = await db.from('users')

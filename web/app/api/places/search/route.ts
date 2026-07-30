@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { hasHangul, romanize } from '@/lib/romanize';
 
 type RawPhoto = { name: string; authorAttributions?: { displayName?: string }[] };
@@ -23,7 +23,7 @@ type RawPlace = {
  */
 export async function POST(req: Request) {
   const db = await createClient();
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) return Response.json({ error: 'unauthorized' }, { status: 401 });
 
   const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();

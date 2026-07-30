@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { AvatarUploader, ProfileFields, MyMapRow } from '@/components/curator/ProfileEditor';
 import { IconBack } from '@/components/Icons';
 
@@ -14,7 +14,7 @@ const TIER_LABEL = { resident: 'Resident curator', guest: 'Guest curator' } as c
 export default async function CuratorEditor() {
   const db = await createClient();
 
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) notFound();
 
   const { data: me } = await db.from('users')

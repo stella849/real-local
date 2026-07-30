@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 
 /**
  * 어드민 동작 (F9 · F10 · F11 · F16).
@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/server';
 
 async function requireAdmin() {
   const db = await createClient();
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) throw new Error('not signed in');
 
   const { data: me } = await db.from('users').select('role').eq('id', user.id).maybeSingle();

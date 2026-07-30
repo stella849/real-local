@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { ReviewForm } from '@/components/ReviewForm';
 import { IconBack, IconHome, IconStar } from '@/components/Icons';
 
@@ -24,7 +24,7 @@ export default async function Reviews({ params }: Params) {
     .select('id,author_name,rating,body,created_at,user_id')
     .eq('map_id', m.id).order('created_at', { ascending: false });
 
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   const mine = user ? (reviews ?? []).find((r) => r.user_id === user.id) ?? null : null;
 
   return (

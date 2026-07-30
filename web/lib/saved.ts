@@ -1,4 +1,4 @@
-import { createClient } from './supabase/server';
+import { createClient, getUser } from './supabase/server';
 
 /**
  * 현재 사용자가 저장한 맵·장소 id 집합.
@@ -11,7 +11,7 @@ import { createClient } from './supabase/server';
  */
 export async function getSaved() {
   const db = await createClient();
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) return { maps: new Set<string>(), places: new Set<string>(), user: null };
 
   const [{ data: m }, { data: p }] = await Promise.all([

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getUser } from '@/lib/supabase/server';
 import { SignOutButton } from '@/components/SignOutButton';
 import { DeleteAccountButton } from '@/components/DeleteAccountButton';
 import { CuratorAvatar } from '@/components/CuratorLine';
@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
  */
 export default async function Profile() {
   const db = await createClient();
-  const { data: { user } } = await db.auth.getUser();
+  const user = await getUser(db);
   if (!user) redirect('/signin?next=%2Fprofile');
 
   // users_read_self 정책이 본인 행만 돌려준다
