@@ -13,9 +13,6 @@ import { photoUrl, categoryLabel, type MapCard as Card, type Place } from '@/lib
 
 type Params = { params: Promise<{ slug: string }> };
 
-const when = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-
 /* map_cards 는 published 만 담는다. 따라서 pending·hidden·draft 슬러그로
    직접 들어오면 여기서 404 가 난다 — 403 은 화면의 존재를 알려준다 (§5).
    큐레이터 본인·어드민의 미리보기는 S11/S8 에서 별도 경로로 붙인다. */
@@ -64,9 +61,10 @@ export default async function MapDetail({ params }: Params) {
     .select('*').eq('curator_id', m.curator_id).neq('id', m.id)
     .order('save_count', { ascending: false }).limit(2);
 
-  // 최신 후기 3개 — Reviews 와 More from 사이에 미리보기로 노출
+  // 최신 후기 3개 — Reviews 와 More from 사이에 미리보기로 노출.
+  // 이름·날짜는 안 보여줄 거라 여기서도 안 읽는다.
   const { data: recentReviews } = await db.from('map_reviews')
-    .select('id,author_name,rating,body,created_at')
+    .select('id,rating,body')
     .eq('map_id', m.id).order('created_at', { ascending: false }).limit(3);
 
   const pins: Pin[] = places.map((p) => ({
@@ -168,14 +166,14 @@ export default async function MapDetail({ params }: Params) {
           </span>
         </Link>
 
+        {/* 이름·날짜는 뺐다 — 여긴 미리보기다. 누가 언제 썼는지는
+            'See all' 로 들어간 후기 화면에서 본다. */}
         {(recentReviews?.length ?? 0) > 0 && (
           <ul className="reviews">
             {(recentReviews ?? []).map((r) => (
               <li className="review" key={r.id}>
                 <p className="review-head">
-                  <b>{r.author_name}</b>
                   <span className="meta-count"><IconStar /> {r.rating}</span>
-                  <span>{when(r.created_at)}</span>
                 </p>
                 <p>{r.body}</p>
               </li>
