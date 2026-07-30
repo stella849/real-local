@@ -33,7 +33,7 @@ export default async function EditMap({ params }: Params) {
     || (map.status !== 'draft' && map.status !== 'rejected')) notFound();
 
   const { data: places } = await db.from('places')
-    .select('google_place_id,name_en,address,lat,lng,curator_note,photo_ref,photo_attribution,photo_candidates')
+    .select('google_place_id,name_en,name_ko,address,lat,lng,curator_note,photo_ref,photo_attribution,photo_candidates')
     .eq('map_id', id).order('order');
 
   return (

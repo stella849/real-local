@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createMap, updateMap, type DraftPlace } from '@/app/curator/maps/actions';
 
 type Hit = {
-  id: string; name: string; address: string; lat: number; lng: number;
+  id: string; name: string; name_ko: string | null; address: string; lat: number; lng: number;
   photo: string | null; attribution: string | null;
   candidates: { name: string; attribution: string | null }[];
 };
@@ -71,6 +71,7 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
     setPlaces([...places, {
       google_place_id: picked.id,
       name_en: picked.name,
+      name_ko: picked.name_ko,
       address: picked.address,
       lat: picked.lat,
       lng: picked.lng,
@@ -115,7 +116,10 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
             {hits.map((h) => (
               <button key={h.id} className="admin-row" style={{ textAlign: 'left' }}
                 onClick={() => { setPicked(h); setHits([]); }}>
-                <b>{h.name}</b>
+                {/* name_ko 는 구글이 영문 표기가 없어 한글을 그대로 준
+                    경우에만 있다 — 로마자로 바꾼 이름이 맞는 곳인지
+                    확인할 수 있게 원문을 옆에 남긴다 */}
+                <b>{h.name}{h.name_ko && <span className="admin-hint"> · {h.name_ko}</span>}</b>
                 <p className="admin-hint">{h.address}</p>
               </button>
             ))}
@@ -124,7 +128,7 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
 
         {picked && (
           <div className="admin-row" style={{ marginTop: 'var(--sp-xs)' }}>
-            <b>{picked.name}</b>
+            <b>{picked.name}{picked.name_ko && <span className="admin-hint"> · {picked.name_ko}</span>}</b>
             <p className="admin-hint">{picked.address}</p>
             <textarea className="field" rows={2} required
               style={{ marginTop: 'var(--sp-xs)' }}

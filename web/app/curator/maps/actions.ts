@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 export type DraftPlace = {
   google_place_id: string;
   name_en: string;
+  name_ko: string | null;
   address: string;
   lat: number;
   lng: number;
@@ -52,6 +53,7 @@ function placeRows(mapId: string, places: DraftPlace[]) {
     map_id: mapId,
     order: i + 1,
     name_en: p.name_en,
+    name_ko: p.name_ko,
     address: p.address || null,
     lat: p.lat,
     lng: p.lng,

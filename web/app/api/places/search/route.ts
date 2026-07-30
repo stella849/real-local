@@ -1,4 +1,14 @@
 import { createClient } from '@/lib/supabase/server';
+import { hasHangul, romanize } from '@/lib/romanize';
+
+type RawPhoto = { name: string; authorAttributions?: { displayName?: string }[] };
+type RawPlace = {
+  id: string;
+  displayName?: { text?: string };
+  formattedAddress?: string;
+  location?: { latitude: number; longitude: number };
+  photos?: RawPhoto[];
+};
 
 /**
  * 맵 에디터의 장소 검색 (§5 S9).
@@ -49,22 +59,30 @@ export async function POST(req: Request) {
     return Response.json({ error: 'search failed' }, { status: 502 });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const j = await res.json() as any;
-  const places = (j.places ?? []).map((p: any) => ({
-    id: p.id,
-    name: p.displayName?.text ?? '',
-    address: p.formattedAddress ?? '',
-    lat: p.location?.latitude,
-    lng: p.location?.longitude,
-    // 사진은 추가 시점에 자동 수집한다. 큐레이터가 고르지 않는다 (§5 S9)
-    photo: p.photos?.[0]?.name ?? null,
-    attribution: p.photos?.[0]?.authorAttributions?.[0]?.displayName ?? null,
-    candidates: (p.photos ?? []).slice(0, 10).map((x: any) => ({
-      name: x.name,
-      attribution: x.authorAttributions?.[0]?.displayName ?? null,
-    })),
-  }));
+  const j = await res.json() as { places?: RawPlace[] };
+  const places = (j.places ?? []).map((p) => {
+    const raw = p.displayName?.text ?? '';
+    // languageCode=en 을 걸어도 그 장소에 영문 로컬라이즈가 없으면 구글이
+    // 그냥 원래(한글) 이름을 돌려준다. 그대로 name_en 에 심으면 목록에
+    // 한글 상호가 노출된다(R3 위반) — 로마자로 바꾸고, 원래 한글은
+    // name_ko 로 살려 둔다. 검색 결과 자체가 이미 한글일 때만이다.
+    const korean = hasHangul(raw);
+    return {
+      id: p.id,
+      name: korean ? romanize(raw) : raw,
+      name_ko: korean ? raw : null,
+      address: p.formattedAddress ?? '',
+      lat: p.location?.latitude,
+      lng: p.location?.longitude,
+      // 사진은 추가 시점에 자동 수집한다. 큐레이터가 고르지 않는다 (§5 S9)
+      photo: p.photos?.[0]?.name ?? null,
+      attribution: p.photos?.[0]?.authorAttributions?.[0]?.displayName ?? null,
+      candidates: (p.photos ?? []).slice(0, 10).map((x) => ({
+        name: x.name,
+        attribution: x.authorAttributions?.[0]?.displayName ?? null,
+      })),
+    };
+  });
 
   return Response.json({ places });
 }
