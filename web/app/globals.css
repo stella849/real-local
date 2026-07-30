@@ -103,6 +103,22 @@ a{color:inherit}
 }
 .iconbtn:hover{background:var(--surface)}
 .iconbtn svg{width:19px;height:19px}
+
+/* 긴 페이지 맨 위로 (PRD v1.4 §6). 뷰포트 기준 고정 — 이 제품은
+   모바일 웹이 본 타깃이라(레이아웃 주석 참조) 데스크톱 미리보기에서
+   셸 중앙 정렬과 살짝 어긋나는 건 감수한다. */
+.scroll-top{
+  position:fixed;right:var(--sp-md);
+  /* 하단 탭바(일부 화면에만 있음, ~76px)를 넉넉히 피한다 — 탭바 없는
+     화면에서는 그만큼 여유롭게 뜨는 정도라 문제되지 않는다 */
+  bottom:calc(76px + env(safe-area-inset-bottom));
+  width:44px;height:44px;border-radius:var(--r-full);
+  display:flex;align-items:center;justify-content:center;
+  background:var(--text);color:var(--canvas);
+  box-shadow:0 2px 8px rgba(0,0,0,.2);
+  z-index:30;
+}
+.scroll-top svg{width:20px;height:20px}
 .topbar-title{
   font-size:14px;font-weight:500;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
@@ -329,7 +345,14 @@ a.section-head-link{text-decoration:none;padding-bottom:var(--sp-xs)}
 a.section-head-link:hover .more{color:var(--text)}
 a.section-head-link h2{cursor:pointer}
 
-.places{list-style:none;margin:0;padding:0 var(--sp-md);background:var(--canvas)}
+/* --surface 로 맵 헤더(--canvas) 와 다른 층이라는 걸 보여준다
+   (PRD v1.4 §6 맵/장소 위계 구분). 새 토큰 없이 기존 값 재사용. */
+.places{list-style:none;margin:0;padding:var(--sp-xs) var(--sp-md);background:var(--surface)}
+
+/* 맵 상세의 'More from' — 같은 --surface 톤. .section-head 는 기본이
+   --canvas 라 이 안에서만 맞춰 덮어쓴다. */
+.more-from{background:var(--surface);padding-bottom:var(--sp-xs)}
+.more-from .section-head{background:var(--surface)}
 .place{
   display:flex;gap:var(--sp-sm);
   padding:var(--sp-sm) 0;
@@ -350,6 +373,11 @@ a.section-head-link h2{cursor:pointer}
   flex:none;width:64px;height:64px;border-radius:var(--r-sm);
   object-fit:cover;background:var(--surface);border:1px solid var(--line);
 }
+.place-thumb-empty{
+  display:flex;align-items:center;justify-content:center;
+  color:var(--line-strong);
+}
+.place-thumb-empty svg{width:26px;height:26px}
 .place-main{flex:1;min-width:0}
 .place-name{font-size:15px;font-weight:700;line-height:1.4;margin:0 0 1px}
 /* name_ko 가 없으면 이 행 자체를 렌더하지 않는다 (§5 S3) */

@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { createClient, getUser } from '@/lib/supabase/server';
 import { MapCanvas, type Pin } from '@/components/MapCanvas';
 import { IconBack } from '@/components/Icons';
-import { photoUrl, categoryLabel, type Place } from '@/lib/types';
+import { PlaceThumb } from '@/components/PlaceThumb';
+import { categoryLabel, type Place } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,10 +72,7 @@ export default async function AdminPreview({ params }: Params) {
           {(places ?? []).map((p: Place) => (
             <li className="place" key={p.id}>
               <span className="place-n">{p.order}</span>
-              {p.photo_ref
-                // eslint-disable-next-line @next/next/no-img-element
-                ? <img className="place-thumb" src={photoUrl(p.photo_ref, 200)} alt="" loading="lazy" />
-                : <span className="place-thumb" aria-hidden />}
+              <PlaceThumb photoRef={p.photo_ref} />
               <div className="place-main">
                 <h3 className="place-name">{p.name_en}</h3>
                 <p className="place-cat">{categoryLabel(p.category)}</p>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient, getUser } from '@/lib/supabase/server';
 import { PhotoPicker, type Candidate } from '@/components/admin/PhotoPicker';
-import { photoUrl } from '@/lib/types';
+import { PlaceThumb } from '@/components/PlaceThumb';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,10 +55,7 @@ export default async function Photos({ params }: Params) {
             <div className="admin-row" key={p.id}>
               <div className="admin-row-main">
                 <span className="place-n">{p.order}</span>
-                {p.photo_ref
-                  // eslint-disable-next-line @next/next/no-img-element
-                  ? <img className="place-thumb" src={photoUrl(p.photo_ref, 160)} alt="" />
-                  : <span className="place-thumb" aria-hidden />}
+                <PlaceThumb photoRef={p.photo_ref} size={160} />
                 <div>
                   <b>{p.name_en}</b>
                   {p.name_ko && <p className="admin-hint">{p.name_ko}</p>}

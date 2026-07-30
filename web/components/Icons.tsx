@@ -63,6 +63,13 @@ export const Logo = (p: P) => (
   </svg>
 );
 
+/** 긴 페이지의 '맨 위로' 버튼 (PRD v1.4 §6) */
+export const IconUp = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M5 14.5 12 7.5l7 7" />
+  </g></svg>
+);
+
 export const IconHome = (p: P) => (
   <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
     <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1v-8.5Z" />
@@ -104,6 +111,18 @@ export const IconStar = (p: P) => (
     <path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 9.7l5.4-.8L12 4Z"
       fill="currentColor" stroke="none" />
   </svg>
+);
+
+/**
+ * 사진 없는 장소의 폴백 (PRD v1.4 §4.3). 빈 회색 박스 대신 쓴다.
+ * 카테고리 11종 각각 따로 그리는 대신 포크+나이프 하나로 통일했다 —
+ * 대부분 음식 카테고리라 크게 어긋나지 않고, 11개를 다 그리는 건
+ * 폴백 하나에 들이는 공으로는 과하다.
+ */
+export const IconMeal = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M6 3v7a2 2 0 0 0 4 0V3M8 3v7M8 10v11M18 3c-1.4 0-2.5 1.6-2.5 4.5S16.6 12 18 12v9M18 3v18" />
+  </g></svg>
 );
 
 /** 선택 표시 (어드민 사진 고르기). `✓` 글리프는 안 쓴다 — R15 와 같은 이유. */

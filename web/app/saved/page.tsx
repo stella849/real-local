@@ -4,7 +4,8 @@ import { createClient, getUser } from '@/lib/supabase/server';
 import { MapCard } from '@/components/MapCard';
 import { SaveButton } from '@/components/SaveButton';
 import { TabBar } from '@/components/TabBar';
-import { photoUrl, type MapCard as Card } from '@/lib/types';
+import { PlaceThumb } from '@/components/PlaceThumb';
+import { type MapCard as Card } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -86,10 +87,7 @@ export default async function Saved({ searchParams }: Params) {
               const p = row.places;
               return (
                 <li className="saved-place" key={p.id}>
-                  {p.photo_ref
-                    // eslint-disable-next-line @next/next/no-img-element
-                    ? <img className="place-thumb" src={photoUrl(p.photo_ref, 200)} alt="" loading="lazy" />
-                    : <span className="place-thumb" aria-hidden />}
+                  <PlaceThumb photoRef={p.photo_ref} />
                   <div className="place-main">
                     <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
                       {/* 목록이므로 한글 상호를 넣지 않는다 — 상세에서만 (R3) */}

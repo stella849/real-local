@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { ScrollTop } from '@/components/ScrollTop';
 
 export const metadata: Metadata = {
   title: 'REAL LOCAL',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <div className="shell">{children}</div>
+        <ScrollTop />
       </body>
     </html>
   );

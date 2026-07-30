@@ -9,6 +9,7 @@ import { MapCard } from '@/components/MapCard';
 import { CuratorAvatar, CuratorName } from '@/components/CuratorLine';
 import { IconBack, IconHome, IconStar } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
+import { PlaceThumb } from '@/components/PlaceThumb';
 import { photoUrl, categoryLabel, type MapCard as Card, type Place } from '@/lib/types';
 
 type Params = { params: Promise<{ slug: string }> };
@@ -127,10 +128,7 @@ export default async function MapDetail({ params }: Params) {
           {places.map((p) => (
             <li className="place" key={p.id} data-place-id={p.id}>
               <span className="place-n">{p.order}</span>
-              {p.photo_ref
-                // eslint-disable-next-line @next/next/no-img-element
-                ? <img className="place-thumb" src={photoUrl(p.photo_ref, 200)} alt="" loading="lazy" />
-                : <span className="place-thumb" aria-hidden />}
+              <PlaceThumb photoRef={p.photo_ref} />
               <div className="place-main">
                 <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
                   <h3 className="place-name">{p.name_en}</h3>
@@ -183,8 +181,10 @@ export default async function MapDetail({ params }: Params) {
           </ul>
         )}
 
+        {/* --surface 톤으로 위 콘텐츠와 다른 층임을 표시한다
+            (PRD v1.4 §6 — Places 와 같은 처리, 새 시각 언어 안 늘림) */}
         {(more?.length ?? 0) > 0 && (
-          <>
+          <div className="more-from">
             {/* 은퇴·강등된 큐레이터는 소개 페이지가 404 라 링크를 걸지
                 않는다 (§3.4). 그때는 제목만 남는다. */}
             {m.curator_listed && m.curator_handle ? (
@@ -203,7 +203,7 @@ export default async function MapDetail({ params }: Params) {
                 <MapCard key={x.id} m={x} saved={saved.maps.has(x.id)} />
               ))}
             </ul>
-          </>
+          </div>
         )}
       </main>
     </>
