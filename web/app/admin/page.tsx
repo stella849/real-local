@@ -47,7 +47,7 @@ export default async function Admin({ searchParams }: Params) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const maps: AdminMap[] = ((rawMaps ?? []) as any[]).map((m) => ({
     id: m.id, slug: m.slug, title: m.title, status: m.status,
-    review_note: m.review_note,
+    review_note: m.review_note, curator_id: m.curator_id,
     curator_name: nameOf.get(m.curator_id) ?? '?',
     place_count: m.places?.[0]?.count ?? 0,
   }));
@@ -83,7 +83,7 @@ export default async function Admin({ searchParams }: Params) {
           <MembersTab members={(members ?? []) as Member[]} meId={user.id} />
         )}
         {tab === 'pending' && <PendingTab maps={pending} />}
-        {tab === 'maps' && <MapsTab maps={maps} />}
+        {tab === 'maps' && <MapsTab maps={maps} meId={user.id} />}
       </main>
     </div>
   );

@@ -16,7 +16,7 @@ export type Member = {
 
 export type AdminMap = {
   id: string; slug: string; title: string; status: string;
-  review_note: string | null; curator_name: string; place_count: number;
+  review_note: string | null; curator_id: string; curator_name: string; place_count: number;
 };
 
 /* 역할 콤보박스는 4지선다다. 큐레이터 등급은 어드민 화면에서만
@@ -53,6 +53,7 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
 
   // 이메일 가입 계정은 큐레이터·어드민이 될 수 없다 (§3.1)
   const emailOnly = m.auth_provider !== 'google';
+  const showEdit = m.role !== 'user';
 
   function change(v: string) {
     const [role, tier] = v.split(':') as ['user' | 'curator' | 'admin', 'resident' | 'guest'];
@@ -70,40 +71,46 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
 
   return (
     <div className="admin-row">
-      <div className="admin-row-main">
+      <div className="admin-row-main member-row-main">
         <span className="admin-email">
           {m.email}
-          <span className="provider-mark" title={emailOnly ? 'Email' : 'Google'}>
+          {/* 반복 문구 대신 아이콘 툴팁 하나로 대체 — 목록이 길어질수록 반복 텍스트는 소음이다 */}
+          <span className="provider-mark" title={emailOnly ? 'Email sign-in — cannot become curator/admin' : 'Google sign-in'}>
             {emailOnly ? <IconMail /> : <IconGoogle />}
           </span>
         </span>
-        <span className="admin-name">{m.display_name}</span>
+        <span className="admin-name">
+          {m.display_name}
+          {/* 자기 자신은 강등할 수 없다 — 아래 줄 대신 이름 옆에 배지로 표시 */}
+          {isMe && <span className="admin-you" title="This is you — role cannot be changed here">You</span>}
+        </span>
 
-        <select
-          className="field admin-select"
-          value={roleValue(m)}
-          disabled={isMe || pending}
-          onChange={(e) => change(e.target.value)}
-        >
-          {ROLES.map((r) => (
-            <option key={r.v} value={r.v}
-              // email 계정은 큐레이터·어드민 선택지가 비활성이다
-              disabled={emailOnly && r.v !== 'user'}>
-              {r.label}
-            </option>
-          ))}
-        </select>
+        {/* select+Edit 을 한 grid 셀로 묶어야 행마다 폭이 똑같이 잡힌다 —
+            둘을 따로 두면 Edit 유무에 따라 열 경계 자체가 흔들린다. */}
+        <span className="admin-controls">
+          <select
+            className={`field admin-select${showEdit ? '' : ' admin-select-wide'}`}
+            value={roleValue(m)}
+            disabled={isMe || pending}
+            onChange={(e) => change(e.target.value)}
+          >
+            {ROLES.map((r) => (
+              <option key={r.v} value={r.v}
+                // email 계정은 큐레이터·어드민 선택지가 비활성이다
+                disabled={emailOnly && r.v !== 'user'}>
+                {r.label}
+              </option>
+            ))}
+          </select>
 
-        {m.role !== 'user' && (
-          <button className="btn btn-secondary sm" onClick={() => setOpen(!open)}>
-            {open ? 'Close' : 'Edit'}
-          </button>
-        )}
+          {showEdit && (
+            <button className="btn btn-secondary sm" onClick={() => setOpen(!open)}>
+              {open ? 'Close' : 'Edit'}
+            </button>
+          )}
+        </span>
       </div>
 
-      {/* 자기 자신은 강등할 수 없다. 실수로 하면 아무도 어드민에 못 들어간다 */}
-      {isMe && <p className="admin-hint">This is you — role cannot be changed here.</p>}
-      {emailOnly && !isMe && <p className="admin-hint">Curators must sign in with Google.</p>}
       <Err msg={err} />
 
       {open && <CuratorFields m={m} />}
@@ -173,7 +180,9 @@ function PendingRow({ m }: { m: AdminMap }) {
       <div className="admin-row-main">
         <b>{m.title}</b>
         <span className="admin-hint">by {m.curator_name} · {m.place_count} places</span>
-        <a className="btn btn-secondary sm" href={`/maps/${m.slug}`} target="_blank" rel="noreferrer">
+        {/* /maps/{slug} 는 map_cards(published 전용) 를 읽어 pending 은
+            거기서 404 난다 — 원본 테이블을 직접 읽는 어드민 전용 경로로 */}
+        <a className="btn btn-secondary sm" href={`/admin/preview/${m.slug}`} target="_blank" rel="noreferrer">
           Preview
         </a>
         <button className="btn btn-dark sm" disabled={pending}
@@ -202,28 +211,46 @@ function PendingRow({ m }: { m: AdminMap }) {
 }
 
 /* ---------------------------------------------------------- Maps */
-export function MapsTab({ maps }: { maps: AdminMap[] }) {
+export function MapsTab({ maps, meId }: { maps: AdminMap[]; meId: string }) {
   return (
     <div className="admin-list">
-      {maps.map((m) => <MapRow key={m.id} m={m} />)}
+      {maps.map((m) => <MapRow key={m.id} m={m} meId={meId} />)}
     </div>
   );
 }
 
-function MapRow({ m }: { m: AdminMap }) {
+function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
   const [err, setErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const hidden = m.status === 'hidden';
+  const isMine = m.curator_id === meId;
+  // 발행 전이거나(draft·pending·rejected) 내려간(hidden) 맵은
+  // map_cards(published 전용) 에 없어 실제 페이지가 없다 — 어드민
+  // 전용 미리보기로 보낸다. published 만 진짜 페이지를 연다.
+  const openHref = m.status === 'published' ? `/maps/${m.slug}` : `/admin/preview/${m.slug}`;
 
   return (
     <div className="admin-row">
+      {/* 1줄 — 무엇인지: 제목 + 상태만 */}
       <div className="admin-row-main">
         <b>{m.title}</b>
         <span className="badge quiet">{m.status.toUpperCase()}</span>
+      </div>
+
+      {/* 2줄 — 누구·얼마나 + 동작 */}
+      <div className="admin-row-main">
         <span className="admin-hint">{m.curator_name} · {m.place_count} places</span>
-        <a className="btn btn-secondary sm" href={`/maps/${m.slug}`} target="_blank" rel="noreferrer">
+        <a className="btn btn-secondary sm" href={openHref} target="_blank" rel="noreferrer">
           Open
         </a>
+        {/* 발행은 본인 draft·rejected 에서만 — tip 필수·최소 4곳 검증이
+            그 편집 화면에만 있다. 어드민이 남의 미완성 초안을 검증 없이
+            강제로 내보내면 §5 S9 규칙이 깨진다. */}
+        {isMine && (m.status === 'draft' || m.status === 'rejected') && (
+          <a className="btn btn-dark sm" href={`/curator/maps/${m.id}/edit`}>
+            Continue editing
+          </a>
+        )}
         {(m.status === 'published' || hidden) && (
           <button className="btn btn-secondary sm" disabled={pending}
             onClick={() => start(async () => {

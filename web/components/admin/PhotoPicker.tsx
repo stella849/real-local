@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { setPlacePhoto } from '@/app/admin/actions';
 import { photoUrl } from '@/lib/types';
+import { IconCheck } from '@/components/Icons';
 
 export type Candidate = { name: string; attribution: string | null };
 
@@ -14,12 +15,20 @@ export type Candidate = { name: string; attribution: string | null };
  * 그런 행은 여기서 고칠 수 없고 이니셜 폴백으로 남는다 — 사진을 틀리게
  * 붙이는 것보다 낫다.
  */
+/**
+ * 클릭 즉시 저장한다 — 별도 저장 버튼을 두지 않는다. 후보가 최대
+ * 10장이라 "고르고 → 저장 버튼 찾기"가 오히려 단계를 늘린다. 대신
+ * 저장이 실제로 일어났다는 걸 눈에 보이게 한다 — 선택된 사진에 체크
+ * 배지를 얹고, 방금 바뀐 직후에는 "Saved" 문구를 잠깐 띄운다.
+ */
 export function PhotoPicker({ placeId, current, candidates }: {
   placeId: string;
   current: string | null;
   candidates: Candidate[];
 }) {
   const [ref, setRef] = useState(current);
+  const [justSaved, setJustSaved] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
   if (!candidates.length) {
@@ -27,23 +36,35 @@ export function PhotoPicker({ placeId, current, candidates }: {
   }
 
   return (
-    <div className="photo-strip">
-      {candidates.map((c) => (
-        <button
-          key={c.name}
-          className="photo-option"
-          aria-pressed={ref === c.name}
-          disabled={pending}
-          title={c.attribution ?? undefined}
-          onClick={() => start(async () => {
-            const r = await setPlacePhoto(placeId, c.name);
-            if (r.ok) setRef(c.name);
-          })}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={photoUrl(c.name, 160)} alt="" loading="lazy" />
-        </button>
-      ))}
+    <div>
+      <div className="photo-strip">
+        {candidates.map((c) => (
+          <button
+            key={c.name}
+            className="photo-option"
+            aria-pressed={ref === c.name}
+            disabled={pending}
+            title={c.attribution ?? undefined}
+            onClick={() => start(async () => {
+              setErr(null);
+              const r = await setPlacePhoto(placeId, c.name);
+              if (r.ok) {
+                setRef(c.name);
+                setJustSaved(true);
+                setTimeout(() => setJustSaved(false), 2000);
+              } else {
+                setErr(r.error);
+              }
+            })}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={photoUrl(c.name, 160)} alt="" loading="lazy" />
+            {ref === c.name && <IconCheck className="photo-check" />}
+          </button>
+        ))}
+      </div>
+      {justSaved && <p className="admin-hint">Saved.</p>}
+      {err && <p className="form-error" style={{ minHeight: 0 }}>{err}</p>}
     </div>
   );
 }

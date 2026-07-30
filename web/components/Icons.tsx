@@ -106,6 +106,13 @@ export const IconStar = (p: P) => (
   </svg>
 );
 
+/** 선택 표시 (어드민 사진 고르기). `✓` 글리프는 안 쓴다 — R15 와 같은 이유. */
+export const IconCheck = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="m5 12.5 4.5 4.5L19 7.5" />
+  </g></svg>
+);
+
 /**
  * 로그인 방식 표식 (어드민 Members, §8). 구글은 브랜드 마크라 고정
  * 4색을 쓴다 — Logo 컴포넌트와 같은 이유(§10.1, currentColor 로는
