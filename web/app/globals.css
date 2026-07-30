@@ -562,6 +562,10 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 .review-head b{font-size:14px;font-weight:700;color:var(--text)}
 .review p{margin:0;font-size:14px;line-height:1.5;color:var(--text-2)}
 
+/* 맵 상세의 후기 미리보기(3개) — 전체 후기 화면(.review 공용)보다
+   위아래를 좁힌다. .review 자체를 고치면 후기 화면까지 같이 좁아진다. */
+.reviews-preview .review{padding:var(--sp-xxs) 0}
+
 /* ============================================================
    Admin (S8) — 운영자용이라 데스크톱 폭을 허용한다. 밀도 우선.
    셸의 480px 를 여기서만 푼다.

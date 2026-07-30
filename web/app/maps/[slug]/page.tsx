@@ -169,7 +169,7 @@ export default async function MapDetail({ params }: Params) {
         {/* 이름·날짜는 뺐다 — 여긴 미리보기다. 누가 언제 썼는지는
             'See all' 로 들어간 후기 화면에서 본다. */}
         {(recentReviews?.length ?? 0) > 0 && (
-          <ul className="reviews">
+          <ul className="reviews reviews-preview">
             {(recentReviews ?? []).map((r) => (
               <li className="review" key={r.id}>
                 {/* 별점 옆에 본문을 바로 잇는다 — 줄바꿈하면 미리보기가
