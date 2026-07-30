@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { createMap, type DraftPlace } from '@/app/curator/maps/new/actions';
+import { createMap, updateMap, type DraftPlace } from '@/app/curator/maps/actions';
 
 type Hit = {
   id: string; name: string; address: string; lat: number; lng: number;
@@ -12,16 +12,23 @@ type Hit = {
 
 const MIN_TO_PUBLISH = 4;
 
-export function MapEditor({ tier }: { tier: 'resident' | 'guest' | null }) {
+type Initial = { title: string; one_liner: string; concept_tag: string; places: DraftPlace[] };
+
+/** mapId 가 있으면 draft 재편집(F13 후속) — 없으면 신규 작성(S9). */
+export function MapEditor({ tier, mapId, initial }: {
+  tier: 'resident' | 'guest' | null;
+  mapId?: string;
+  initial?: Initial;
+}) {
   const router = useRouter();
   const [q, setQ] = useState('');
   const [hits, setHits] = useState<Hit[]>([]);
   const [picked, setPicked] = useState<Hit | null>(null);
   const [tip, setTip] = useState('');
-  const [places, setPlaces] = useState<DraftPlace[]>([]);
-  const [title, setTitle] = useState('');
-  const [oneLiner, setOneLiner] = useState('');
-  const [tag, setTag] = useState('');
+  const [places, setPlaces] = useState<DraftPlace[]>(initial?.places ?? []);
+  const [title, setTitle] = useState(initial?.title ?? '');
+  const [oneLiner, setOneLiner] = useState(initial?.one_liner ?? '');
+  const [tag, setTag] = useState(initial?.concept_tag ?? '');
   const [err, setErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const [saved, setSaved] = useState(false);
@@ -79,7 +86,8 @@ export function MapEditor({ tier }: { tier: 'resident' | 'guest' | null }) {
   function submit(publish: boolean) {
     start(async () => {
       setErr(null);
-      const r = await createMap({ title, one_liner: oneLiner, concept_tag: tag, places, publish });
+      const input = { title, one_liner: oneLiner, concept_tag: tag, places, publish };
+      const r = mapId ? await updateMap({ mapId, ...input }) : await createMap(input);
       if (!r.ok) { setErr(r.error); return; }
       setSaved(true);
       router.push(publish ? `/maps/${r.slug}` : '/curator');

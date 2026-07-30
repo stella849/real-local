@@ -410,9 +410,16 @@ create policy places_update on public.places for update using (
             and (m.curator_id = auth.uid() or public.is_admin()))
 );
 
--- places 도 DELETE 정책 없음. 단 맵 에디터의 '장소 삭제'(§5 S9)는
--- 발행 전 draft 단계의 편집이라 Server Action 이 service role 없이
--- 처리할 수 없다. F13 구현 시 draft 한정 DELETE 정책을 추가할 것.
+-- published·pending·hidden 장소는 여전히 삭제 불가 (maps 와 동일 원칙).
+-- draft 재편집(F13 후속)만 예외 — curator 본인 소유 + 맵이 draft 상태일
+-- 때만 삭제할 수 있다. 맵이 발행되는 순간 이 정책은 더 이상 적용되지 않는다.
+drop policy if exists places_delete_draft on public.places;
+create policy places_delete_draft on public.places for delete using (
+  exists (select 1 from public.maps m
+          where m.id = places.map_id
+            and m.curator_id = auth.uid()
+            and m.status = 'draft')
+);
 
 -- ---------- 저장 목록 ----------
 drop policy if exists "own saved maps" on public.saved_maps;
