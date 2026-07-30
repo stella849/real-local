@@ -174,7 +174,7 @@ export default async function MapDetail({ params }: Params) {
               <li className="review" key={r.id}>
                 {/* 별점 옆에 본문을 바로 잇는다 — 줄바꿈하면 미리보기가
                     후기 화면과 다를 게 없어진다 */}
-                <p className="review-head">
+                <p className="review-head" style={{ lineHeight: '1.2' }}>
                   <span className="meta-count"><IconStar /> {r.rating}</span>
                   <span style={{ color: 'var(--text-2)' }}>{r.body}</span>
                 </p>
