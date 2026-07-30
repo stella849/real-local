@@ -31,9 +31,16 @@ export default async function Admin({ searchParams }: Params) {
 
   /* maps 를 직접 조회한다. map_cards 뷰는 published 만 담기 때문이다 —
      어드민은 draft·pending·rejected·hidden 을 전부 봐야 한다.
-     maps_read 정책이 어드민에게 전체를 열어 준다. */
+     maps_read 정책이 어드민에게 전체를 열어 준다.
+
+     places(count) 대신 places!places_map_id_fkey(count) 를 쓴다 —
+     maps → places 로 가는 FK 가 두 개다(1. places.map_id, 2.
+     maps.cover_place_id). PostgREST 가 embed 대상을 못 정해 PGRST201
+     로 쿼리 전체를 거부했고, 그 결과 Pending·Maps 탭이 항상 0으로
+     보였다(이 select 가 실패하면 rawMaps 가 null → maps·pending 모두
+     빈 배열). 어느 쪽 FK 인지 명시하면 해결된다. */
   const { data: rawMaps } = await db.from('maps')
-    .select('id,slug,title,status,review_note,curator_id,places(count)')
+    .select('id,slug,title,status,review_note,curator_id,places!places_map_id_fkey(count)')
     .order('status').order('created_at', { ascending: false });
 
   const nameOf = new Map((members ?? []).map((m) => [m.id, m.display_name ?? m.email ?? '?']));
