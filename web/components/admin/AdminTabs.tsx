@@ -53,7 +53,13 @@ export function MembersTab({ groups, meId }: { groups: MemberGroup[]; meId: stri
     <div style={{ display: 'grid', gap: 'var(--sp-md)' }}>
       {groups.map((g) => (
         <section key={g.key}>
-          <div className="section-head"><h2>{g.label}</h2><span className="count">{g.items.length}</span></div>
+          {/* provider 아이콘은 행마다 넣지 않고 섹션 제목 앞에 하나만 —
+              그룹으로 이미 나뉘어 있어 행마다 반복할 필요가 없다. */}
+          <div className="section-head">
+            <span className="provider-mark">{g.key === 'google' ? <IconGoogle /> : <IconMail />}</span>
+            <h2>{g.label}</h2>
+            <span className="count">{g.items.length}</span>
+          </div>
           {/* Maps 탭과 같은 패턴 — 8개까지만 보이고 나머지는 이 안에서만
               세로 스크롤한다. 정렬 기준(§ page.tsx sortMembers)은 그룹으로
               나누기 전과 동일하게 유지된다. */}
@@ -94,10 +100,6 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
       <div className="admin-row-main member-row-main">
         <span className="admin-email">
           <span className="truncate">{m.email}</span>
-          {/* 반복 문구 대신 아이콘 툴팁 하나로 대체 — 목록이 길어질수록 반복 텍스트는 소음이다 */}
-          <span className="provider-mark" title={emailOnly ? 'Email sign-in — cannot become curator/admin' : 'Google sign-in'}>
-            {emailOnly ? <IconMail /> : <IconGoogle />}
-          </span>
         </span>
         <span className="admin-name">
           <span className="truncate">{m.display_name}</span>
