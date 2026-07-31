@@ -816,6 +816,8 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 }
 .curator-page-info .url{font-size:15px;font-weight:700;color:var(--text)}
 .curator-page-info .url a{color:var(--accent)}
+/* 변경 불가 안내 — 볼드 없이 옅게. 굵은 본문에 붙여 두면 경고로 읽힌다 */
+.curator-page-info .note{font-size:12px;font-weight:400;color:var(--text-3)}
 .curator-page-info .tier{font-size:13px;color:var(--text-2)}
 
 /* 월 1회 businessStatus 크론이 붙이는 폐업 의심 경고 (Maps 탭). */

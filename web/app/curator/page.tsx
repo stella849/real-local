@@ -48,11 +48,13 @@ export default async function CuratorEditor() {
             공유된 링크가 깨진다 (§9) */}
         <div className="curator-page-info">
           <p className="url">
-            Your page: {me.handle
+            Profile URL: {me.handle
               ? <Link href={`/curators/${me.handle}`}>/curators/{me.handle}</Link>
               : 'not assigned yet'}
-            {' '}— set by an admin and fixed after that.
           </p>
+          {/* 변경 불가 안내는 아랫줄로 내리고 볼드를 뺐다 — 같은 줄에
+              굵게 붙어 있으면 안내가 아니라 경고처럼 읽힌다 (요청). */}
+          <p className="note">(set by an admin and fixed after that)</p>
           {/* 등급은 본인에게만 보인다. 일반 사용자에게는 어디에도 없다 (§3.2) */}
           {me.curator_tier && (
             <p className="tier">{TIER_LABEL[me.curator_tier as keyof typeof TIER_LABEL]}</p>
