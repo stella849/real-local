@@ -694,6 +694,10 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 /* 회원이 늘어날 걸 감안해 밀도를 우선한다 — 상하 여백을 sp-sm 대신
    sp-xxs 로 좁히고, 이메일·이름은 넓게 열어 select 는 좁혔다. */
 .admin-list{padding:var(--sp-md);display:flex;flex-direction:column;gap:var(--sp-xxs)}
+/* Maps/Photo 탭 — 상태 그룹당 5개까지만 보이고 나머지는 이 안에서만
+   스크롤한다(탭 전체가 끝없이 안 늘어난다). 행 높이가 상태마다 조금씩
+   달라 정확히 5.0개는 아니고 근사치다. */
+.admin-list-scroll{max-height:740px;overflow-y:auto}
 .admin-row{
   border:1px solid var(--line);border-radius:var(--r-md);
   padding:var(--sp-xxs) var(--sp-md);background:var(--canvas);
@@ -731,8 +735,12 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 }
 .admin-you{
   flex:none;font-size:11px;font-weight:600;color:var(--text-3);
-  border:1px solid var(--line);border-radius:999px;padding:1px 8px;
+  border:1px solid var(--line);border-radius:999px;padding:0 6px;
 }
+/* 어드민 화면에 남은 알약(preview 상단의 상태 배지 등)은 여백을
+   더 줄인다 — 기본 .badge 는 /curator 같은 비-admin 화면도 쓰므로
+   거긴 안 건드리고 이 modifier 만 admin 쪽에서 붙인다. */
+.badge.tight{padding:1px 7px}
 .admin-hint{font-size:12px;color:var(--text-3);margin:2px 0 0}
 .admin-empty{padding:var(--sp-xxl);text-align:center}
 

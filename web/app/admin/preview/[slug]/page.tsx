@@ -48,7 +48,7 @@ export default async function AdminPreview({ params }: Params) {
         <Link className="iconbtn" href="/admin?tab=maps" aria-label="Back"><IconBack /></Link>
         <span className="topbar-title">{map.title}</span>
         <span className="topbar-spacer" />
-        <span className="badge quiet">{map.status.toUpperCase()}</span>
+        <span className="badge quiet tight">{map.status.toUpperCase()}</span>
       </header>
 
       <main className="view">

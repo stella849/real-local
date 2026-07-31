@@ -217,10 +217,35 @@ function PendingRow({ m }: { m: AdminMap }) {
 }
 
 /* ---------------------------------------------------------- Maps */
+// 순서 고정: Pending → Published → Hidden → Draft → Rejected. 요청은
+// 앞의 셋만 짚었지만 draft·rejected 도 실제 존재하는 맵이라 빼면
+// 어드민이 그 맵들을 아예 못 본다 — 이름 없는 나머지 뒤에 붙였다.
+const MAP_GROUPS: { status: string; label: string }[] = [
+  { status: 'pending', label: 'Pending' },
+  { status: 'published', label: 'Published' },
+  { status: 'hidden', label: 'Hidden' },
+  { status: 'draft', label: 'Draft' },
+  { status: 'rejected', label: 'Rejected' },
+];
+
 export function MapsTab({ maps, meId }: { maps: AdminMap[]; meId: string }) {
+  const groups = MAP_GROUPS
+    .map((g) => ({ ...g, items: maps.filter((m) => m.status === g.status) }))
+    .filter((g) => g.items.length > 0);
+
   return (
-    <div className="admin-list">
-      {maps.map((m) => <MapRow key={m.id} m={m} meId={meId} />)}
+    <div style={{ display: 'grid', gap: 'var(--sp-md)' }}>
+      {groups.map((g) => (
+        <section key={g.status}>
+          <div className="section-head"><h2>{g.label}</h2><span className="count">{g.items.length}</span></div>
+          {/* 상태별로 이미 묶여 있어 행마다 상태를 또 안 적는다(닷도
+              생략). 5개까지만 보이고 나머지는 세로 스크롤 — 목록이
+              길어져도 탭 하나가 끝없이 늘어지지 않는다. */}
+          <div className="admin-list admin-list-scroll">
+            {g.items.map((m) => <MapRow key={m.id} m={m} meId={meId} />)}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }
@@ -240,11 +265,10 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
 
   return (
     <div className="admin-row">
-      {/* 1줄 — 무엇인지: 제목 + 상태(컬러 닷). 캡슐 배지 대신이다 —
-          어드민 화면 전체에서 알약이 볼륨 커 보인다는 요청으로 바꿨다. */}
+      {/* 1줄 — 제목만. 상태는 이제 그룹 헤더가 말해줘서 컬러 닷도
+          텍스트도 행마다 또 안 넣는다 (그룹핑 도입으로 생략). */}
       <div className="admin-row-main">
         <b>{m.title}</b>
-        <span className={`status ${m.status}`}>{m.status.toUpperCase()}</span>
       </div>
 
       {/* 2줄 — 누구·얼마나 + 동작. 상태를 바꾸는 액션(Hide/Publish,

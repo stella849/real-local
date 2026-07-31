@@ -39,10 +39,17 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
   const [busy, setBusy] = useState(false);
   const [pending, start] = useTransition();
 
+  // 어떤 사진 액션(커버·갤러리·업로드)이든 저장되면 똑같이 잠깐
+  // "Saved." 를 띄운다 — 지금까지 커버 교체에만 있던 걸 전부로 넓혔다.
+  function flashSaved() {
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 2000);
+  }
+
   async function saveGallery(next: string[]) {
     setErr(null);
     const r = await setPlacePhotos(placeId, next);
-    if (r.ok) setSelected(next);
+    if (r.ok) { setSelected(next); flashSaved(); }
     else setErr(r.error);
   }
 
@@ -87,13 +94,8 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
                 onClick={() => start(async () => {
                   setErr(null);
                   const r = await setPlacePhoto(placeId, c.name);
-                  if (r.ok) {
-                    setRef(c.name);
-                    setJustSaved(true);
-                    setTimeout(() => setJustSaved(false), 2000);
-                  } else {
-                    setErr(r.error);
-                  }
+                  if (r.ok) { setRef(c.name); flashSaved(); }
+                  else setErr(r.error);
                 })}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -102,7 +104,6 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
               </button>
             ))}
           </div>
-          {justSaved && <p className="admin-hint">Saved.</p>}
         </>
       )}
 
@@ -148,6 +149,7 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
         <input type="file" accept="image/*" onChange={upload} disabled={busy} hidden />
       </label>
 
+      {justSaved && <p className="admin-hint">Saved.</p>}
       {err && <p className="form-error" style={{ minHeight: 0 }}>{err}</p>}
     </div>
   );

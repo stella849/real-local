@@ -108,7 +108,7 @@ export default async function Admin({ searchParams }: Params) {
   const TABS = [
     { id: 'members', label: `Members (${members.length})` },
     { id: 'pending', label: `Pending (${pending.length})` },
-    { id: 'maps', label: `Maps (${maps.length})` },
+    { id: 'maps', label: `Maps/Photo (${maps.length})` },
     { id: 'reviews', label: `Reviews (${reviews.length})` },
   ];
 
