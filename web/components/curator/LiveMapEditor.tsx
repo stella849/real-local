@@ -41,7 +41,6 @@ export function LiveMapEditor({ mapId, initial, places }: {
   const session = useRef<string>(crypto.randomUUID());
 
   const [err, setErr] = useState<string | null>(null);
-  const [msg, setMsg] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const [adding, setAdding] = useState(false);
 
@@ -99,7 +98,7 @@ export function LiveMapEditor({ mapId, initial, places }: {
   }
 
   function save() {
-    setErr(null); setMsg(null);
+    setErr(null);
     start(async () => {
       const r = await updateLiveMap({
         mapId,
@@ -110,8 +109,10 @@ export function LiveMapEditor({ mapId, initial, places }: {
         newPlaces,
       });
       if (!r.ok) { setErr(r.error); return; }
-      setNewPlaces([]);
-      setMsg('Saved.');
+      // 저장하고 이 화면에 머무르지 않는다 — 편집이 끝났는데 같은 폼이
+      // 그대로 떠 있으면 저장이 됐는지 알기 어렵다. 상단 Back 이
+      // 가리키는 곳(맵 목록)과 같은 자리로 돌려보낸다 (요청).
+      router.push('/curator');
       router.refresh();
     });
   }
@@ -203,7 +204,6 @@ export function LiveMapEditor({ mapId, initial, places }: {
       <p className="form-error">{err}</p>
 
       <div className="row-end">
-        {msg && <span className="admin-hint">{msg}</span>}
         <button className="btn btn-dark btn-block" disabled={pending} onClick={save}>
           Save changes
         </button>
