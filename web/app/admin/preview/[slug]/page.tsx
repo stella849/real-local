@@ -74,8 +74,16 @@ export default async function AdminPreview({ params }: Params) {
               <span className="place-n">{p.order}</span>
               <PlaceThumb photoRef={p.photo_ref} />
               <div className="place-main">
-                <h3 className="place-name">{p.name_en}</h3>
-                <p className="place-cat">{categoryLabel(p.category)}</p>
+                {/* places_read RLS 가 어드민에게는 상태 무관 전체를 열어
+                    주므로 pending·draft·rejected 장소도 이 링크로 상세
+                    (사진 캐러셀·주소·길찾기) 를 그대로 볼 수 있다 —
+                    /maps/[slug] 의 같은 패턴. 지금까지 이 링크가 없어서
+                    Preview 에서 요약(썸네일·이름·카테고리·팁)만 보이고
+                    장소 세부 정보로 들어갈 방법이 없었다. */}
+                <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
+                  <h3 className="place-name">{p.name_en}</h3>
+                  <p className="place-cat">{categoryLabel(p.category)}</p>
+                </Link>
                 {p.curator_note && <p className="place-tip">{p.curator_note}</p>}
               </div>
             </li>
