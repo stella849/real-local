@@ -813,16 +813,26 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
    상자(테두리·배경)도 여기서 지운다 — 텍스트+네이티브 화살표만 남긴
    고스트형(요청). 별도 화살표 아이콘은 그리지 않는다(Icons.tsx 원칙). */
 .member-row-main .admin-select{
-  flex:none;min-width:0;max-width:9rem;width:auto;
+  /* flex:none + width:auto 였을 때가 "Resident"가 "esident"로 보인 원인이다.
+     select 의 auto 폭은 가장 긴 옵션 기준이라 트랙보다 넓어지는데, 그러면
+     넘치는 건 select 가 아니라 부모(.admin-controls)다 — select 자신은
+     넘치지 않으니 text-overflow 가 발동할 일이 없고, 부모의 overflow:hidden
+     + 오른쪽 정렬이 왼쪽(글자 앞부분)을 잘라냈다.
+     flex:1 1 auto + min-width:0 으로 select 가 트랙 안까지 줄어들게 하면
+     이제 select 자신이 넘쳐서 아래 ellipsis 가 뒷글자를 생략한다. */
+  flex:1 1 auto;min-width:0;max-width:9rem;width:auto;
   border:none;background:none;border-radius:0;
   padding:4px 2px;font-weight:600;
-  /* 트랙이 좁아 "Resident" 가 다 안 들어가면 앞부분이 잘려 보이는
-     대신(§ overflow:hidden 배경 참조) 뒷글자를 말줄임표로 생략한다
-     (요청) — 잘려도 "Resi…" 처럼 어떤 역할인지는 알아볼 수 있다. */
+  /* 좁아서 다 못 넣으면 앞부분을 잘라내는 대신 뒷글자를 생략한다(요청) —
+     "Resi…" 처럼 잘려도 어떤 역할인지는 알아볼 수 있다. */
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .member-row-main .admin-select:focus{outline:none;text-decoration:underline}
 .member-row-main .admin-select-wide{flex:1;min-width:0;max-width:none;width:auto}
+/* select 와 연필 사이 간격은 좁혀 그만큼을 글자에 준다 — 대부분의 행은
+   이걸로 생략 없이 "Resident" 가 다 들어간다. Pending 행의 Reject·Approve
+   는 붙으면 안 되므로 .admin-controls 전체가 아니라 Members 행에만 건다. */
+.member-row-main .admin-controls{gap:var(--sp-xxs)}
 
 /* 데스크톱(Members 목록이 720px 로 묶이는 폭, admin-members 참조)에서는
    요청대로 role 표시를 User 행과 같은 왼쪽 자리로 옮긴다 — 폭을 고정해
@@ -831,8 +841,11 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
    오히려 넘칠 수 있어 기존(오른쪽 정렬 + 콘텐츠 너비) 그대로 둔다. */
 @media (min-width:640px){
   .admin-controls{justify-content:flex-start}
-  .member-row-main .admin-select{width:6.5rem;max-width:none}
+  /* 여기서는 flex:none 으로 되돌린다 — 6.5rem 이면 "Resident" 가 생략 없이
+     들어가고, 늘어나게 두면 연필이 트랙 오른쪽 끝까지 밀려간다. */
+  .member-row-main .admin-select{flex:none;width:6.5rem;max-width:none}
   .member-row-main .admin-select-wide{flex:none;width:6.5rem}
+  .member-row-main .admin-controls{gap:var(--sp-sm)}
 }
 
 /* Reviews — 어드민이 여기 오는 건 악성 후기를 찾아 지우기 위해서다.
