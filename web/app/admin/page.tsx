@@ -14,16 +14,15 @@ type Params = { searchParams: Promise<{ tab?: string }> };
 /* Members 정렬 순서.
    1) 구글 로그인 먼저, 이메일 로그인은 맨 아래 — 큐레이터·어드민은
       구글 전용이라(§3.1) 사실상 이메일 그룹은 일반 회원뿐이다.
-   2) 그 안에서 resident 큐레이터 → guest 큐레이터 → admin → 일반 회원.
-      user 를 맨 아래 두는 이유는 큐레이터·어드민 쪽이 관리 우선순위가
-      높은 계정이라 위로, 새로 유입되는 일반 회원은 아래로 두는 게 실무
-      동선에 맞기 때문이다.
+   2) 그 안에서 일반 회원 → resident 큐레이터 → guest 큐레이터 → admin.
+      user 를 맨 위로 올린 이유는 이 화면에서 가장 잦은 일이 승격 대상을
+      찾는 것이기 때문이다 — 큐레이터 지정이 여기서 시작한다 (요청).
    3) 같은 그룹 안에서는 이메일 알파벳순. */
 const ROLE_RANK: Record<string, number> = {
-  'curator:resident': 0,
-  'curator:guest': 1,
-  admin: 2,
-  user: 3,
+  user: 0,
+  'curator:resident': 1,
+  'curator:guest': 2,
+  admin: 3,
 };
 
 function memberSortKey(m: Pick<Member, 'role' | 'curator_tier' | 'auth_provider' | 'email'>) {

@@ -34,8 +34,13 @@ export default async function Profile() {
           <p className="curator-byline">{user.email}</p>
         </section>
 
+        {/* 권한이 높은 진입점부터 위로 — 어드민·큐레이터는 이 화면을
+            관리 작업의 출발점으로 쓴다. Saved 는 모두에게 보이는 일반
+            항목이라 그 아래, Sign out 은 맨 끝이다 (요청). */}
         <div className="pad" style={{ display: 'grid', gap: 'var(--sp-xs)' }}>
-          <Link className="btn btn-secondary btn-block" href="/saved">Saved</Link>
+          {me?.role === 'admin' && (
+            <Link className="btn btn-secondary btn-block" href="/admin">Admin</Link>
+          )}
 
           {/* 큐레이터에게만 보인다. 일반 유저에게는 진입점 자체가 없다 (§4.1 F2) */}
           {(me?.role === 'curator' || me?.role === 'admin') && (
@@ -43,9 +48,8 @@ export default async function Profile() {
               Your curator page
             </Link>
           )}
-          {me?.role === 'admin' && (
-            <Link className="btn btn-secondary btn-block" href="/admin">Admin</Link>
-          )}
+
+          <Link className="btn btn-secondary btn-block" href="/saved">Saved</Link>
 
           <SignOutButton />
         </div>
