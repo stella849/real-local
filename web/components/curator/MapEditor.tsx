@@ -33,6 +33,7 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
   const [err, setErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const [saved, setSaved] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   // 검색~선택을 한 세션으로 묶어 과금을 1회로 만든다 (§5 S9)
   const session = useRef<string>(crypto.randomUUID());
@@ -63,15 +64,32 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
     return () => clearTimeout(t);
   }, [q]);
 
-  function add() {
+  async function add() {
     if (!picked) return;
     // tip 을 비우면 장소를 추가할 수 없다 — 이 앱의 상품 그 자체다
     if (!tip.trim()) { setErr('Write your tip first.'); return; }
 
+    // 검색(languageCode=en)은 구글에 영문 표기가 있는 곳은 한글 이름을
+    // 안 준다 — 실제로 담기로 고른 이 1곳에 대해서만 한국어로 한 번 더
+    // 물어 채운다. 검색 결과마다 물으면 과금이 배로 늘어난다(§5 S9).
+    let nameKo = picked.name_ko;
+    if (!nameKo) {
+      setAdding(true);
+      try {
+        const res = await fetch('/api/places/korean-name', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ placeId: picked.id }),
+        });
+        if (res.ok) nameKo = (await res.json()).name_ko ?? null;
+      } catch { /* 조회가 실패해도 장소 추가 자체는 막지 않는다 */ }
+      setAdding(false);
+    }
+
     setPlaces([...places, {
       google_place_id: picked.id,
       name_en: picked.name,
-      name_ko: picked.name_ko,
+      name_ko: nameKo,
       address: picked.address,
       lat: picked.lat,
       lng: picked.lng,
@@ -139,10 +157,13 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
               placeholder="Your tip * — what should someone order, when should they go?"
               value={tip} onChange={(e) => setTip(e.target.value)} />
             <div className="row-end">
-              <button className="btn btn-secondary sm" onClick={() => { setPicked(null); setTip(''); }}>
+              <button className="btn btn-secondary sm" disabled={adding}
+                onClick={() => { setPicked(null); setTip(''); }}>
                 Cancel
               </button>
-              <button className="btn btn-dark sm" onClick={add}>Add</button>
+              <button className="btn btn-dark sm" disabled={adding} onClick={add}>
+                {adding ? 'Adding…' : 'Add'}
+              </button>
             </div>
           </div>
         )}

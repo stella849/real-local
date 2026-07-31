@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { saveMyProfile, saveMyAvatar, setMyMapVisibility } from '@/app/curator/actions';
 import { CuratorAvatar } from '@/components/CuratorLine';
+import { IconEdit } from '@/components/Icons';
 
 const MAX_BYTES = 2 * 1024 * 1024;   // 2MB
 
@@ -109,16 +110,25 @@ export function MyMapRow({ id, title, slug, status, note }: {
   return (
     <div className="admin-row">
       <div className="admin-row-main">
-        {/* published 는 상세 페이지로, draft·rejected 는 재편집 화면으로
-            연결한다. map_cards 뷰가 published 전용이라 그 외 슬러그로
-            /maps/{slug} 에 들어가면 404 난다 (원래 버그였던 지점).
-            pending/hidden 은 아직 편집 경로가 없어 일반 텍스트로 둔다. */}
+        {/* published 는 제목이 상세 페이지로, draft·rejected 는 제목이
+            바로 재편집 화면으로 연결한다. map_cards 뷰가 published
+            전용이라 그 외 슬러그로 /maps/{slug} 에 들어가면 404 난다
+            (원래 버그였던 지점) — pending·hidden 은 제목을 일반 텍스트로
+            두고 별도 연필 아이콘으로 재편집(LiveMapEditor)을 연다. */}
         {s === 'published' && <a href={`/maps/${slug}`} style={{ fontWeight: 600 }}>{title}</a>}
         {(s === 'draft' || s === 'rejected') &&
           <a href={`/curator/maps/${id}/edit`} style={{ fontWeight: 600 }}>{title}</a>}
-        {s !== 'published' && s !== 'draft' && s !== 'rejected' &&
-          <span style={{ fontWeight: 600 }}>{title}</span>}
+        {s === 'pending' && <span style={{ fontWeight: 600 }}>{title}</span>}
+        {s === 'hidden' && <span style={{ fontWeight: 600 }}>{title}</span>}
         <span className="badge quiet">{s.toUpperCase()}</span>
+        {/* published·pending·hidden — 이미 나간 맵도 팁 수정·장소 추가는
+            할 수 있어야 한다는 요청으로 신설. draft·rejected 는 제목
+            자체가 이미 편집 링크라 여기 또 넣지 않는다. */}
+        {(s === 'published' || s === 'pending' || s === 'hidden') && (
+          <a className="btn btn-ghost sm icon" href={`/curator/maps/${id}/edit`} aria-label="Edit map">
+            <IconEdit />
+          </a>
+        )}
         {canToggle && (
           <button className="btn btn-secondary sm" disabled={pending}
             onClick={() => start(async () => {

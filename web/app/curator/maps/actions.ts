@@ -210,6 +210,79 @@ export async function updateMap(input: {
   }
 }
 
+/**
+ * 이미 나간(published·pending·hidden) 맵 수정.
+ *
+ * draft·rejected 재편집(updateMap)과 방식이 다르다 — 그쪽은 장소를
+ * 통째로 지웠다 다시 넣지만, places_delete_draft 정책이 이 세 상태의
+ * 장소는 삭제를 막는다(§3.3과 같은 원칙: 한 번 나간 콘텐츠는 지우지
+ * 않는다). 그래서 기존 장소는 UPDATE(팁 수정)만 하고, 새 장소는
+ * INSERT로 뒤에 덧붙인다. 순서 재배치·삭제는 여기서 다루지 않는다.
+ */
+export async function updateLiveMap(input: {
+  mapId: string;
+  title: string;
+  one_liner: string;
+  concept_tag: string;
+  tips: { id: string; curator_note: string }[];
+  newPlaces: DraftPlace[];
+}): Promise<Result> {
+  try {
+    const db = await createClient();
+    const user = await getUser(db);
+    if (!user) return { ok: false, error: 'Sign in first.' };
+
+    const { data: existing } = await db.from('maps')
+      .select('id,slug,curator_id,status').eq('id', input.mapId).maybeSingle();
+    if (!existing || existing.curator_id !== user.id) {
+      return { ok: false, error: 'Not your map.' };
+    }
+    if (!['published', 'pending', 'hidden'].includes(existing.status)) {
+      return { ok: false, error: 'Use the draft editor for this map.' };
+    }
+
+    const title = input.title.trim();
+    const one_liner = input.one_liner.trim();
+    if (!title) return { ok: false, error: 'A title is required.' };
+    if (!one_liner) return { ok: false, error: 'A one-line description is required.' };
+    if (input.tips.some((t) => !t.curator_note.trim())) {
+      return { ok: false, error: 'Every place needs your tip.' };
+    }
+    if (input.newPlaces.some((p) => !p.curator_note.trim())) {
+      return { ok: false, error: 'Every place needs your tip.' };
+    }
+
+    const { error: e1 } = await db.from('maps').update({
+      title, one_liner, concept_tag: input.concept_tag.trim() || null,
+    }).eq('id', input.mapId);
+    if (e1) return { ok: false, error: e1.message };
+
+    for (const t of input.tips) {
+      const { error } = await db.from('places')
+        .update({ curator_note: t.curator_note.trim() })
+        .eq('id', t.id).eq('map_id', input.mapId);
+      if (error) return { ok: false, error: error.message };
+    }
+
+    if (input.newPlaces.length) {
+      const { count } = await db.from('places')
+        .select('id', { count: 'exact', head: true }).eq('map_id', input.mapId);
+      const rows = placeRows(input.mapId, input.newPlaces)
+        .map((r, i) => ({ ...r, order: (count ?? 0) + i + 1 }));
+      const { error: e2 } = await db.from('places').insert(rows);
+      if (e2) return { ok: false, error: e2.message };
+    }
+
+    revalidatePath('/curator');
+    revalidatePath('/');
+    revalidatePath(`/maps/${existing.slug}`);
+    revalidatePath(`/admin/preview/${existing.slug}`);
+    return { ok: true, slug: existing.slug, status: existing.status };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
 type SimpleResult = { ok: true } | { ok: false; error: string };
 
 /**
