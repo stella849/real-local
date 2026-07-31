@@ -5,7 +5,7 @@ import {
   setRole, saveCuratorProfile, approveMap, rejectMap, setMapVisibility, setMapRegion,
   deleteReview,
 } from '@/app/admin/actions';
-import { IconGoogle, IconMail, IconStar } from '@/components/Icons';
+import { IconGoogle, IconMail, IconStar, IconKebab } from '@/components/Icons';
 
 export type Member = {
   id: string; email: string | null; display_name: string | null;
@@ -110,7 +110,7 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
           </select>
 
           {showEdit && (
-            <button className="btn btn-secondary sm" onClick={() => setOpen(!open)}>
+            <button className="btn btn-ghost sm" onClick={() => setOpen(!open)}>
               {open ? 'Close' : 'Edit'}
             </button>
           )}
@@ -188,7 +188,7 @@ function PendingRow({ m }: { m: AdminMap }) {
         <span className="admin-hint">by {m.curator_name} · {m.place_count} places</span>
         {/* /maps/{slug} 는 map_cards(published 전용) 를 읽어 pending 은
             거기서 404 난다 — 원본 테이블을 직접 읽는 어드민 전용 경로로 */}
-        <a className="btn btn-secondary sm" href={`/admin/preview/${m.slug}`} target="_blank" rel="noreferrer">
+        <a className="btn btn-ghost sm" href={`/admin/preview/${m.slug}`} target="_blank" rel="noreferrer">
           Preview
         </a>
         <button className="btn btn-dark sm" disabled={pending}
@@ -203,7 +203,7 @@ function PendingRow({ m }: { m: AdminMap }) {
         {/* 반려 사유는 필수다. 없으면 큐레이터가 무엇을 고칠지 모른다 */}
         <input className="field" placeholder="Reason (required to reject)"
           value={note} onChange={(e) => setNote(e.target.value)} />
-        <button className="btn btn-secondary sm" disabled={pending}
+        <button className="btn btn-ghost danger sm" disabled={pending}
           onClick={() => start(async () => {
             const r = await rejectMap(m.id, note);
             setErr(r.ok ? null : r.error);
@@ -228,42 +228,40 @@ export function MapsTab({ maps, meId }: { maps: AdminMap[]; meId: string }) {
 function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
   const [err, setErr] = useState<string | null>(null);
   const [region, setRegion] = useState(m.region ?? '');
+  const [menuOpen, setMenuOpen] = useState(false);
   const [pending, start] = useTransition();
   const hidden = m.status === 'hidden';
   const isMine = m.curator_id === meId;
+  const canEdit = isMine && (m.status === 'draft' || m.status === 'rejected');
   // 발행 전이거나(draft·pending·rejected) 내려간(hidden) 맵은
   // map_cards(published 전용) 에 없어 실제 페이지가 없다 — 어드민
   // 전용 미리보기로 보낸다. published 만 진짜 페이지를 연다.
   const openHref = m.status === 'published' ? `/maps/${m.slug}` : `/admin/preview/${m.slug}`;
-  // published 는 채운 badge 로 "확정", pending·rejected 는 accent 로
-  // "처리 필요"를 표시한다. draft·hidden 은 기존 quiet 그대로.
-  const badgeTone = m.status === 'published' ? 'live'
-    : (m.status === 'pending' || m.status === 'rejected') ? 'attn' : 'quiet';
 
   return (
     <div className="admin-row">
-      {/* 1줄 — 무엇인지: 제목 + 상태만 */}
+      {/* 1줄 — 무엇인지: 제목 + 상태(컬러 닷). 캡슐 배지 대신이다 —
+          어드민 화면 전체에서 알약이 볼륨 커 보인다는 요청으로 바꿨다. */}
       <div className="admin-row-main">
         <b>{m.title}</b>
-        <span className={`badge ${badgeTone}`}>{m.status.toUpperCase()}</span>
+        <span className={`status ${m.status}`}>{m.status.toUpperCase()}</span>
       </div>
 
-      {/* 2줄 — 누구·얼마나 + 동작 */}
+      {/* 2줄 — 누구·얼마나 + 동작. 상태를 바꾸는 액션(Hide/Publish,
+          Continue editing)만 눈에 보이게 두고, 나머지(Open·Photos)는
+          케밥으로 묶었다 — 이 행이 액션이 가장 많아서 케밥이 맞다. */}
       <div className="admin-row-main">
         <span className="admin-hint">{m.curator_name} · {m.place_count} places</span>
-        <a className="btn btn-secondary sm" href={openHref} target="_blank" rel="noreferrer">
-          Open
-        </a>
         {/* 발행은 본인 draft·rejected 에서만 — tip 필수·최소 4곳 검증이
             그 편집 화면에만 있다. 어드민이 남의 미완성 초안을 검증 없이
             강제로 내보내면 §5 S9 규칙이 깨진다. */}
-        {isMine && (m.status === 'draft' || m.status === 'rejected') && (
-          <a className="btn btn-dark sm" href={`/curator/maps/${m.id}/edit`}>
+        {canEdit && (
+          <a className="btn btn-ghost sm" href={`/curator/maps/${m.id}/edit`}>
             Continue editing
           </a>
         )}
         {(m.status === 'published' || hidden) && (
-          <button className="btn btn-secondary sm" disabled={pending}
+          <button className="btn btn-ghost sm" disabled={pending}
             onClick={() => start(async () => {
               const r = await setMapVisibility(m.id, !hidden);
               setErr(r.ok ? null : r.error);
@@ -271,7 +269,23 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
             {hidden ? 'Publish' : 'Hide'}
           </button>
         )}
-        <a className="btn btn-secondary sm" href={`/admin/photos/${m.slug}`}>Photos</a>
+        <div className="kebab">
+          <button className="kebab-trigger" onClick={() => setMenuOpen((v) => !v)}
+            aria-label="More actions" aria-expanded={menuOpen}>
+            <IconKebab />
+          </button>
+          {menuOpen && (
+            <>
+              {/* 배경 클릭으로 닫는다. Open·Photos 는 이동이라 메뉴가
+                  저절로 닫힐 필요가 없다(새 탭/새 페이지). */}
+              <div className="kebab-backdrop" onClick={() => setMenuOpen(false)} />
+              <div className="kebab-menu">
+                <a href={openHref} target="_blank" rel="noreferrer">Open</a>
+                <a href={`/admin/photos/${m.slug}`}>Photos</a>
+              </div>
+            </>
+          )}
+        </div>
         {/* 삭제 버튼은 어디에도 없다 (§3.3) */}
       </div>
 
@@ -280,7 +294,7 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
       <div className="admin-row-main">
         <input className="field" placeholder="Region (optional) — e.g. Seongsu. Blank = Nationwide"
           value={region} onChange={(e) => setRegion(e.target.value)} />
-        <button className="btn btn-secondary sm" disabled={pending}
+        <button className="btn btn-ghost sm" disabled={pending}
           onClick={() => start(async () => {
             const r = await setMapRegion(m.id, region);
             setErr(r.ok ? null : r.error);
@@ -315,7 +329,7 @@ function ReviewRow({ r }: { r: AdminReview }) {
         <a className="admin-hint" href={`/maps/${r.map_slug}`} target="_blank" rel="noreferrer">
           {r.map_title}
         </a>
-        <button className="btn btn-secondary sm" disabled={pending}
+        <button className="btn btn-ghost danger sm" disabled={pending}
           onClick={() => {
             if (!confirm('Delete this review? This cannot be undone.')) return;
             start(async () => {

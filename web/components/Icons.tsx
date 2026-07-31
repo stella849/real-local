@@ -63,6 +63,15 @@ export const Logo = (p: P) => (
   </svg>
 );
 
+/** 어드민 행 액션을 묶는 케밥 메뉴 트리거 */
+export const IconKebab = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}>
+    <circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none" />
+  </svg>
+);
+
 /** 긴 페이지의 '맨 위로' 버튼 (PRD v1.4 §6) */
 export const IconUp = (p: P) => (
   <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>

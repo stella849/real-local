@@ -318,8 +318,29 @@ a.curator-name:hover{text-decoration:underline}
    새 색을 늘리지 않는다 — published 는 이미 있는 먹색(--text) 을
    채워 "확정"으로, pending·rejected 는 단청 적색(--accent) 으로
    "처리 필요"를 표시한다. draft·hidden 은 기존 quiet 그대로. */
-.badge.live{color:var(--canvas);background:var(--text);border-color:var(--text)}
-.badge.attn{color:var(--accent);border-color:var(--accent)}
+/* 어드민 상태 표시 — 캡슐 배지 대신 컬러 닷 + 텍스트 (볼륨을 줄여
+   달라는 요청). 팔레트에 없던 색 3개를 추가했는데, 전부 채도를
+   낮춰 한지·먹 톤과 어울리게 하면서 5개 상태가 서로 확실히
+   구분되게 했다 — 닷은 작아서(7px) 색이 좀 있어도 화면을 흔들지
+   않는다. rejected 는 기존 --accent(단청 적색) 재사용. */
+:root{
+  --dot-pending:#B8873A;    /* 톤 낮춘 황토 */
+  --dot-published:#5B7A5B;  /* 톤 낮춘 청록 */
+  --dot-hidden:#7C8B99;     /* 톤 낮춘 청회색 */
+}
+.status{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--text-2);
+}
+.status::before{
+  content:'';width:7px;height:7px;border-radius:var(--r-full);flex:none;
+  background:var(--dot, var(--text-3));
+}
+.status.draft{--dot:var(--text-3)}
+.status.pending{--dot:var(--dot-pending)}
+.status.published{--dot:var(--dot-published)}
+.status.rejected{--dot:var(--accent)}
+.status.hidden{--dot:var(--dot-hidden)}
 
 /* 지도는 sticky 가 아니다 (§10.2). 한 스크롤 컨테이너에 sticky 레이어가
    여럿이면 중간에 떠 있는 바가 생긴다 — 390×844 검수 항목이다.
@@ -474,6 +495,36 @@ a.section-head-link h2{cursor:pointer}
 .btn-secondary{border:1px solid var(--line-strong);color:var(--text)}
 .btn-secondary:hover{background:var(--surface)}
 .btn-block{width:100%}
+
+/* 고스트 버튼 — 테두리·배경 없이 텍스트만. 어드민 행마다 줄지어
+   있던 보조 액션이 묵직해 보인다는 요청으로 만들었다. */
+.btn-ghost{background:none;border-color:transparent;color:var(--text-2)}
+.btn-ghost:hover{background:var(--surface)}
+.btn-ghost.danger{color:var(--accent)}
+
+/* 케밥 메뉴 — 한 행에 액션이 여럿(Maps 탭)일 때만 쓴다. 적으면
+   (Pending·Members·Reviews) 그냥 고스트 버튼으로 늘어놓는 편이
+   오히려 가볍다 — 메뉴 하나 더 여는 탭을 늘리지 않는다. */
+.kebab{position:relative}
+.kebab-trigger{
+  width:32px;height:32px;flex:none;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;color:var(--text-2);
+}
+.kebab-trigger:hover{background:var(--surface)}
+.kebab-trigger svg{width:18px;height:18px}
+.kebab-backdrop{position:fixed;inset:0;z-index:19}
+.kebab-menu{
+  position:absolute;right:0;top:calc(100% + 4px);z-index:20;
+  background:var(--canvas);border:1px solid var(--line);border-radius:var(--r-md);
+  box-shadow:0 4px 16px rgba(0,0,0,.14);
+  display:flex;flex-direction:column;min-width:150px;padding:4px;
+}
+.kebab-menu a,.kebab-menu button{
+  display:block;width:100%;text-align:left;
+  padding:8px 10px;border-radius:var(--r-sm);
+  font-size:13px;color:var(--text);text-decoration:none;
+}
+.kebab-menu a:hover,.kebab-menu button:hover{background:var(--surface)}
 .btn.sm{min-height:36px;padding:6px var(--sp-md);font-size:13px}
 
 .act{
