@@ -134,6 +134,15 @@ export const IconMeal = (p: P) => (
   </g></svg>
 );
 
+/** 폐업 의심 경고 (어드민 Maps, 월 1회 businessStatus 크론 결과). */
+export const IconWarning = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M12 4 3 20h18L12 4Z" />
+    <path d="M12 10v4" />
+    <path d="M12 17h.01" strokeWidth="2.4" />
+  </g></svg>
+);
+
 /** 선택 표시 (어드민 사진 고르기). `✓` 글리프는 안 쓴다 — R15 와 같은 이유. */
 export const IconCheck = (p: P) => (
   <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>

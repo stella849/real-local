@@ -818,6 +818,10 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 .curator-page-info .url a{color:var(--accent)}
 .curator-page-info .tier{font-size:13px;color:var(--text-2)}
 
+/* 월 1회 businessStatus 크론이 붙이는 폐업 의심 경고 (Maps 탭). */
+.map-flag-warning{display:flex;align-items:center;gap:5px;color:var(--accent)}
+.map-flag-warning svg{width:13px;height:13px;flex:none}
+
 .review-row{position:relative;padding-right:44px}
 .review-body{font-size:16px;font-weight:600;line-height:1.5;color:var(--text);margin:0 0 3px}
 .review-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}

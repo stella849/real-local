@@ -94,6 +94,20 @@ export default async function Admin({ searchParams }: Params) {
     .select('id,slug,title,region,status,review_note,curator_id,places!places_map_id_fkey(count)')
     .order('created_at', { ascending: false });
 
+  /* 폐업 의심 장소 (월 1회 크론, api/cron/check-place-status).
+     자동 삭제·비공개는 하지 않고 어드민에게 경고만 보여준다(§3.3과
+     같은 원칙) — 맵별로 묶어야 Maps 탭 행에 붙일 수 있어 JS 로 묶는다. */
+  const { data: flaggedPlaces } = await db.from('places')
+    .select('map_id,name_en,google_business_status')
+    .not('google_business_status', 'is', null)
+    .neq('google_business_status', 'OPERATIONAL');
+  const flaggedByMap = new Map<string, { name_en: string; status: string }[]>();
+  for (const p of flaggedPlaces ?? []) {
+    const list = flaggedByMap.get(p.map_id) ?? [];
+    list.push({ name_en: p.name_en, status: p.google_business_status as string });
+    flaggedByMap.set(p.map_id, list);
+  }
+
   const nameOf = new Map(members.map((m) => [m.id, m.display_name ?? m.email ?? '?']));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const maps: AdminMap[] = ((rawMaps ?? []) as any[]).map((m) => ({
@@ -101,6 +115,7 @@ export default async function Admin({ searchParams }: Params) {
     review_note: m.review_note, curator_id: m.curator_id,
     curator_name: nameOf.get(m.curator_id) ?? '?',
     place_count: m.places?.[0]?.count ?? 0,
+    flagged_places: flaggedByMap.get(m.id) ?? [],
   }));
 
   const pending = maps.filter((m) => m.status === 'pending');

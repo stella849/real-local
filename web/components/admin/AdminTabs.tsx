@@ -6,7 +6,7 @@ import {
   deleteReview,
 } from '@/app/admin/actions';
 import {
-  IconGoogle, IconMail, IconStar, IconKebab, IconEdit, IconTrash, IconCheck, IconEye,
+  IconGoogle, IconMail, IconStar, IconKebab, IconEdit, IconTrash, IconCheck, IconEye, IconWarning,
 } from '@/components/Icons';
 
 export type Member = {
@@ -20,6 +20,8 @@ export type Member = {
 export type AdminMap = {
   id: string; slug: string; title: string; region: string | null; status: string;
   review_note: string | null; curator_id: string; curator_name: string; place_count: number;
+  // 월 1회 businessStatus 크론이 채운다 (§ 요청). 빈 배열 = 정상.
+  flagged_places?: { name_en: string; status: string }[];
 };
 
 export type AdminReview = {
@@ -383,6 +385,15 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
           <IconCheck />
         </button>
       </div>
+      {/* 월 1회 businessStatus 크론 결과 — 자동으로 내리지 않고 경고만
+          한다(§3.3과 같은 원칙, API 오탐 가능성 + 팁 자체는 유효할 수
+          있음). 어드민이 직접 확인 후 Hide 등으로 판단한다. */}
+      {!!m.flagged_places?.length && (
+        <p className="admin-hint map-flag-warning">
+          <IconWarning />
+          Possibly closed: {m.flagged_places.map((f) => f.name_en).join(', ')}
+        </p>
+      )}
       {m.review_note && <p className="admin-hint">Rejected: {m.review_note}</p>}
       <Err msg={err} />
     </div>
