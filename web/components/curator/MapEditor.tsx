@@ -92,7 +92,11 @@ export function MapEditor({ tier, mapId, initial, rejectionNote }: {
       const r = mapId ? await updateMap({ mapId, ...input }) : await createMap(input);
       if (!r.ok) { setErr(r.error); return; }
       setSaved(true);
-      router.push(publish ? `/maps/${r.slug}` : '/curator');
+      // /maps/[slug] 는 published 전용 뷰(map_cards)만 읽는다 — guest
+      // curator 의 publish 는 pending 이 되므로 그 주소로 보내면 404 난다.
+      // 실제로 published 가 된 경우에만 공개 페이지로, 그 외(draft·
+      // pending)는 본인 대시보드로 보낸다.
+      router.push(r.status === 'published' ? `/maps/${r.slug}` : '/curator');
       router.refresh();
     });
   }

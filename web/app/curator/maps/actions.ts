@@ -17,7 +17,7 @@ export type DraftPlace = {
   photo_candidates: { name: string; attribution: string | null }[];
 };
 
-type Result = { ok: true; slug: string } | { ok: false; error: string };
+type Result = { ok: true; slug: string; status: string } | { ok: false; error: string };
 
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[’'"]/g, '').replace(/[^a-z0-9]+/g, '-')
@@ -128,7 +128,7 @@ export async function createMap(input: {
 
     revalidatePath('/curator');
     revalidatePath('/');
-    return { ok: true, slug: map.slug };
+    return { ok: true, slug: map.slug, status };
   } catch (e) {
     return { ok: false, error: (e as Error).message };
   }
@@ -204,7 +204,7 @@ export async function updateMap(input: {
 
     revalidatePath('/curator');
     revalidatePath('/');
-    return { ok: true, slug: existing.slug };
+    return { ok: true, slug: existing.slug, status };
   } catch (e) {
     return { ok: false, error: (e as Error).message };
   }

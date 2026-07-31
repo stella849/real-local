@@ -24,11 +24,20 @@ async function requireAdmin() {
 
 type Result = { ok: true } | { ok: false; error: string };
 
-/** 회원의 역할·등급 변경 (F9) */
+/**
+ * 회원의 역할·등급 변경 (F9).
+ *
+ * 큐레이터로 지정할 때는 프로필 URL(handle)이 반드시 있어야 한다 —
+ * 없는 채로 두면 그 큐레이터가 맵을 발행해도 본인 페이지가 없어
+ * 확인할 방법이 없다. handle 은 어드민만 지정하고 이후 고정이다
+ * (curator/actions.ts saveMyProfile 주석 §9) — 큐레이터 본인이 나중에
+ * 채우게 두지 않고 승격 시점에 여기서 강제한다.
+ */
 export async function setRole(
   userId: string,
   role: 'user' | 'curator' | 'admin',
   tier: 'resident' | 'guest' | null,
+  handle?: string,
 ): Promise<Result> {
   try {
     const { db, adminId } = await requireAdmin();
@@ -39,7 +48,7 @@ export async function setRole(
     if (userId === adminId) return { ok: false, error: 'You cannot change your own role.' };
 
     const { data: target } = await db.from('users')
-      .select('auth_provider, role').eq('id', userId).maybeSingle();
+      .select('auth_provider, role, handle').eq('id', userId).maybeSingle();
     if (!target) return { ok: false, error: 'Member not found.' };
 
     /* 큐레이터·어드민은 구글 전용이다 (§3.1). 같은 이메일로 이메일 가입과
@@ -50,8 +59,21 @@ export async function setRole(
     }
 
     const patch: Record<string, unknown> = { role };
-    if (role === 'curator') patch.curator_tier = tier ?? 'guest';
-    else {
+    if (role === 'curator') {
+      patch.curator_tier = tier ?? 'guest';
+
+      const trimmed = (handle ?? '').trim().toLowerCase();
+      const nextHandle = trimmed || target.handle;
+      if (!nextHandle) {
+        return { ok: false, error: 'Set a profile URL (handle) to make this member a curator.' };
+      }
+      if (trimmed) {
+        if (!/^[a-z0-9-]{2,30}$/.test(trimmed)) {
+          return { ok: false, error: 'Handle must be 2-30 characters: a-z, 0-9, hyphen.' };
+        }
+        patch.handle = trimmed;
+      }
+    } else {
       patch.curator_tier = null;
       // 강등 시 curator_listed 도 자동으로 false 가 된다 (§3.4).
       // 맵은 자동으로 내리지 않는다 — 자격을 회수한 것이지 콘텐츠가
@@ -60,10 +82,13 @@ export async function setRole(
     }
 
     const { error } = await db.from('users').update(patch).eq('id', userId);
-    if (error) return { ok: false, error: error.message };
+    if (error) {
+      return { ok: false, error: error.code === '23505' ? 'That handle is taken.' : error.message };
+    }
 
     revalidatePath('/admin');
     revalidatePath('/');
+    if (typeof patch.handle === 'string') revalidatePath(`/curators/${patch.handle}`);
     return { ok: true };
   } catch (e) {
     return { ok: false, error: (e as Error).message };

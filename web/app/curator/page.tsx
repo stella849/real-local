@@ -6,7 +6,12 @@ import { IconBack } from '@/components/Icons';
 
 export const dynamic = 'force-dynamic';
 
-const TIER_LABEL = { resident: 'Resident curator', guest: 'Guest curator' } as const;
+// 등급 옆 괄호는 발행 시 어드민 승인이 필요한지 여부를 즉시 알려준다 —
+// 큐레이터 본인이 "왜 내 맵이 바로 안 뜨지"를 매번 묻지 않게 (요청).
+const TIER_LABEL = {
+  resident: 'Resident curator (no admin approval needed)',
+  guest: 'Guest curator (admin approval needed for each map)',
+} as const;
 
 /**
  * S11 Curator editor (F15). role='curator' 만 접근하며 그 외는 404 다.
@@ -38,17 +43,11 @@ export default async function CuratorEditor() {
       </header>
 
       <main className="view pad" style={{ display: 'grid', gap: 'var(--sp-lg)' }}>
-        <AvatarUploader userId={user.id} name={name} url={me.avatar_url} />
-
-        <ProfileFields initial={{
-          display_name: me.display_name ?? '',
-          byline: me.byline ?? '',
-          about: me.about ?? '',
-        }} />
-
-        <div>
-          {/* handle 은 편집 불가다. 공개 주소라 바꾸면 공유된 링크가 깨진다 (§9) */}
-          <p className="admin-hint">
+        {/* 공개 주소·등급은 맨 위 — 스크롤 안 해도 바로 보여야 하는
+            정보다 (요청). handle 은 편집 불가다: 공개 주소라 바꾸면
+            공유된 링크가 깨진다 (§9) */}
+        <div className="curator-page-info">
+          <p className="url">
             Your page: {me.handle
               ? <Link href={`/curators/${me.handle}`}>/curators/{me.handle}</Link>
               : 'not assigned yet'}
@@ -56,9 +55,17 @@ export default async function CuratorEditor() {
           </p>
           {/* 등급은 본인에게만 보인다. 일반 사용자에게는 어디에도 없다 (§3.2) */}
           {me.curator_tier && (
-            <p className="admin-hint">{TIER_LABEL[me.curator_tier as keyof typeof TIER_LABEL]}</p>
+            <p className="tier">{TIER_LABEL[me.curator_tier as keyof typeof TIER_LABEL]}</p>
           )}
         </div>
+
+        <AvatarUploader userId={user.id} name={name} url={me.avatar_url} />
+
+        <ProfileFields initial={{
+          display_name: me.display_name ?? '',
+          byline: me.byline ?? '',
+          about: me.about ?? '',
+        }} />
 
         <div>
           <div className="section-head" style={{ padding: '0 0 var(--sp-xs)' }}>

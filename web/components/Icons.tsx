@@ -148,6 +148,14 @@ export const IconEdit = (p: P) => (
   </g></svg>
 );
 
+/** 미리보기 진입점 (어드민 Pending). 텍스트 Preview 대신 아이콘 버튼으로 쓴다. */
+export const IconEye = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+    <circle cx="12" cy="12" r="2.6" />
+  </g></svg>
+);
+
 /** 삭제(어드민 Reviews). 유일하게 진짜 삭제가 있는 화면이라 — 후기는
     맵·장소와 달리 DB 에 delete 정책이 있다(§3.3 은 맵·장소에만 해당). */
 export const IconTrash = (p: P) => (

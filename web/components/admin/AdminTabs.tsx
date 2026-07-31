@@ -6,7 +6,7 @@ import {
   deleteReview,
 } from '@/app/admin/actions';
 import {
-  IconGoogle, IconMail, IconStar, IconKebab, IconEdit, IconTrash, IconCheck,
+  IconGoogle, IconMail, IconStar, IconKebab, IconEdit, IconTrash, IconCheck, IconEye,
 } from '@/components/Icons';
 
 export type Member = {
@@ -84,13 +84,27 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
   function change(v: string) {
     const [role, tier] = v.split(':') as ['user' | 'curator' | 'admin', 'resident' | 'guest'];
     const label = ROLES.find((r) => r.v === v)?.label ?? v;
+
+    // 큐레이터로 처음 지정할 때는 프로필 URL이 없으면 여기서 바로
+    // 받는다 — 승격 이후로 미루면 handle 없는 채로 발행하다 404를
+    // 만난다(실제로 있었던 버그). handle 이 이미 있으면 다시 묻지 않는다.
+    let handle: string | undefined;
+    if (role === 'curator' && !m.handle) {
+      const input = window.prompt(
+        `Profile URL for ${m.display_name ?? m.email} — becomes /curators/<this>\n`
+        + '(a-z, 0-9, hyphen, 2-30 chars):',
+      );
+      if (!input || !input.trim()) return;
+      handle = input.trim();
+    }
+
     if (!confirm(
       `Change ${m.display_name ?? m.email} to ${label}?\n\n`
       + 'Their published maps stay visible either way.',
     )) return;
 
     start(async () => {
-      const r = await setRole(m.id, role, tier ?? null);
+      const r = await setRole(m.id, role, tier ?? null, handle);
       setErr(r.ok ? null : r.error);
     });
   }
@@ -160,19 +174,19 @@ function CuratorFields({ m }: { m: Member }) {
   return (
     <div className="admin-edit">
       <label>profile url
-        <input className="field" value={f.handle}
+        <input className="field field-flat" value={f.handle}
           onChange={(e) => setF({ ...f, handle: e.target.value })} />
       </label>
       <label>name
-        <input className="field" value={f.display_name}
+        <input className="field field-flat" value={f.display_name}
           onChange={(e) => setF({ ...f, display_name: e.target.value })} />
       </label>
       <label>byline (short tagline shown under the name, max 60 chars)
-        <input className="field" maxLength={60} value={f.byline}
+        <input className="field field-flat" maxLength={60} value={f.byline}
           onChange={(e) => setF({ ...f, byline: e.target.value })} />
       </label>
       <label>about (longer bio on the profile page, optional)
-        <textarea className="field" maxLength={300} rows={2} value={f.about}
+        <textarea className="field field-flat" maxLength={300} rows={2} value={f.about}
           onChange={(e) => setF({ ...f, about: e.target.value })} />
       </label>
       <label className="admin-toggle">
@@ -182,7 +196,10 @@ function CuratorFields({ m }: { m: Member }) {
       </label>
       <div className="row-end">
         {msg && <span className="admin-hint">{msg}</span>}
-        <button className="btn btn-dark sm" onClick={save} disabled={pending}>Save</button>
+        {/* 텍스트 Save 대신 체크 아이콘 — Maps 탭 Region 저장과 같은 패턴 */}
+        <button className="btn btn-dark sm icon" onClick={save} disabled={pending} aria-label="Save profile">
+          <IconCheck />
+        </button>
       </div>
     </div>
   );
@@ -207,8 +224,9 @@ function PendingRow({ m }: { m: AdminMap }) {
         <span className="admin-hint">by {m.curator_name} · {m.place_count} places</span>
         {/* /maps/{slug} 는 map_cards(published 전용) 를 읽어 pending 은
             거기서 404 난다 — 원본 테이블을 직접 읽는 어드민 전용 경로로 */}
-        <a className="btn btn-ghost sm" href={`/admin/preview/${m.slug}`} target="_blank" rel="noreferrer">
-          Preview
+        <a className="btn btn-ghost sm icon" href={`/admin/preview/${m.slug}`} target="_blank" rel="noreferrer"
+          aria-label="Preview">
+          <IconEye />
         </a>
         {/* Approve·Reject 를 붙여 묶는다 — 멀리 떨어져 있으면 둘을 비교하며
             고르는 게 아니라 각자 발견해야 하는 액션처럼 읽힌다.
