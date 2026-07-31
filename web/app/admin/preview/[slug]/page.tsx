@@ -72,7 +72,7 @@ export default async function AdminPreview({ params }: Params) {
           {(places ?? []).map((p: Place) => (
             <li className="place" key={p.id}>
               <span className="place-n">{p.order}</span>
-              <PlaceThumb photoRef={p.photo_ref} />
+              <PlaceThumb photoRef={p.photo_ref} category={p.category} />
               <div className="place-main">
                 {/* places_read RLS 가 어드민에게는 상태 무관 전체를 열어
                     주므로 pending·draft·rejected 장소도 이 링크로 상세

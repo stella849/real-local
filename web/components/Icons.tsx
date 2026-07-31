@@ -124,13 +124,101 @@ export const IconStar = (p: P) => (
 
 /**
  * 사진 없는 장소의 폴백 (PRD v1.4 §4.3). 빈 회색 박스 대신 쓴다.
- * 카테고리 11종 각각 따로 그리는 대신 포크+나이프 하나로 통일했다 —
- * 대부분 음식 카테고리라 크게 어긋나지 않고, 11개를 다 그리는 건
- * 폴백 하나에 들이는 공으로는 과하다.
+ * 카테고리 11종(supabase/schema.sql place_category)마다 다르게 그린다
+ * (요청) — PlaceThumb.tsx 의 CATEGORY_ICON 이 category 값으로 이
+ * 아래 아이콘들 중 하나를 고른다. 이 하나(포크+나이프)는 'restaurant'
+ * 전용이자, 알 수 없는 값이 오면 쓰는 최종 폴백이다.
  */
 export const IconMeal = (p: P) => (
   <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
     <path d="M6 3v7a2 2 0 0 0 4 0V3M8 3v7M8 10v11M18 3c-1.4 0-2.5 1.6-2.5 4.5S16.6 12 18 12v9M18 3v18" />
+  </g></svg>
+);
+
+/** 'bbq' — 꼬치 3덩이 */
+export const IconCatBbq = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4 20 20 4" />
+    <circle cx="8" cy="16" r="2.1" />
+    <circle cx="12" cy="12" r="2.1" />
+    <circle cx="16" cy="8" r="2.1" />
+  </g></svg>
+);
+
+/** 'noodles' — 면 그릇 + 김 */
+export const IconCatNoodles = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M3.5 10.5h17" />
+    <path d="M4.5 10.5c0 4.4 3.4 8 7.5 8s7.5-3.6 7.5-8" />
+    <path d="M9 6.5c.5-1 .5-1.8-.3-2.8M12.3 6.5c.3-1.1 0-2-.7-2.8M15.6 6.5c.5-1 .5-1.8-.2-2.8" />
+  </g></svg>
+);
+
+/** 'cafe' — 손잡이 있는 컵 + 김 */
+export const IconCatCafe = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M5 8h11v6.5A4.5 4.5 0 0 1 11.5 19H10a4.5 4.5 0 0 1-4.5-4.5V8Z" />
+    <path d="M16 9.2h1.2a2.3 2.3 0 0 1 0 4.6H16" />
+    <path d="M8.2 4.3c.4-.7.4-1.3-.2-2M11.4 4.3c.4-.7.4-1.3-.2-2" />
+  </g></svg>
+);
+
+/** 'bakery' — 식빵 한 덩이(칼집 두 줄) */
+export const IconCatBakery = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4 12.5c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5-3.4 6-8 6-8-1.6-8-6Z" />
+    <path d="M9.3 7.8v9M14.7 7.8v9" />
+  </g></svg>
+);
+
+/** 'bar' — 마티니 잔 */
+export const IconCatBar = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4.5 5h15L12 13.5 4.5 5Z" />
+    <path d="M12 13.5V20M8.2 20h7.6" />
+  </g></svg>
+);
+
+/** 'street_food' — 테이크아웃 박스 */
+export const IconCatStreetFood = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4.2 9h15.6l-1.4 9.7a1.6 1.6 0 0 1-1.6 1.4H7.2a1.6 1.6 0 0 1-1.6-1.4L4.2 9Z" />
+    <path d="M4.2 9 6.3 5h11.4l2.1 4" />
+    <path d="M10 5V3h4v2" />
+  </g></svg>
+);
+
+/** 'market' — 나무 상자(슬랫) */
+export const IconCatMarket = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4 9h16v10H4V9Z" />
+    <path d="M4 9 7 4h10l3 5" />
+    <path d="M4 13.5h16M9 9v10M15 9v10" />
+  </g></svg>
+);
+
+/** 'shop' — 손잡이 있는 쇼핑백 */
+export const IconCatShop = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M6 8h12l1 12H5L6 8Z" />
+    <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
+  </g></svg>
+);
+
+/** 'culture' — 기둥 있는 건물(박물관) */
+export const IconCatCulture = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M3 10 12 4l9 6" />
+    <path d="M4.5 20V10.5M9 20V10.5M15 20V10.5M19.5 20V10.5" />
+    <path d="M3 20h18" />
+  </g></svg>
+);
+
+/** 'other' — 지도 핀 */
+export const IconCatOther = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M12 3.2a6.8 6.8 0 0 1 6.8 6.8c0 4.8-6.8 10.8-6.8 10.8S5.2 14.8 5.2 10A6.8 6.8 0 0 1 12 3.2Z" />
+    <circle cx="12" cy="10" r="2.2" />
   </g></svg>
 );
 

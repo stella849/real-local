@@ -128,7 +128,7 @@ export default async function MapDetail({ params }: Params) {
           {places.map((p) => (
             <li className="place" key={p.id} data-place-id={p.id}>
               <span className="place-n">{p.order}</span>
-              <PlaceThumb photoRef={p.photo_ref} />
+              <PlaceThumb photoRef={p.photo_ref} category={p.category} />
               <div className="place-main">
                 <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
                   <h3 className="place-name">{p.name_en}</h3>

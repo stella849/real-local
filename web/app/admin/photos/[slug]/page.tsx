@@ -32,7 +32,7 @@ export default async function Photos({ params }: Params) {
   if (!isAdmin && m.curator_id !== user.id) notFound();
 
   const { data: places } = await db.from('places')
-    .select('id,order,name_en,name_ko,photo_ref,photo_candidates,photo_refs,google_place_id')
+    .select('id,order,name_en,name_ko,category,photo_ref,photo_candidates,photo_refs,google_place_id')
     .eq('map_id', m.id).order('order');
 
   const missing = (places ?? []).filter((p) => !p.photo_ref).length;
@@ -56,7 +56,7 @@ export default async function Photos({ params }: Params) {
             <div className="admin-row" key={p.id}>
               <div className="admin-row-main">
                 <span className="place-n">{p.order}</span>
-                <PlaceThumb photoRef={p.photo_ref} size={160} />
+                <PlaceThumb photoRef={p.photo_ref} category={p.category} size={160} />
                 <div>
                   <b>{p.name_en}</b>
                   {p.name_ko && <p className="admin-hint">{p.name_ko}</p>}

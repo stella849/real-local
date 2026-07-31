@@ -87,7 +87,7 @@ export default async function Saved({ searchParams }: Params) {
               const p = row.places;
               return (
                 <li className="saved-place" key={p.id}>
-                  <PlaceThumb photoRef={p.photo_ref} />
+                  <PlaceThumb photoRef={p.photo_ref} category={p.category} />
                   <div className="place-main">
                     <Link href={`/places/${p.id}`} style={{ textDecoration: 'none' }}>
                       {/* 목록이므로 한글 상호를 넣지 않는다 — 상세에서만 (R3) */}
