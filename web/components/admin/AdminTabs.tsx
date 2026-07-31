@@ -5,7 +5,9 @@ import {
   setRole, saveCuratorProfile, approveMap, rejectMap, setMapVisibility, setMapRegion,
   deleteReview,
 } from '@/app/admin/actions';
-import { IconGoogle, IconMail, IconStar, IconKebab } from '@/components/Icons';
+import {
+  IconGoogle, IconMail, IconStar, IconKebab, IconEdit, IconTrash, IconCheck,
+} from '@/components/Icons';
 
 export type Member = {
   id: string; email: string | null; display_name: string | null;
@@ -76,17 +78,17 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
   }
 
   return (
-    <div className="admin-row">
+    <div className="admin-row admin-row-tight">
       <div className="admin-row-main member-row-main">
         <span className="admin-email">
-          {m.email}
+          <span className="truncate">{m.email}</span>
           {/* 반복 문구 대신 아이콘 툴팁 하나로 대체 — 목록이 길어질수록 반복 텍스트는 소음이다 */}
           <span className="provider-mark" title={emailOnly ? 'Email sign-in — cannot become curator/admin' : 'Google sign-in'}>
             {emailOnly ? <IconMail /> : <IconGoogle />}
           </span>
         </span>
         <span className="admin-name">
-          {m.display_name}
+          <span className="truncate">{m.display_name}</span>
           {/* 자기 자신은 강등할 수 없다 — 아래 줄 대신 이름 옆에 배지로 표시 */}
           {isMe && <span className="admin-you" title="This is you — role cannot be changed here">You</span>}
         </span>
@@ -109,9 +111,11 @@ function MemberRow({ m, isMe }: { m: Member; isMe: boolean }) {
             ))}
           </select>
 
+          {/* 텍스트 Edit 대신 연필 아이콘 — 좁은 행에서 공간을 아낀다 */}
           {showEdit && (
-            <button className="btn btn-ghost sm" onClick={() => setOpen(!open)}>
-              {open ? 'Close' : 'Edit'}
+            <button className="btn btn-ghost sm icon" onClick={() => setOpen(!open)}
+              aria-label={open ? 'Close editor' : 'Edit curator profile'} aria-expanded={open}>
+              <IconEdit />
             </button>
           )}
         </span>
@@ -178,54 +182,71 @@ export function PendingTab({ maps }: { maps: AdminMap[] }) {
 
 function PendingRow({ m }: { m: AdminMap }) {
   const [note, setNote] = useState('');
+  const [showReject, setShowReject] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
   return (
     <div className="admin-row">
       <div className="admin-row-main">
-        <b>{m.title}</b>
+        <b style={{ flex: 1 }}>{m.title}</b>
         <span className="admin-hint">by {m.curator_name} · {m.place_count} places</span>
         {/* /maps/{slug} 는 map_cards(published 전용) 를 읽어 pending 은
             거기서 404 난다 — 원본 테이블을 직접 읽는 어드민 전용 경로로 */}
         <a className="btn btn-ghost sm" href={`/admin/preview/${m.slug}`} target="_blank" rel="noreferrer">
           Preview
         </a>
-        <button className="btn btn-dark sm" disabled={pending}
-          onClick={() => start(async () => {
-            const r = await approveMap(m.id);
-            setErr(r.ok ? null : r.error);
-          })}>
-          Approve
-        </button>
+        {/* Approve·Reject 를 붙여 묶는다 — 멀리 떨어져 있으면 둘을 비교하며
+            고르는 게 아니라 각자 발견해야 하는 액션처럼 읽힌다.
+            Reject 는 먼저 사유 입력창을 펼치기만 한다 — 즉시 반려하지 않는다. */}
+        <span className="admin-controls">
+          <button className="btn btn-ghost danger sm" disabled={pending}
+            aria-expanded={showReject} onClick={() => setShowReject((v) => !v)}>
+            Reject
+          </button>
+          <button className="btn btn-dark sm" disabled={pending}
+            onClick={() => start(async () => {
+              const r = await approveMap(m.id);
+              setErr(r.ok ? null : r.error);
+            })}>
+            Approve
+          </button>
+        </span>
       </div>
-      <div className="admin-row-main">
-        {/* 반려 사유는 필수다. 없으면 큐레이터가 무엇을 고칠지 모른다 */}
-        <input className="field" placeholder="Reason (required to reject)"
-          value={note} onChange={(e) => setNote(e.target.value)} />
-        <button className="btn btn-ghost danger sm" disabled={pending}
-          onClick={() => start(async () => {
-            const r = await rejectMap(m.id, note);
-            setErr(r.ok ? null : r.error);
-          })}>
-          Reject
-        </button>
-      </div>
+
+      {/* 반려 사유는 필수다 — 없으면 큐레이터가 무엇을 고칠지 모른다.
+          기본은 숨겨 두고 Reject 를 눌렀을 때만 편다 — 대부분의 맵은
+          승인되므로 이 입력창이 항상 떠 있을 이유가 없다. */}
+      {showReject && (
+        <div className="admin-row-main">
+          <input className="field field-flat" placeholder="Reason (required to reject)"
+            value={note} autoFocus
+            onChange={(e) => setNote(e.target.value)} />
+          <button className="btn btn-ghost danger sm" disabled={pending || !note.trim()}
+            onClick={() => start(async () => {
+              const r = await rejectMap(m.id, note);
+              setErr(r.ok ? null : r.error);
+            })}>
+            Confirm reject
+          </button>
+        </div>
+      )}
       <Err msg={err} />
     </div>
   );
 }
 
 /* ---------------------------------------------------------- Maps */
-// 순서 고정: Pending → Published → Hidden → Draft → Rejected. 요청은
-// 앞의 셋만 짚었지만 draft·rejected 도 실제 존재하는 맵이라 빼면
-// 어드민이 그 맵들을 아예 못 본다 — 이름 없는 나머지 뒤에 붙였다.
+// 순서 고정: Published → Pending → Hidden → Rejected (요청한 흐름 —
+// "지금 살아있는 것부터, 그다음 처리할 것, 내려간 것, 반려된 것" 순).
+// draft 는 요청에 없었지만 실제 존재하는 맵이라 빼면 어드민이 그 맵을
+// 아예 못 본다 — 이름 없는 나머지 뒤에 붙였다.
 const MAP_GROUPS: { status: string; label: string }[] = [
-  { status: 'pending', label: 'Pending' },
   { status: 'published', label: 'Published' },
+  { status: 'pending', label: 'Pending' },
   { status: 'hidden', label: 'Hidden' },
-  { status: 'draft', label: 'Draft' },
   { status: 'rejected', label: 'Rejected' },
+  { status: 'draft', label: 'Draft' },
 ];
 
 export function MapsTab({ maps, meId }: { maps: AdminMap[]; meId: string }) {
@@ -314,16 +335,20 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
       </div>
 
       {/* 3줄 — 지역(PRD v1.4 §1). 필터 아님, 홈 상단 그루핑 전용.
-          비우면 Nationwide 로 간다. */}
+          비우면 Nationwide 로 간다. 입력창을 줄이고 Save 를 체크
+          아이콘으로 바로 옆에 붙였다 — 이 행에서 값은 지역명 하나뿐이라
+          넓은 입력창이 필요 없다. */}
       <div className="admin-row-main">
-        <input className="field" placeholder="Region (optional) — e.g. Seongsu. Blank = Nationwide"
+        <input className="field field-flat" style={{ flex: '0 1 12rem', minWidth: 0 }}
+          title="Region — blank = Nationwide"
+          placeholder="Region (optional)"
           value={region} onChange={(e) => setRegion(e.target.value)} />
-        <button className="btn btn-ghost sm" disabled={pending}
+        <button className="btn btn-ghost sm icon" disabled={pending} aria-label="Save region"
           onClick={() => start(async () => {
             const r = await setMapRegion(m.id, region);
             setErr(r.ok ? null : r.error);
           })}>
-          Save
+          <IconCheck />
         </button>
       </div>
       {m.review_note && <p className="admin-hint">Rejected: {m.review_note}</p>}
@@ -346,26 +371,27 @@ function ReviewRow({ r }: { r: AdminReview }) {
   if (gone) return null;
 
   return (
-    <div className="admin-row">
-      <div className="admin-row-main">
-        <span className="meta-count"><IconStar /> {r.rating}</span>
-        <b>{r.author_name}</b>
-        <a className="admin-hint" href={`/maps/${r.map_slug}`} target="_blank" rel="noreferrer">
-          {r.map_title}
-        </a>
-        <button className="btn btn-ghost danger sm" disabled={pending}
-          onClick={() => {
-            if (!confirm('Delete this review? This cannot be undone.')) return;
-            start(async () => {
-              const res = await deleteReview(r.id);
-              if (res.ok) setGone(true);
-              else setErr(res.error);
-            });
-          }}>
-          Delete
-        </button>
-      </div>
-      <p className="admin-hint">{r.body}</p>
+    <div className="admin-row review-row">
+      {/* 어드민은 악성 후기를 찾으러 온다 — 본문이 주인공이라 크고
+          진하게, 작성자·별점은 참고 정보라 작고 흐리게 내렸다. */}
+      <p className="review-body">{r.body}</p>
+      <p className="admin-hint review-meta">
+        <IconStar /> {r.rating.toFixed(1)} · {r.author_name} ·{' '}
+        <a href={`/maps/${r.map_slug}`} target="_blank" rel="noreferrer">{r.map_title}</a>
+      </p>
+      {/* 오터치 방지 — 본문을 읽다가 실수로 누르지 않게 카드 모서리로 뗀다 */}
+      <button className="btn btn-ghost danger sm icon review-delete" disabled={pending}
+        aria-label="Delete review"
+        onClick={() => {
+          if (!confirm('Delete this review? This cannot be undone.')) return;
+          start(async () => {
+            const res = await deleteReview(r.id);
+            if (res.ok) setGone(true);
+            else setErr(res.error);
+          });
+        }}>
+        <IconTrash />
+      </button>
       <Err msg={err} />
     </div>
   );

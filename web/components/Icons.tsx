@@ -141,6 +141,24 @@ export const IconCheck = (p: P) => (
   </g></svg>
 );
 
+/** 편집 진입점 (어드민 Members Edit). 텍스트 버튼 대신 아이콘 버튼으로 쓴다. */
+export const IconEdit = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+  </g></svg>
+);
+
+/** 삭제(어드민 Reviews). 유일하게 진짜 삭제가 있는 화면이라 — 후기는
+    맵·장소와 달리 DB 에 delete 정책이 있다(§3.3 은 맵·장소에만 해당). */
+export const IconTrash = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}><g {...base}>
+    <path d="M4 7h16" />
+    <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" />
+    <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
+    <path d="M10 11v6M14 11v6" />
+  </g></svg>
+);
+
 /**
  * 로그인 방식 표식 (어드민 Members, §8). 구글은 브랜드 마크라 고정
  * 4색을 쓴다 — Logo 컴포넌트와 같은 이유(§10.1, currentColor 로는
