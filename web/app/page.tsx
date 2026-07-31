@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { getSaved } from '@/lib/saved';
-import { MapCard } from '@/components/MapCard';
+import { RegionFilter } from '@/components/RegionFilter';
 import { TabBar } from '@/components/TabBar';
 import { Logo } from '@/components/Icons';
 import type { MapCard as Card } from '@/lib/types';
@@ -14,8 +14,9 @@ export default async function Explore() {
   const saved = await getSaved();
 
   /* map_cards 뷰는 published 만 담는다. 정렬은 §8 —
-     저장수 → 후기수 → 최신순. 검색·필터는 스코프 밖이다 (§4.3):
-     사용자는 장소를 검색하지 않고 사람의 취향을 소비한다 (§1). */
+     저장수 → 후기수 → 최신순. 텍스트 검색은 여전히 스코프 밖이다
+     (§4.3·§1) — region 알약 필터만 명시적 예외다(PRD v1.4 §1 개정,
+     RegionFilter.tsx 참조). 기본(알약 미선택) 상태는 이 정렬 그대로다. */
   const { data, error } = await db
     .from('map_cards')
     .select('*')
@@ -24,20 +25,7 @@ export default async function Explore() {
     .order('created_at', { ascending: false });
 
   const maps = (data ?? []) as Card[];
-
-  /* 지역 그루핑 (PRD v1.4 §1) — 필터가 아니라 브라우즈 보조다. region 이
-     지정된 맵이 하나도 없으면(운영 초기) 아무것도 안 그리고 기존 전체
-     피드만 보인다 — 빈 섹션을 억지로 채우지 않는다. */
-  const regionGroups = new Map<string, Card[]>();
-  for (const m of maps) {
-    const region = m.region?.trim();
-    if (!region) continue;
-    if (!regionGroups.has(region)) regionGroups.set(region, []);
-    regionGroups.get(region)!.push(m);
-  }
-  const regionEntries = [...regionGroups.entries()]
-    .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
-  const nationwide = maps.filter((m) => !m.region?.trim());
+  const mapsWithSaved = maps.map((m) => ({ ...m, saved: saved.maps.has(m.id) }));
 
   return (
     <>
@@ -70,32 +58,7 @@ export default async function Explore() {
           </div>
         )}
 
-        {regionEntries.length > 0 && (
-          <>
-            {regionEntries.map(([region, list]) => (
-              <div key={region}>
-                <div className="section-head"><h2>{region}</h2></div>
-                <ul className="feed">
-                  {list.map((m) => <MapCard key={m.id} m={m} saved={saved.maps.has(m.id)} />)}
-                </ul>
-              </div>
-            ))}
-            {nationwide.length > 0 && (
-              <div>
-                <div className="section-head"><h2>Nationwide</h2></div>
-                <ul className="feed">
-                  {nationwide.map((m) => <MapCard key={m.id} m={m} saved={saved.maps.has(m.id)} />)}
-                </ul>
-              </div>
-            )}
-            {/* 그루핑은 진입점이지 전체 목록을 대체하지 않는다 (PRD v1.4 §1) */}
-            <div className="section-head"><h2>All maps</h2></div>
-          </>
-        )}
-
-        <ul className="feed">
-          {maps.map((m) => <MapCard key={m.id} m={m} saved={saved.maps.has(m.id)} />)}
-        </ul>
+        {!error && maps.length > 0 && <RegionFilter maps={mapsWithSaved} />}
       </main>
 
       <TabBar current="/" />

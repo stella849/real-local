@@ -151,6 +151,21 @@ a{color:inherit}
 .hero-copy{padding:var(--sp-xs) var(--sp-md)}
 .hero .lede-sub{color:var(--text-2);margin-bottom:0}
 
+/* 지역 알약 필터 — 히어로와 첫 맵 카드 사이, 한 줄 가로 스크롤.
+   §4.3 검색/필터 예외(RegionFilter.tsx 참조). */
+.region-pills{
+  display:flex;gap:6px;overflow-x:auto;
+  padding:var(--sp-sm) var(--sp-md);
+  scrollbar-width:none;
+}
+.region-pills::-webkit-scrollbar{display:none}
+.pill{
+  flex:none;padding:6px 14px;border-radius:var(--r-full);
+  border:1px solid var(--line-strong);
+  font-size:13px;color:var(--text-2);white-space:nowrap;
+}
+.pill.active{background:var(--text);border-color:var(--text);color:var(--canvas)}
+
 .cut{height:0;margin:0;border:0;border-top:1px solid var(--line)}
 
 /* ============================================================
