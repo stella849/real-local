@@ -5,6 +5,7 @@ import {
   MembersTab, PendingTab, MapsTab, ReviewsTab,
   type Member, type AdminMap, type AdminReview,
 } from '@/components/admin/AdminTabs';
+import { Logo } from '@/components/Icons';
 
 export const dynamic = 'force-dynamic';
 
@@ -115,7 +116,10 @@ export default async function Admin({ searchParams }: Params) {
   return (
     <div className="admin">
       <header className="topbar">
-        <Link className="wordmark" href="/">Real Local</Link>
+        <Link className="brand" href="/">
+          <Logo className="brand-mark" />
+          <span className="wordmark">Real Local</span>
+        </Link>
         <span className="topbar-title">Admin</span>
         <span className="topbar-spacer" />
         <Link className="admin-hint" href="/profile">Profile</Link>
