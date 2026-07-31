@@ -750,7 +750,12 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
    열 폭이 행마다 항상 같아져, 그 안의 select·Edit 도 같은 자리에 떨어진다. */
 .member-row-main{
   display:grid;
-  grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);
+  /* name 은 대개 짧아(Mimyo, Sora…) 1fr 까지는 필요 없고, controls 는
+     "Resident"+연필까지 들어가야 해서 좁은 모바일에서 fr 비율이
+     같으면 select 텍스트 앞부분이 잘려 보였다(Resident → "dent" 등,
+     overflow:hidden 이 트랙 밖으로 넘친 부분을 가려서 생긴 문제).
+     name 비중을 줄이고 그만큼 controls 로 옮겼다. */
+  grid-template-columns:minmax(0,1.6fr) minmax(0,0.7fr) minmax(0,1.2fr);
   align-items:center;column-gap:var(--sp-sm);row-gap:2px;
 }
 .admin-email{
