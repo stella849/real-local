@@ -85,7 +85,14 @@ export default async function PlaceDetail({ params }: Params) {
               </div>
             );
           }
-          return <PlaceCarousel photos={photos} />;
+          // 큐레이터가 직접 올린 사진(http URL)을 맨 앞으로 — 구글에서
+          // 못 찾은 곳이거나 큐레이터가 더 나은 사진을 골라 올린 경우라
+          // 대표성이 더 크다. 각 그룹 내 상대 순서는 그대로 둔다.
+          const ordered = [
+            ...photos.filter((ph) => ph.ref.startsWith('http')),
+            ...photos.filter((ph) => !ph.ref.startsWith('http')),
+          ];
+          return <PlaceCarousel photos={ordered} curatorName={m?.curator_name ?? null} />;
         })()}
 
         <section className="detail-head">

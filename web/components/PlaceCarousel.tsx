@@ -15,7 +15,7 @@ import { resolvePhotoUrl, type PlacePhoto } from '@/lib/types';
  * 인덱스가 어긋난다 — 각 이미지 자체를 관찰하는 편이 레이아웃 폭에
  * 관계없이 정확하다.
  */
-export function PlaceCarousel({ photos }: { photos: PlacePhoto[] }) {
+export function PlaceCarousel({ photos, curatorName }: { photos: PlacePhoto[]; curatorName?: string | null }) {
   const [active, setActive] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
@@ -58,14 +58,14 @@ export function PlaceCarousel({ photos }: { photos: PlacePhoto[] }) {
           />
         ))}
       </div>
-      {/* 큐레이터 직접 업로드(http URL)는 구글 사진이 아니라 출처 줄을
-          아예 숨긴다 — attribution 이 null 이라고 "Photo: Google" 만
-          남기면 없는 출처를 있는 것처럼 보여주게 된다. */}
-      {!current.ref.startsWith('http') && (
-        <p className="photo-credit">
-          Photo: Google{current.attribution ? ` / ${current.attribution}` : ''}
-        </p>
-      )}
+      {/* 큐레이터 직접 업로드(http URL)는 구글 사진이 아니라 "Photo:
+          Google" 을 붙이면 안 된다 — 대신 Real Local·큐레이터 이름으로
+          출처를 표시한다. */}
+      <p className="photo-credit">
+        {current.ref.startsWith('http')
+          ? `Photo: Real Local${curatorName ? ` / ${curatorName}` : ''}`
+          : `Photo: Google${current.attribution ? ` / ${current.attribution}` : ''}`}
+      </p>
     </>
   );
 }
