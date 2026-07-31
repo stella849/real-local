@@ -843,6 +843,20 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 .map-flag-warning{display:flex;align-items:center;gap:5px;color:var(--accent)}
 .map-flag-warning svg{width:13px;height:13px;flex:none}
 
+/* Maps 탭 카드 밀도 — 제목 줄과 메타/액션 줄을 한 줄로 합치고, 지역
+   입력창 상하 패딩을 크게 줄여 카드 세로 높이를 눈에 띄게 조인다(요청).
+   제목만 flex:1 로 남는 폭을 먹고 나머지는 flex:none 으로 고정해,
+   좁은 화면에서도 줄바꿈 대신 제목이 말줄임표로 잘린다. */
+.map-row-head{flex-wrap:nowrap}
+.map-row-head > *{flex:none}
+.map-row-head .map-row-title{
+  flex:1;min-width:0;font-weight:700;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.map-row-head .admin-hint{white-space:nowrap}
+.map-row-region{margin-top:2px}
+.map-row-region .field{padding-top:4px;padding-bottom:4px}
+
 .review-row{position:relative;padding-right:44px}
 .review-body{font-size:16px;font-weight:600;line-height:1.5;color:var(--text);margin:0 0 3px}
 .review-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}

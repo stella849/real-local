@@ -320,16 +320,13 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
 
   return (
     <div className="admin-row">
-      {/* 1줄 — 제목만. 상태는 이제 그룹 헤더가 말해줘서 컬러 닷도
-          텍스트도 행마다 또 안 넣는다 (그룹핑 도입으로 생략). */}
-      <div className="admin-row-main">
-        <b>{m.title}</b>
-      </div>
-
-      {/* 2줄 — 누구·얼마나 + 동작. 상태를 바꾸는 액션(Hide/Publish,
-          Continue editing)만 눈에 보이게 두고, 나머지(Open·Photos)는
-          케밥으로 묶었다 — 이 행이 액션이 가장 많아서 케밥이 맞다. */}
-      <div className="admin-row-main">
+      {/* 1줄 — 제목 + 누구·얼마나 + 동작. 예전엔 제목/메타 두 줄이었는데
+          카드가 세로로 너무 길어진다는 요청으로 한 줄에 합쳤다. 제목이
+          남는 폭을 flex:1 로 다 먹고 나머지(메타·버튼·케밥)는 flex:none 으로
+          제 크기를 지켜 오른쪽에 고정된다 — 좁은 화면에서도 줄바꿈 대신
+          제목만 말줄임표로 잘린다. */}
+      <div className="admin-row-main map-row-head">
+        <b className="map-row-title">{m.title}</b>
         <span className="admin-hint">{m.curator_name} · {m.place_count} places</span>
         {/* 발행은 본인 draft·rejected 에서만 — tip 필수·최소 4곳 검증이
             그 편집 화면에만 있다. 어드민이 남의 미완성 초안을 검증 없이
@@ -368,11 +365,12 @@ function MapRow({ m, meId }: { m: AdminMap; meId: string }) {
         {/* 삭제 버튼은 어디에도 없다 (§3.3) */}
       </div>
 
-      {/* 3줄 — 지역(PRD v1.4 §1). 필터 아님, 홈 상단 그루핑 전용.
+      {/* 2줄 — 지역(PRD v1.4 §1). 필터 아님, 홈 상단 그루핑 전용.
           비우면 Nationwide 로 간다. 입력창을 줄이고 Save 를 체크
           아이콘으로 바로 옆에 붙였다 — 이 행에서 값은 지역명 하나뿐이라
-          넓은 입력창이 필요 없다. */}
-      <div className="admin-row-main">
+          넓은 입력창이 필요 없다. 위 제목 줄과 위아래 패딩을 모두
+          바짝 좁혀 카드 전체 높이를 눈에 띄게 줄였다(요청). */}
+      <div className="admin-row-main map-row-region">
         <input className="field field-flat" style={{ flex: '0 1 12rem', minWidth: 0 }}
           title="Region — blank = Nationwide"
           placeholder="Region (optional)"
