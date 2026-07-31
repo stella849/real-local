@@ -52,7 +52,7 @@ type MemberGroup = { key: string; label: string; items: Member[] };
 
 export function MembersTab({ groups, meId }: { groups: MemberGroup[]; meId: string }) {
   return (
-    <div style={{ display: 'grid', gap: 'var(--sp-md)' }}>
+    <div className="admin-members">
       {groups.map((g) => (
         <section key={g.key}>
           {/* provider 아이콘은 행마다 넣지 않고 섹션 제목 앞에 하나만 —
