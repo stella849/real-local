@@ -62,37 +62,35 @@ export default async function PlaceDetail({ params }: Params) {
       </header>
 
       <main className="view">
-        {p.photo_ref ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photoUrl(p.photo_ref, 900)} alt=""
-              style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover' }} />
-            {/* 출처 표기는 의무다 (§6.1) */}
-            <p className="photo-credit">
-              Photo: Google{p.photo_attribution ? ` / ${p.photo_attribution}` : ''}
-            </p>
-          </>
-        ) : (
-          <div className="collage" data-n="0" style={{ aspectRatio: '4 / 3' }} aria-hidden>
-            {p.name_en.trim()[0]?.toUpperCase() ?? '?'}
-          </div>
-        )}
-
-        {/* 갤러리(PRD v1.4 §4.1) — 대표 사진과 별개다. 구글 후보 여러
-            장을 어드민/큐레이터가 고르거나, 큐레이터가 직접 올린
-            사진이 섞여 들어올 수 있다(resolvePhotoUrl 이 구분). */}
-        {p.photo_refs.length > 0 && (
-          <div className="photo-strip pad" style={{ paddingTop: 'var(--sp-xs)' }}>
-            {p.photo_refs.map((ref, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={i} src={resolvePhotoUrl(ref, 300)} alt=""
-                style={{
-                  width: 96, height: 72, objectFit: 'cover',
-                  borderRadius: 'var(--r-sm)', flex: 'none',
-                }} />
-            ))}
-          </div>
-        )}
+        {(() => {
+          // 대표 사진(photo_ref) + 갤러리(photo_refs) 를 한 캐러셀로
+          // 합친다 — 같은 크기로 옆으로 스와이프해서 본다. 중복은 뺀다
+          // (갤러리를 고를 때 대표 사진을 같이 고른 경우가 있을 수 있다).
+          const photos = Array.from(new Set([p.photo_ref, ...p.photo_refs].filter(Boolean))) as string[];
+          if (photos.length === 0) {
+            return (
+              <div className="collage" data-n="0" style={{ aspectRatio: '4 / 3' }} aria-hidden>
+                {p.name_en.trim()[0]?.toUpperCase() ?? '?'}
+              </div>
+            );
+          }
+          return (
+            <>
+              <div className={`photo-carousel${photos.length === 1 ? ' single' : ''}`}>
+                {photos.map((ref, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={ref} src={resolvePhotoUrl(ref, 900)} alt=""
+                    loading={i === 0 ? undefined : 'lazy'} />
+                ))}
+              </div>
+              {/* 출처 표기는 의무다(§6.1) — 여러 장이어도 대표 사진 하나만
+                  붙어 있다(갤러리 개별 항목엔 출처를 안 받는다). */}
+              <p className="photo-credit">
+                Photo: Google{p.photo_attribution ? ` / ${p.photo_attribution}` : ''}
+              </p>
+            </>
+          );
+        })()}
 
         <section className="detail-head">
           <div style={{ display: 'flex', gap: 'var(--sp-sm)', alignItems: 'flex-start' }}>
