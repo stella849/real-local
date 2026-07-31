@@ -159,7 +159,7 @@ function CuratorFields({ m }: { m: Member }) {
 
   return (
     <div className="admin-edit">
-      <label>handle
+      <label>profile url
         <input className="field" value={f.handle}
           onChange={(e) => setF({ ...f, handle: e.target.value })} />
       </label>
@@ -167,11 +167,11 @@ function CuratorFields({ m }: { m: Member }) {
         <input className="field" value={f.display_name}
           onChange={(e) => setF({ ...f, display_name: e.target.value })} />
       </label>
-      <label>byline
+      <label>byline (short tagline shown under the name, max 60 chars)
         <input className="field" maxLength={60} value={f.byline}
           onChange={(e) => setF({ ...f, byline: e.target.value })} />
       </label>
-      <label>about
+      <label>about (longer bio on the profile page, optional)
         <textarea className="field" maxLength={300} rows={2} value={f.about}
           onChange={(e) => setF({ ...f, about: e.target.value })} />
       </label>
