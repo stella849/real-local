@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { setPlacePhoto } from '@/app/admin/actions';
 import { setPlacePhotos } from '@/app/curator/maps/actions';
 import { createClient } from '@/lib/supabase/client';
-import { photoUrl, resolvePhotoUrl } from '@/lib/types';
+import { photoUrl, resolvePhotoUrl, type PlacePhoto } from '@/lib/types';
 import { IconCheck } from '@/components/Icons';
 
 export type Candidate = { name: string; attribution: string | null };
@@ -29,11 +29,11 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
   placeId: string;
   current: string | null;
   candidates: Candidate[];
-  gallery: string[];
+  gallery: PlacePhoto[];
   canPickCover: boolean;
 }) {
   const [ref, setRef] = useState(current);
-  const [selected, setSelected] = useState<string[]>(gallery);
+  const [selected, setSelected] = useState<PlacePhoto[]>(gallery);
   const [justSaved, setJustSaved] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -46,15 +46,17 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
     setTimeout(() => setJustSaved(false), 2000);
   }
 
-  async function saveGallery(next: string[]) {
+  async function saveGallery(next: PlacePhoto[]) {
     setErr(null);
     const r = await setPlacePhotos(placeId, next);
     if (r.ok) { setSelected(next); flashSaved(); }
     else setErr(r.error);
   }
 
-  const toggleCandidate = (name: string) => saveGallery(
-    selected.includes(name) ? selected.filter((x) => x !== name) : [...selected, name],
+  const toggleCandidate = (c: Candidate) => saveGallery(
+    selected.some((s) => s.ref === c.name)
+      ? selected.filter((s) => s.ref !== c.name)
+      : [...selected, { ref: c.name, attribution: c.attribution }],
   );
 
   async function upload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -71,12 +73,13 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
       .upload(path, file, { contentType: file.type });
     if (upErr) { setBusy(false); setErr(upErr.message); return; }
 
+    // 큐레이터 직접 업로드는 구글 사진이 아니라 출처 표기 대상이 아니다.
     const { data } = db.storage.from('place-photos').getPublicUrl(path);
-    await saveGallery([...selected, data.publicUrl]);
+    await saveGallery([...selected, { ref: data.publicUrl, attribution: null }]);
     setBusy(false);
   }
 
-  const uploaded = selected.filter((s) => s.startsWith('http'));
+  const uploaded = selected.filter((s) => s.ref.startsWith('http'));
 
   return (
     <div>
@@ -112,11 +115,11 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
           <p className="admin-hint">Gallery (detail page, pick any number)</p>
           <div className="photo-strip">
             {candidates.map((c) => (
-              <button key={c.name} className="photo-option" aria-pressed={selected.includes(c.name)}
-                title={c.attribution ?? undefined} onClick={() => toggleCandidate(c.name)}>
+              <button key={c.name} className="photo-option" aria-pressed={selected.some((s) => s.ref === c.name)}
+                title={c.attribution ?? undefined} onClick={() => toggleCandidate(c)}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={photoUrl(c.name, 160)} alt="" loading="lazy" />
-                {selected.includes(c.name) && <IconCheck className="photo-check" />}
+                {selected.some((s) => s.ref === c.name) && <IconCheck className="photo-check" />}
               </button>
             ))}
           </div>
@@ -127,11 +130,11 @@ export function PhotoPicker({ placeId, current, candidates, gallery, canPickCove
         <>
           <p className="admin-hint">Your uploads (tap to remove)</p>
           <div className="photo-strip">
-            {uploaded.map((url) => (
-              <button key={url} className="photo-option" aria-pressed="true"
-                onClick={() => saveGallery(selected.filter((s) => s !== url))}>
+            {uploaded.map((u) => (
+              <button key={u.ref} className="photo-option" aria-pressed="true"
+                onClick={() => saveGallery(selected.filter((s) => s.ref !== u.ref))}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={resolvePhotoUrl(url, 160)} alt="" loading="lazy" />
+                <img src={resolvePhotoUrl(u.ref, 160)} alt="" loading="lazy" />
                 <IconCheck className="photo-check" />
               </button>
             ))}

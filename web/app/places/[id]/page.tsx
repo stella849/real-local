@@ -7,7 +7,8 @@ import { Directions } from '@/components/Directions';
 import { SaveButton } from '@/components/SaveButton';
 import { IconBack, IconHome } from '@/components/Icons';
 import { ShareButton } from '@/components/ShareButton';
-import { photoUrl, resolvePhotoUrl, categoryLabel, type Place } from '@/lib/types';
+import { PlaceCarousel } from '@/components/PlaceCarousel';
+import { photoUrl, categoryLabel, type Place, type PlacePhoto } from '@/lib/types';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -66,7 +67,17 @@ export default async function PlaceDetail({ params }: Params) {
           // 대표 사진(photo_ref) + 갤러리(photo_refs) 를 한 캐러셀로
           // 합친다 — 같은 크기로 옆으로 스와이프해서 본다. 중복은 뺀다
           // (갤러리를 고를 때 대표 사진을 같이 고른 경우가 있을 수 있다).
-          const photos = Array.from(new Set([p.photo_ref, ...p.photo_refs].filter(Boolean))) as string[];
+          // 사진마다 출처가 다를 수 있어(§6.1) PlaceCarousel 이 스와이프에
+          // 맞춰 출처를 갱신한다 — 대표 사진 것만 고정으로 보여주지 않는다.
+          const photos: PlacePhoto[] = [];
+          const seen = new Set<string>();
+          if (p.photo_ref) {
+            photos.push({ ref: p.photo_ref, attribution: p.photo_attribution });
+            seen.add(p.photo_ref);
+          }
+          for (const g of p.photo_refs) {
+            if (!seen.has(g.ref)) { photos.push(g); seen.add(g.ref); }
+          }
           if (photos.length === 0) {
             return (
               <div className="collage" data-n="0" style={{ aspectRatio: '4 / 3' }} aria-hidden>
@@ -74,22 +85,7 @@ export default async function PlaceDetail({ params }: Params) {
               </div>
             );
           }
-          return (
-            <>
-              <div className={`photo-carousel${photos.length === 1 ? ' single' : ''}`}>
-                {photos.map((ref, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={ref} src={resolvePhotoUrl(ref, 900)} alt=""
-                    loading={i === 0 ? undefined : 'lazy'} />
-                ))}
-              </div>
-              {/* 출처 표기는 의무다(§6.1) — 여러 장이어도 대표 사진 하나만
-                  붙어 있다(갤러리 개별 항목엔 출처를 안 받는다). */}
-              <p className="photo-credit">
-                Photo: Google{p.photo_attribution ? ` / ${p.photo_attribution}` : ''}
-              </p>
-            </>
-          );
+          return <PlaceCarousel photos={photos} />;
         })()}
 
         <section className="detail-head">

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient, getUser } from '@/lib/supabase/server';
+import type { PlacePhoto } from '@/lib/types';
 
 export type DraftPlace = {
   google_place_id: string;
@@ -218,7 +219,7 @@ type SimpleResult = { ok: true } | { ok: false; error: string };
  * "본인 맵의 장소 또는 어드민"을 허용하므로 여기서는 같은 조건을
  * 앱에서도 확인해 더 친절한 에러 메시지를 준다.
  */
-export async function setPlacePhotos(placeId: string, refs: string[]): Promise<SimpleResult> {
+export async function setPlacePhotos(placeId: string, refs: PlacePhoto[]): Promise<SimpleResult> {
   try {
     const db = await createClient();
     const user = await getUser(db);

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createClient, getUser } from '@/lib/supabase/server';
 import { PhotoPicker, type Candidate } from '@/components/admin/PhotoPicker';
 import { PlaceThumb } from '@/components/PlaceThumb';
+import type { PlacePhoto } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,7 +69,7 @@ export default async function Photos({ params }: Params) {
                 placeId={p.id}
                 current={p.photo_ref}
                 candidates={(p.photo_candidates ?? []) as Candidate[]}
-                gallery={(p.photo_refs ?? []) as string[]}
+                gallery={(p.photo_refs ?? []) as PlacePhoto[]}
                 canPickCover={isAdmin}
               />
             </div>

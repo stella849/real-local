@@ -40,9 +40,13 @@ export type Place = {
   curator_note: string | null;
   photo_ref: string | null;
   photo_attribution: string | null;
-  /** 상세 갤러리(PRD v1.4 §4.1). 구글 ref·큐레이터 업로드 URL 혼재 가능 */
-  photo_refs: string[];
+  /** 상세 갤러리(PRD v1.4 §4.1). 구글 ref·큐레이터 업로드 URL 혼재 가능.
+   *  사진마다 출처가 다를 수 있어(§6.1) 항목별로 attribution 을 들고
+   *  있다 — 업로드 사진은 null. */
+  photo_refs: PlacePhoto[];
 };
+
+export type PlacePhoto = { ref: string; attribution: string | null };
 
 /** curator_profiles 뷰 (§9). email 도 curator_tier 도 없다. */
 export type CuratorProfile = {
