@@ -814,11 +814,20 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
   padding:var(--sp-sm) var(--sp-md);
   background:var(--surface);border-radius:var(--r-md);
 }
-.curator-page-info .url{font-size:15px;font-weight:700;color:var(--text)}
+/* 볼드는 뺀다 — 굵으면 주소 안내가 경고처럼 읽힌다. 붉은 링크색은 유지 */
+.curator-page-info .url{font-size:15px;color:var(--text)}
 .curator-page-info .url a{color:var(--accent)}
 /* 변경 불가 안내 — 볼드 없이 옅게. 굵은 본문에 붙여 두면 경고로 읽힌다 */
 .curator-page-info .note{font-size:12px;font-weight:400;color:var(--text-3)}
 .curator-page-info .tier{font-size:13px;color:var(--text-2)}
+
+/* 큐레이터 '내 맵' 행 — 제목이 남는 폭을 다 먹어야 연필이 오른쪽 끝에
+   선다. 제목이 길면 줄을 늘리는 대신 말줄임 (행 높이를 일정하게). */
+.my-map-title{
+  flex:1;min-width:0;font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.my-map-actions{margin-top:var(--sp-xxs)}
 
 /* 월 1회 businessStatus 크론이 붙이는 폐업 의심 경고 (Maps 탭). */
 .map-flag-warning{display:flex;align-items:center;gap:5px;color:var(--accent)}
