@@ -33,15 +33,22 @@ export function RegionFilter({ maps }: { maps: (Card & { saved: boolean })[] }) 
 
   const visible = active ? maps.filter((m) => m.region?.trim() === active) : maps;
 
+  // 누른 알약을 가로 목록 한가운데로 스크롤한다. block:'nearest' 로
+  // 페이지 전체가 세로로 딸려 스크롤되는 걸 막는다 — 가로만 움직인다.
+  function pick(r: string | null, e: React.MouseEvent<HTMLButtonElement>) {
+    setActive(r);
+    e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
   return (
     <>
       <div className="region-pills">
-        <button className={`pill${active === null ? ' active' : ''}`} onClick={() => setActive(null)}>
+        <button className={`pill${active === null ? ' active' : ''}`} onClick={(e) => pick(null, e)}>
           All
         </button>
         {regions.map((r) => (
           <button key={r} className={`pill${active === r ? ' active' : ''}`}
-            onClick={() => setActive(active === r ? null : r)}>
+            onClick={(e) => pick(active === r ? null : r, e)}>
             {r}
           </button>
         ))}
