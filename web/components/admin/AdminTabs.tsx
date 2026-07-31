@@ -46,10 +46,22 @@ function Err({ msg }: { msg: string | null }) {
 }
 
 /* ---------------------------------------------------------- Members */
-export function MembersTab({ members, meId }: { members: Member[]; meId: string }) {
+type MemberGroup = { key: string; label: string; items: Member[] };
+
+export function MembersTab({ groups, meId }: { groups: MemberGroup[]; meId: string }) {
   return (
-    <div className="admin-list">
-      {members.map((m) => <MemberRow key={m.id} m={m} isMe={m.id === meId} />)}
+    <div style={{ display: 'grid', gap: 'var(--sp-md)' }}>
+      {groups.map((g) => (
+        <section key={g.key}>
+          <div className="section-head"><h2>{g.label}</h2><span className="count">{g.items.length}</span></div>
+          {/* Maps 탭과 같은 패턴 — 8개까지만 보이고 나머지는 이 안에서만
+              세로 스크롤한다. 정렬 기준(§ page.tsx sortMembers)은 그룹으로
+              나누기 전과 동일하게 유지된다. */}
+          <div className="admin-list admin-list-scroll-members">
+            {g.items.map((m) => <MemberRow key={m.id} m={m} isMe={m.id === meId} />)}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

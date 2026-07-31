@@ -66,6 +66,16 @@ export default async function Admin({ searchParams }: Params) {
     .select('id,email,display_name,role,curator_tier,handle,byline,about,curator_listed,auth_provider');
   const members = sortMembers((rawMembers ?? []) as Member[]);
 
+  // Maps 탭처럼 두 그룹으로 나눈다 — 구글/이메일은 로그인 방식 자체가
+  // 다른 그룹이라 한 목록에 섞이면 select 폭(Edit 유무)이 뒤섞여
+  // 행마다 정렬 기준선이 들쭉날쭉해 보였다. members 는 이미 provider →
+  // role → email 순으로 정렬돼 있으니 여기선 provider 로 나누기만 하면
+  // 그룹 내부 순서는 그대로 유지된다.
+  const memberGroups = [
+    { key: 'google', label: 'Google sign-in', items: members.filter((m) => m.auth_provider === 'google') },
+    { key: 'email', label: 'Email sign-in', items: members.filter((m) => m.auth_provider !== 'google') },
+  ].filter((g) => g.items.length > 0);
+
   /* maps 를 직접 조회한다. map_cards 뷰는 published 만 담기 때문이다 —
      어드민은 draft·pending·rejected·hidden 을 전부 봐야 한다.
      maps_read 정책이 어드민에게 전체를 열어 준다.
@@ -136,7 +146,7 @@ export default async function Admin({ searchParams }: Params) {
 
       <main className="view">
         {tab === 'members' && (
-          <MembersTab members={members} meId={user.id} />
+          <MembersTab groups={memberGroups} meId={user.id} />
         )}
         {tab === 'pending' && <PendingTab maps={pending} />}
         {tab === 'maps' && <MapsTab maps={maps} meId={user.id} />}

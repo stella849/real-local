@@ -718,6 +718,9 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
    스크롤한다(탭 전체가 끝없이 안 늘어난다). 행 높이가 상태마다 조금씩
    달라 정확히 5.0개는 아니고 근사치다. */
 .admin-list-scroll{max-height:740px;overflow-y:auto}
+/* Members 그룹(Google/Email) 전용 — 행이 Maps 보다 훨씬 낮아(1줄) 740px
+   기준을 그대로 쓰면 20개 넘게 보인다. 8개 근사치로 맞춘 값. */
+.admin-list-scroll-members{max-height:336px;overflow-y:auto}
 .admin-row{
   border-bottom:1px solid var(--line);
   padding:var(--sp-xs) var(--sp-md);background:var(--canvas);
@@ -743,11 +746,14 @@ textarea.field{resize:vertical;min-height:76px;line-height:1.5}
 .admin-email{
   font-size:14px;color:var(--text-2);
   display:inline-flex;align-items:center;gap:6px;
-  min-width:0;
+  min-width:0;overflow:hidden;
 }
+/* overflow:hidden 필수 — grid 셀은 자기 트랙 폭으로 고정되지만 내부
+   내용(이름+You 배지)이 그보다 넓으면 clip 없이 옆 컬럼까지 밀려
+   보였다(예: 긴 이름 + You 배지 조합에서 role 텍스트와 겹쳐 보임). */
 .admin-name{
   font-size:14px;font-weight:600;min-width:0;
-  display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;align-items:center;gap:6px;overflow:hidden;
 }
 /* 이메일·이름 둘 다 무조건 1줄 — 넘치면 줄바꿈 대신 말줄임표.
    부모(.admin-email/.admin-name)가 아니라 텍스트만 담은 이 span 에
