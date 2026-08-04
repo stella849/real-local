@@ -6,8 +6,11 @@ const GA_ID = 'G-KYV2V0DG1R';
 /** GTM 컨테이너 ID. GA_ID 와 마찬가지로 공개 값이다. */
 const GTM_ID = 'GTM-56K3JLJ8';
 
+/** Microsoft Clarity 프로젝트 ID. 역시 공개 값이다. */
+const CLARITY_ID = 'xx4cbgitk7';
+
 /**
- * GA4(gtag.js) + GTM. 둘 다 전역이라 layout 에 하나만 둔다.
+ * GA4(gtag.js) + GTM + Clarity. 셋 다 전역이라 layout 에 하나만 둔다.
  *
  * ─ GA4 와 GTM 의 역할 분담 ─────────────────────────────────
  * GA4 는 아래 gtag.js 로 직접 계측한다. GTM 은 GA4 이외의 태그(광고
@@ -63,6 +66,24 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`}
+      </Script>
+
+      {/*
+        Microsoft Clarity — 히트맵/세션 리코딩. GA4·GTM 과 독립이라 dataLayer
+        를 건드리지 않는다.
+
+        GTM 관리화면에 Clarity 태그를 또 붙이면 안 된다. 스크립트가 두 번
+        로드되면 같은 세션이 중복 기록된다. 여기 코드로 심는 쪽 하나만 둔다.
+
+        마이크로소프트 안내도 <head> 지만 GTM 과 같은 이유로 afterInteractive
+        를 쓴다. 리코딩은 렌더보다 먼저일 이유가 없다.
+      */}
+      <Script id="clarity-init" strategy="afterInteractive">
+        {`(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "${CLARITY_ID}");`}
       </Script>
 
       {/*
